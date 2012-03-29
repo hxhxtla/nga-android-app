@@ -5,46 +5,46 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
+import com.hxhxtla.ngaapp.controller.PageScrollController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 
-public class NgaAppMainActivity extends Activity implements OnGestureListener,
-		OnTouchListener {
+public class NgaAppMainActivity extends Activity {
 
 	private static final int MENU_DEL = 1;
-
-	private static final float FLING_MIN_DISTANCE = 80;
 
 	private static AllTopicListAdapter atla;
 
 	private AlertDialog alert;
 
-	private ViewFlipper vf;
+	private HorizontalScrollView hsv;
 
-	private GestureDetector gd;
+	private LinearLayout ll;
+
+	private PageScrollController psc;
+
+	private DisplayMetrics dm;
+
+	private LayoutParams lps;
 
 	private PointTabController pointTabController;
 
@@ -61,9 +61,15 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 	private void initView() {
 		setContentView(R.layout.main);
 
-		gd = new GestureDetector(this, this);
+		hsv = (HorizontalScrollView) findViewById(R.id.home_list_hs);
 
-		vf = (ViewFlipper) findViewById(R.id.home_list);
+		ll = (LinearLayout) findViewById(R.id.home_list_ll);
+
+		psc = new PageScrollController(ll);
+
+		dm = this.getResources().getDisplayMetrics();
+
+		lps = new LayoutParams(dm.widthPixels, LayoutParams.WRAP_CONTENT);
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.home_tab_bar);
 
@@ -71,7 +77,7 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 
 		this.addNewPage(HomeListAdapter.getCurrentPageCount());
 
-		pointTabController.changePageOn(this.vf.getDisplayedChild());
+		pointTabController.changePageOn(psc.getDisplayedChild());
 
 		btn_next = (Button) findViewById(R.id.home_btn_next);
 		btn_pre = (Button) findViewById(R.id.home_btn_pre);
@@ -80,7 +86,7 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 
 			@Override
 			public void onClick(View v) {
-				if (vf.getChildCount() > 1) {
+				if (psc.getChildCount() > 1) {
 					if (v == btn_next) {
 						showNextPage();
 					} else if (v == btn_pre) {
@@ -104,7 +110,7 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 	}
 
 	private HomeListAdapter getCurrentHomeListAdapter() {
-		GridView gv = (GridView) vf.getCurrentView();
+		GridView gv = (GridView) psc.getCurrentView();
 		return (HomeListAdapter) gv.getAdapter();
 	}
 
@@ -113,15 +119,15 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 			GridView gv = (GridView) getLayoutInflater().inflate(
 					R.layout.home_list_item_view, null);
 
+			gv.setLayoutParams(lps);
+
 			HomeListAdapter hla = new HomeListAdapter(this);
 
-			hla.setIndex_view(vf.getChildCount());
+			hla.setIndex_view(psc.getChildCount());
 
 			gv.setAdapter(hla);
 
-			vf.addView(gv);
-
-			gv.setOnTouchListener(this);
+			psc.addView(gv);
 
 			gv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
@@ -141,7 +147,7 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 			this.registerForContextMenu(gv);
 		}
 
-		int pageNum = vf.getChildCount();
+		int pageNum = psc.getChildCount();
 
 		// if (pageNum > 1
 		// && (nextInAnimation == null || preInAnimation == null
@@ -232,9 +238,9 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 	}
 
 	private void notifyAllDataSetChanged() {
-		int numVFChildren = vf.getChildCount();
+		int numVFChildren = psc.getChildCount();
 		for (int index = 0; index < numVFChildren; index++) {
-			GridView gv = (GridView) vf.getChildAt(index);
+			GridView gv = (GridView) psc.getChildAt(index);
 			HomeListAdapter hla = (HomeListAdapter) gv.getAdapter();
 			hla.notifyDataSetChanged();
 		}
@@ -243,27 +249,15 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 	private void showNextPage() {
 		// this.vf.setInAnimation(nextInAnimation);
 		// this.vf.setOutAnimation(nextOutAnimation);
-		this.vf.showNext();
-		pointTabController.changePageOn(this.vf.getDisplayedChild());
+		// this.vf.showNext();
+		pointTabController.changePageOn(psc.getDisplayedChild());
 	}
 
 	private void showPreviousPage() {
 		// this.vf.setInAnimation(preInAnimation);
 		// this.vf.setOutAnimation(preOutAnimation);
-		this.vf.showPrevious();
-		pointTabController.changePageOn(this.vf.getDisplayedChild());
-	}
-
-	private void dragPage(float distance) {
-		vf.getCurrentView().setX(vf.getX() + distance);
-//		vf.getChildAt(vf.getDisplayedChild() + 1)
-//				.setX(vf.getWidth() + distance);
-		// float abs_distace = Math.abs(distance);
-		// if (distance > 0) {
-		//
-		// } else if (distance < 0) {
-		//
-		// }
+		// this.vf.showPrevious();
+		pointTabController.changePageOn(psc.getDisplayedChild());
 	}
 
 	// /////////////////////////////////////////////////////////Override
@@ -301,65 +295,5 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 		}
 
 		return super.onContextItemSelected(item);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return this.gd.onTouchEvent(event);
-	}
-
-	@Override
-	public boolean onDown(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		float distace = e1.getX() - e2.getX();
-		float abs_distacex = Math.abs(distace);
-		if (abs_distacex > FLING_MIN_DISTANCE) {
-			if (distace > 0) {
-				showPreviousPage();
-				return true;
-			} else if (distace < 0) {
-				showNextPage();
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		// float distance = e1.getX() - e2.getX();
-		dragPage(distanceX);
-
-		return true;
-	}
-
-	@Override
-	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return this.gd.onTouchEvent(event);
 	}
 }
