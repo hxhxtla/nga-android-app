@@ -111,7 +111,7 @@ public class NgaAppMainActivity extends Activity implements OnGestureListener,
 	private void addNewPage(int num) {
 		for (int i = 0; i < num; i++) {
 			GridView gv = (GridView) getLayoutInflater().inflate(
-					R.layout.home_list_itemview, null);
+					R.layout.home_list_item_view, null);
 
 			HomeListAdapter hla = new HomeListAdapter(this);
 
