@@ -1,23 +1,22 @@
 package com.hxhxtla.ngaapp.homepage;
 
+import org.taptwo.android.widget.ViewFlow;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
-import com.hxhxtla.ngaapp.controller.PageScrollController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 
 public class NgaAppMainActivity extends Activity {
@@ -36,11 +34,7 @@ public class NgaAppMainActivity extends Activity {
 
 	private AlertDialog alert;
 
-	private PageScrollController psc;
-
-	private DisplayMetrics dm;
-
-	private LayoutParams lps;
+	private ViewFlow vf;
 
 	private PointTabController pointTabController;
 
@@ -52,23 +46,19 @@ public class NgaAppMainActivity extends Activity {
 	private void initView() {
 		setContentView(R.layout.main);
 
-		HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.home_list_hs);
+		vf = (ViewFlow) findViewById(R.id.home_list);
 
-		LinearLayout ll = (LinearLayout) findViewById(R.id.home_list_ll);
+		PageListAdapter pla = new PageListAdapter();
 
-		psc = new PageScrollController(ll, hsv);
-
-		dm = this.getResources().getDisplayMetrics();
-
-		lps = new LayoutParams(dm.widthPixels, LayoutParams.WRAP_CONTENT);
+		vf.setAdapter(pla);
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.home_tab_bar);
 
 		pointTabController = new PointTabController(linearLayout);
 
-		this.addNewPage(HomeListAdapter.getCurrentPageCount());
+		this.addNewPage(HomeListAdapter.getCurrentPageCount(this));
 
-		pointTabController.changePageOn(psc.getDisplayedChild());
+		pointTabController.changePageOn(vf.getSelectedItemPosition());
 
 		btn_next = (Button) findViewById(R.id.home_btn_next);
 		btn_pre = (Button) findViewById(R.id.home_btn_pre);
@@ -77,7 +67,7 @@ public class NgaAppMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if (psc.getChildCount() > 1) {
+				if (vf.getChildCount() > 1) {
 					if (v == btn_next) {
 						showNextPage();
 					} else if (v == btn_pre) {
@@ -101,24 +91,21 @@ public class NgaAppMainActivity extends Activity {
 	}
 
 	private HomeListAdapter getCurrentHomeListAdapter() {
-		GridView gv = (GridView) psc.getCurrentView();
+		GridView gv = (GridView) vf.getSelectedView();
 		return (HomeListAdapter) gv.getAdapter();
 	}
 
 	private void addNewPage(int num) {
+		PageListAdapter pla = (PageListAdapter) vf.getAdapter();
 		for (int i = 0; i < num; i++) {
 			GridView gv = (GridView) getLayoutInflater().inflate(
 					R.layout.home_list_item_view, null);
 
-			gv.setLayoutParams(lps);
-
 			HomeListAdapter hla = new HomeListAdapter(this);
 
-			hla.setIndex_view(psc.getChildCount());
+			hla.setIndex_view(vf.getChildCount());
 
 			gv.setAdapter(hla);
-
-			psc.addView(gv);
 
 			gv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
@@ -136,9 +123,13 @@ public class NgaAppMainActivity extends Activity {
 			});
 
 			this.registerForContextMenu(gv);
+			
+			pla.addPage(gv);
 		}
+		
+		pla.notifyDataSetChanged();
 
-		int pageNum = psc.getChildCount();
+		int pageNum = vf.getChildCount();
 
 		pointTabController.setNumPage(pageNum);
 	}
@@ -215,22 +206,22 @@ public class NgaAppMainActivity extends Activity {
 	}
 
 	private void notifyAllDataSetChanged() {
-		int numVFChildren = psc.getChildCount();
+		int numVFChildren = vf.getChildCount();
 		for (int index = 0; index < numVFChildren; index++) {
-			GridView gv = (GridView) psc.getChildAt(index);
+			GridView gv = (GridView) vf.getChildAt(index);
 			HomeListAdapter hla = (HomeListAdapter) gv.getAdapter();
 			hla.notifyDataSetChanged();
 		}
 	}
 
 	private void showNextPage() {
-		psc.showNextPage();
-		pointTabController.changePageOn(psc.getDisplayedChild());
+		vf.setSelection(vf.getSelectedItemPosition() + 1);
+		pointTabController.changePageOn(vf.getSelectedItemPosition());
 	}
 
 	private void showPreviousPage() {
-		psc.showPreviousPage();
-		pointTabController.changePageOn(psc.getDisplayedChild());
+		vf.setSelection(vf.getSelectedItemPosition() - 1);
+		pointTabController.changePageOn(vf.getSelectedItemPosition());
 	}
 
 	// /////////////////////////////////////////////////////////Override

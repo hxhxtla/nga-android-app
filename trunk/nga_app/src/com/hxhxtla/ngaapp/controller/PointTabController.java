@@ -19,6 +19,9 @@ public class PointTabController {
 	}
 
 	public void changePageOn(int pageIndex) {
+		if (pageIndex < 0 || pageIndex >= linearLayout.getChildCount()) {
+			return;
+		}
 		ImageSwitcher is = (ImageSwitcher) linearLayout.getChildAt(pageIndex);
 		if (is == curOnPoint) {
 			return;
