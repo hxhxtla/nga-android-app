@@ -30,9 +30,6 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 	public HomeListAdapter(Context c) {
 		mContext = c;
-		if (TopicInfoList == null) {
-			initializeTopicInfoList();
-		}
 	}
 
 	public int getCount() {
@@ -81,8 +78,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 	public TopicInfo deleteItemAt(int position) {
 		TopicInfo item = getItem(position);
-		if (item.getId()
-				.equals(mContext.getString(R.string.add_topic_id))) {
+		if (item.getId().equals(mContext.getString(R.string.add_topic_id))) {
 			return null;
 		}
 		this.removeItemAt(position);
@@ -119,38 +115,38 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		return convertView;
 	}
 
-	private void initializeTopicInfoList() {
+	private static void initializeTopicInfoList(Context context) {
 		TopicInfoList = new ArrayList<TopicInfo>();
 
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic1_id),
-				mContext.getString(R.string.topic1), R.drawable.p7));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic2_id),
-				mContext.getString(R.string.topic2), R.drawable.p323));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic3_id),
-				mContext.getString(R.string.topic3), R.drawable.p354));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic4_id),
-				mContext.getString(R.string.topic4), R.drawable.p318));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic5_id),
-				mContext.getString(R.string.topic5), R.drawable.p10));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic6_id),
-				mContext.getString(R.string.topic6), R.drawable.p230));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic7_id),
-				mContext.getString(R.string.topic7), R.drawable.p387));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic1_id),
+				context.getString(R.string.topic1), R.drawable.p7));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic2_id),
+				context.getString(R.string.topic2), R.drawable.p323));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic3_id),
+				context.getString(R.string.topic3), R.drawable.p354));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic4_id),
+				context.getString(R.string.topic4), R.drawable.p318));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic5_id),
+				context.getString(R.string.topic5), R.drawable.p10));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic6_id),
+				context.getString(R.string.topic6), R.drawable.p230));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic7_id),
+				context.getString(R.string.topic7), R.drawable.p387));
 
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic8_id),
-				mContext.getString(R.string.topic8), R.drawable.p320));
-		TopicInfoList.add(new TopicInfo(mContext.getString(R.string.topic9_id),
-				mContext.getString(R.string.topic9), R.drawable.p181));
-		TopicInfoList.add(new TopicInfo(
-				mContext.getString(R.string.topic10_id), mContext
-						.getString(R.string.topic10), R.drawable.p182));
-		TopicInfoList.add(new TopicInfo(
-				mContext.getString(R.string.topic11_id), mContext
-						.getString(R.string.topic11), R.drawable.p183));
-		TopicInfoList.add(new TopicInfo(mContext
-				.getString(R.string.add_topic_id), mContext
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic8_id),
+				context.getString(R.string.topic8), R.drawable.p320));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic9_id),
+				context.getString(R.string.topic9), R.drawable.p181));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic10_id),
+				context.getString(R.string.topic10), R.drawable.p182));
+		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic11_id),
+				context.getString(R.string.topic11), R.drawable.p183));
+		TopicInfoList.add(new TopicInfo(context
+				.getString(R.string.add_topic_id), context
 				.getString(R.string.add_topic), R.drawable.add_icon));
-		getContext().saveTopicInfoListToConfig();
+		if (context instanceof NgaAppMainActivity) {
+			((NgaAppMainActivity) context).saveTopicInfoListToConfig();
+		}
 	}
 
 	public int getIndex_view() {
@@ -169,10 +165,13 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		TopicInfoList = topicInfoList;
 	}
 
-	public static int getCurrentPageCount() {
-		int Numpage = (int) Math.ceil((double) TopicInfoList.size()
+	public static int getCurrentPageCount(Context value) {
+		if(TopicInfoList == null){
+			initializeTopicInfoList(value);
+		}
+		int numPage = (int) Math.ceil((double) TopicInfoList.size()
 				/ (double) NUM_PER_PAGE);
-		return Numpage;
+		return numPage;
 	}
 
 }

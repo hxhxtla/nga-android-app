@@ -12,16 +12,21 @@ public class PageScrollController {
 
 	private HorizontalScrollView hsv;
 
+	private PointTabController ptc;
+
 	private int curPageIndex = 0;
 
-	public PageScrollController(LinearLayout value1, HorizontalScrollView value2) {
+	public PageScrollController(LinearLayout value1,
+			HorizontalScrollView value2, PointTabController value3) {
 		ll = value1;
 		hsv = value2;
+		ptc = value3;
 		hsv.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
+				if (event.getAction() == MotionEvent.ACTION_UP
+						|| event.getAction() == MotionEvent.ACTION_CANCEL) {
 					int curX = hsv.getScrollX();
 					int distance1 = curX - getChildAt(curPageIndex).getLeft();
 					if (distance1 == 0) {
@@ -42,7 +47,8 @@ public class PageScrollController {
 							targetIndex = curPageIndex;
 							curPageIndex = -1;
 						}
-						showPageByIndex(targetIndex, false);
+						if (showPageByIndex(targetIndex, true))
+							syncPTC(targetIndex);
 					}
 				}
 				return false;
@@ -70,7 +76,7 @@ public class PageScrollController {
 		return ll.getChildAt(index);
 	}
 
-	private void showPageByIndex(int index, boolean smooth) {
+	private boolean showPageByIndex(int index, boolean smooth) {
 		if (index > -1 && index < getChildCount() && curPageIndex != index) {
 			int targetX = getChildAt(index).getLeft();
 			if (smooth) {
@@ -78,15 +84,27 @@ public class PageScrollController {
 			} else {
 				hsv.scrollTo(targetX, 0);
 			}
+			if (hsv.getScrollX() != targetX) {
+				return showPageByIndex(index, true);
+			}
 			curPageIndex = index;
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	public void showNextPage() {
-		showPageByIndex(curPageIndex + 1, true);
+	public boolean showNextPage() {
+		return showPageByIndex(curPageIndex + 1, true);
 	}
 
-	public void showPreviousPage() {
-		showPageByIndex(curPageIndex - 1, true);
+	public boolean showPreviousPage() {
+		return showPageByIndex(curPageIndex - 1, true);
+	}
+
+	private void syncPTC(int index) {
+		if (ptc != null) {
+			ptc.changePageOn(index);
+		}
 	}
 }
