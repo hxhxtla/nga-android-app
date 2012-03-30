@@ -36,10 +36,6 @@ public class NgaAppMainActivity extends Activity {
 
 	private AlertDialog alert;
 
-	private HorizontalScrollView hsv;
-
-	private LinearLayout ll;
-
 	private PageScrollController psc;
 
 	private DisplayMetrics dm;
@@ -53,19 +49,14 @@ public class NgaAppMainActivity extends Activity {
 	private Button btn_next;
 	private Button btn_pre;
 
-	// private static Animation nextInAnimation;
-	// private static Animation preInAnimation;
-	// private static Animation nextOutAnimation;
-	// private static Animation preOutAnimation;
-
 	private void initView() {
 		setContentView(R.layout.main);
 
-		hsv = (HorizontalScrollView) findViewById(R.id.home_list_hs);
+		HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.home_list_hs);
 
-		ll = (LinearLayout) findViewById(R.id.home_list_ll);
+		LinearLayout ll = (LinearLayout) findViewById(R.id.home_list_ll);
 
-		psc = new PageScrollController(ll);
+		psc = new PageScrollController(ll, hsv);
 
 		dm = this.getResources().getDisplayMetrics();
 
@@ -148,20 +139,6 @@ public class NgaAppMainActivity extends Activity {
 		}
 
 		int pageNum = psc.getChildCount();
-
-		// if (pageNum > 1
-		// && (nextInAnimation == null || preInAnimation == null
-		// || nextOutAnimation == null || preOutAnimation == null)) {
-		//
-		// nextInAnimation = AnimationUtils.loadAnimation(this,
-		// R.anim.push_right_in);
-		// nextOutAnimation = AnimationUtils.loadAnimation(this,
-		// R.anim.push_left_out);
-		// preInAnimation = AnimationUtils.loadAnimation(this,
-		// R.anim.push_left_in);
-		// preOutAnimation = AnimationUtils.loadAnimation(this,
-		// R.anim.push_right_out);
-		// }
 
 		pointTabController.setNumPage(pageNum);
 	}
@@ -247,16 +224,12 @@ public class NgaAppMainActivity extends Activity {
 	}
 
 	private void showNextPage() {
-		// this.vf.setInAnimation(nextInAnimation);
-		// this.vf.setOutAnimation(nextOutAnimation);
-		// this.vf.showNext();
+		psc.showNextPage();
 		pointTabController.changePageOn(psc.getDisplayedChild());
 	}
 
 	private void showPreviousPage() {
-		// this.vf.setInAnimation(preInAnimation);
-		// this.vf.setOutAnimation(preOutAnimation);
-		// this.vf.showPrevious();
+		psc.showPreviousPage();
 		pointTabController.changePageOn(psc.getDisplayedChild());
 	}
 
