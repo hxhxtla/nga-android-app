@@ -9,13 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 
 public class PageListAdapter extends BaseAdapter {
-	
-	private static final List<GridView> pageList = new ArrayList<GridView>();
+
+	private static List<GridView> pageList;
 
 	public PageListAdapter() {
+		pageList = new ArrayList<GridView>();
 	}
-	
-	public void addPage(GridView value){
+
+	public void addPage(GridView value) {
 		pageList.add(value);
 	}
 
@@ -39,7 +40,7 @@ public class PageListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
+
 		return pageList.get(position);
 	}
 

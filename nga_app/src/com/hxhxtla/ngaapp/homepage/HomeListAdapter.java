@@ -166,7 +166,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 	}
 
 	public static int getCurrentPageCount(Context value) {
-		if(TopicInfoList == null){
+		if (TopicInfoList == null) {
 			initializeTopicInfoList(value);
 		}
 		int numPage = (int) Math.ceil((double) TopicInfoList.size()
