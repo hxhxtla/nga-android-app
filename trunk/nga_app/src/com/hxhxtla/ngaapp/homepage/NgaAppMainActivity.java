@@ -204,6 +204,14 @@ public class NgaAppMainActivity extends Activity {
 	private void menuHandler_deleteTopic(int position) {
 		TopicInfo item = getCurrentHomeListAdapter().deleteItemAt(position);
 		if (item != null) {
+			while (vf.getViewsCount() > HomeListAdapter
+					.getCurrentPageCount(this)) {
+				PageListAdapter pla = (PageListAdapter) vf.getAdapter();
+				pla.removePage();
+				pla.notifyDataSetChanged();
+				pointTabController.setNumPage(vf.getViewsCount());
+			}
+
 			notifyAllDataSetChanged();
 			Toast.makeText(
 					NgaAppMainActivity.this,
