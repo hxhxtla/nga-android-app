@@ -1,6 +1,7 @@
 package com.hxhxtla.ngaapp.homepage;
 
 import org.taptwo.android.widget.ViewFlow;
+import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,6 +31,8 @@ public class NgaAppMainActivity extends Activity {
 
 	private static final int MENU_DEL = 1;
 
+	private int curPageIndex = 0;
+
 	private static AllTopicListAdapter atla;
 
 	private AlertDialog alert;
@@ -51,6 +54,16 @@ public class NgaAppMainActivity extends Activity {
 		PageListAdapter pla = new PageListAdapter();
 
 		vf.setAdapter(pla);
+		vf.setOnViewSwitchListener(new ViewSwitchListener() {
+
+			@Override
+			public void onSwitched(View arg0, int arg1) {
+
+				curPageIndex = arg1;
+
+				pointTabController.changePageOn(arg1);
+			}
+		});
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.home_tab_bar);
 
@@ -58,7 +71,7 @@ public class NgaAppMainActivity extends Activity {
 
 		this.addNewPage(HomeListAdapter.getCurrentPageCount(this));
 
-		pointTabController.changePageOn(vf.getSelectedItemPosition());
+		pointTabController.changePageOn(curPageIndex);
 
 		btn_next = (Button) findViewById(R.id.home_btn_next);
 		btn_pre = (Button) findViewById(R.id.home_btn_pre);
@@ -67,7 +80,7 @@ public class NgaAppMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if (vf.getChildCount() > 1) {
+				if (vf.getViewsCount() > 1) {
 					if (v == btn_next) {
 						showNextPage();
 					} else if (v == btn_pre) {
@@ -103,7 +116,7 @@ public class NgaAppMainActivity extends Activity {
 
 			HomeListAdapter hla = new HomeListAdapter(this);
 
-			hla.setIndex_view(vf.getChildCount());
+			hla.setIndex_view(vf.getViewsCount());
 
 			gv.setAdapter(hla);
 
@@ -123,13 +136,13 @@ public class NgaAppMainActivity extends Activity {
 			});
 
 			this.registerForContextMenu(gv);
-			
+
 			pla.addPage(gv);
 		}
-		
+
 		pla.notifyDataSetChanged();
 
-		int pageNum = vf.getChildCount();
+		int pageNum = vf.getViewsCount();
 
 		pointTabController.setNumPage(pageNum);
 	}
@@ -206,7 +219,7 @@ public class NgaAppMainActivity extends Activity {
 	}
 
 	private void notifyAllDataSetChanged() {
-		int numVFChildren = vf.getChildCount();
+		int numVFChildren = vf.getViewsCount();
 		for (int index = 0; index < numVFChildren; index++) {
 			GridView gv = (GridView) vf.getChildAt(index);
 			HomeListAdapter hla = (HomeListAdapter) gv.getAdapter();
@@ -215,13 +228,11 @@ public class NgaAppMainActivity extends Activity {
 	}
 
 	private void showNextPage() {
-		vf.setSelection(vf.getSelectedItemPosition() + 1);
-		pointTabController.changePageOn(vf.getSelectedItemPosition());
+		vf.setSelection(curPageIndex + 1);
 	}
 
 	private void showPreviousPage() {
-		vf.setSelection(vf.getSelectedItemPosition() - 1);
-		pointTabController.changePageOn(vf.getSelectedItemPosition());
+		vf.setSelection(curPageIndex - 1);
 	}
 
 	// /////////////////////////////////////////////////////////Override
