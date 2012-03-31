@@ -20,15 +20,17 @@ public class PageListAdapter extends BaseAdapter {
 		pageList.add(value);
 	}
 
+	public void removePage() {
+		pageList.remove(getCount() - 1);
+	}
+
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return pageList.size();
 	}
 
 	@Override
 	public GridView getItem(int index) {
-		// TODO Auto-generated method stub
 		return pageList.get(index);
 	}
 

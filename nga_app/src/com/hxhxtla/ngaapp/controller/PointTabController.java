@@ -49,9 +49,9 @@ public class PointTabController {
 		}
 
 		while (count < 0) {
-			linearLayout.removeViews(linearLayout.getChildCount() - 1 - count,
-					count);
-			count = linearLayout.getChildCount() - cur_num_page;
+			linearLayout.removeViews(linearLayout.getChildCount() + count,
+					-count);
+			count = num_page - linearLayout.getChildCount();
 		}
 	}
 
