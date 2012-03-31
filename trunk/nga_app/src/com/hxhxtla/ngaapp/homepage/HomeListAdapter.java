@@ -132,7 +132,6 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 				context.getString(R.string.topic6), R.drawable.p230));
 		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic7_id),
 				context.getString(R.string.topic7), R.drawable.p387));
-
 		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic8_id),
 				context.getString(R.string.topic8), R.drawable.p320));
 		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic9_id),

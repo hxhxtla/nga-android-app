@@ -1,5 +1,6 @@
 package com.hxhxtla.ngaapp.homepage;
 
+import org.dom4j.Document;
 import org.taptwo.android.widget.ViewFlow;
 import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
 
@@ -23,11 +24,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.bean.IActivity;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
+import com.hxhxtla.ngaapp.task.GetArticlesListTask;
 
-public class NgaAppMainActivity extends Activity {
+public class NgaAppMainActivity extends Activity implements IActivity {
 
 	private static final int MENU_DEL = 1;
 
@@ -42,6 +45,8 @@ public class NgaAppMainActivity extends Activity {
 	private PointTabController pointTabController;
 
 	private ConfigController cctrl;
+
+	private GetArticlesListTask galt;
 
 	private Button btn_next;
 	private Button btn_pre;
@@ -123,14 +128,17 @@ public class NgaAppMainActivity extends Activity {
 			gv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
 						int position, long id) {
-					if (getCurrentHomeListAdapter()
-							.getItem(position)
-							.getId()
-							.equals(NgaAppMainActivity.this
-									.getString(R.string.add_topic_id))) {
+					String curTopicId = getCurrentHomeListAdapter().getItem(
+							position).getId();
+					if (curTopicId.equals(NgaAppMainActivity.this
+							.getString(R.string.add_topic_id))) {
 						showTopicPicker();
 					} else {
-
+						if (galt == null) {
+							galt = new GetArticlesListTask(
+									NgaAppMainActivity.this);
+						}
+						galt.execute(curTopicId);
 					}
 				}
 			});
@@ -278,5 +286,10 @@ public class NgaAppMainActivity extends Activity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public void callbackGetArticlesList(Document doc) {
+
 	}
 }
