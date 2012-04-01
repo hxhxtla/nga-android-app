@@ -22,13 +22,13 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 	public static final int ADD_STATUS_OK = 0;
 	public static final int ADD_STATUS_FULL = 1;
 
-	private Context mContext;
+	private Activity mContext;
 
 	private static final int NUM_PER_PAGE = 12;
 
 	private int index_view;
 
-	public HomeListAdapter(Context c) {
+	public HomeListAdapter(Activity c) {
 		mContext = c;
 	}
 
@@ -90,15 +90,12 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-
-		Activity aty = (Activity) mContext;
-
 		TopicInfo curTopicInfo = getItem(position);
 
 		convertView = curTopicInfo.getView();
 
 		if (convertView == null) {
-			convertView = aty.getLayoutInflater().inflate(
+			convertView = mContext.getLayoutInflater().inflate(
 					R.layout.home_list_item, null);
 			ImageView imageView = (ImageView) convertView
 					.findViewById(R.id.home_list_item_icon);
