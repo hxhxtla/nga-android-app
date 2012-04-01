@@ -34,6 +34,10 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 	@Override
 	protected Document doInBackground(String... arg0) {
 		String url = getArticlesListURL(arg0[0]);
+		if (url == null) {
+			// TODO
+			return null;
+		}
 		Document document;
 		URL url_rss;
 		try {

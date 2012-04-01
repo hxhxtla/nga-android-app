@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -23,9 +24,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.articleslistpage.ArticlesListPageActivity;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
 public class NgaAppMainActivity extends Activity {
 
@@ -129,7 +132,9 @@ public class NgaAppMainActivity extends Activity {
 							.getString(R.string.add_topic_id))) {
 						showTopicPicker();
 					} else {
-						// TODO
+						SharedInfoController.DISPLAYED_ARTICLE = curTopicId;
+						startActivity(new Intent(NgaAppMainActivity.this,
+								ArticlesListPageActivity.class));
 					}
 				}
 			});

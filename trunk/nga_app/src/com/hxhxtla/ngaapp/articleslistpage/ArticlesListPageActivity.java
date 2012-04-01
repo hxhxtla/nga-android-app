@@ -7,17 +7,27 @@ import org.dom4j.Element;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ListView;
 
+import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.IActivity;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetArticlesListTask;
 
 public class ArticlesListPageActivity extends Activity implements IActivity {
 
 	private GetArticlesListTask galt;
-	private String curTopicId;
+
+	private ArticlesListAdapter ala;
 
 	private void initView() {
-		// TODO Auto-generated method stub
+		setContentView(R.layout.articles_list_page);
+
+		ListView lv = (ListView) findViewById(R.id.articles_list);
+
+		ala = new ArticlesListAdapter(this);
+
+		lv.setAdapter(ala);
 
 	}
 
@@ -25,7 +35,8 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 		if (galt == null) {
 			galt = new GetArticlesListTask(ArticlesListPageActivity.this);
 		}
-		galt.execute(curTopicId);
+
+		galt.execute(SharedInfoController.DISPLAYED_ARTICLE);
 	}
 
 	@Override
@@ -38,8 +49,16 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 	@Override
 	public void callbackGetArticlesList(Document doc) {
-		Element channel = (Element) doc.getRootElement().element("channel");
-		Iterator i = channel.elementIterator("item");
+		if (doc != null) {
+			Element channel = (Element) doc.getRootElement().element(
+					this.getString(R.string.channel));
+			Iterator it = channel
+					.elementIterator(this.getString(R.string.item));
+			ala.setData(it);
+			ala.notifyDataSetChanged();
+		} else {
+			// TODO
+		}
 
 	}
 
