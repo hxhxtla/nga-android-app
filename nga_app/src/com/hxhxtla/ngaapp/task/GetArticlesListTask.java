@@ -1,11 +1,15 @@
 package com.hxhxtla.ngaapp.task;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
+import org.dom4j.DocumentHelper;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -30,18 +34,36 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 	@Override
 	protected Document doInBackground(String... arg0) {
 		String url = getArticlesListURL(arg0[0]);
-		SAXReader sr = new SAXReader();
-		Document document = null;
+		Document document;
+		URL url_rss;
 		try {
-			document = sr.read(new URL(url));
+			url_rss = new URL(url);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
+		}
+		InputStream is;
+		HttpURLConnection conn;
+		String res;
+		try {
+			conn = (HttpURLConnection) url_rss.openConnection();
+			conn.setRequestProperty("User-Agent", "3rd_part_android_app");
+			conn.connect();
+			is = conn.getInputStream();
+			res = IOUtils.toString(is, "GBK");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		try {
+			document = DocumentHelper.parseText(res);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-
 		return document;
 	}
 
