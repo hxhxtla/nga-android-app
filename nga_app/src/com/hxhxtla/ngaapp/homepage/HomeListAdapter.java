@@ -97,6 +97,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		if (convertView == null) {
 			convertView = mContext.getLayoutInflater().inflate(
 					R.layout.home_list_item, null);
+			
 			ImageView imageView = (ImageView) convertView
 					.findViewById(R.id.home_list_item_icon);
 			TextView textView = (TextView) convertView
@@ -108,7 +109,12 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 			curTopicInfo.setView(convertView);
 		}
-
+		
+		if(position%2 == 0){
+			convertView.setBackgroundResource(R.color.home_list_item1);
+		}else{
+			convertView.setBackgroundResource(R.color.home_list_item2);
+		}
 		return convertView;
 	}
 
