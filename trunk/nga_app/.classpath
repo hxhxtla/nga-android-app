@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/fastjson-1.1.17.jar"/>
 	<classpathentry kind="lib" path="lib/viewflow-20110706.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
