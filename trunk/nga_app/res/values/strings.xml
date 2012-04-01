@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, Nga_App_MainActivity!</string>
-    <string name="app_name">nga_app</string>
+    <string name="app_name">艾泽拉斯国家地理</string>
     
     <string name="msg_topicExist">添加的主题已存在</string>
     <string name="msg_delTopicSucc">删除主题成功</string>

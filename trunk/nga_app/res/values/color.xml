@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="home_page">#FFFFFFEE</color>
-    <color name="home_list_item">#FFFFF5D7</color>
+    <color name="home_page">#FFFFF5D7</color>
+    <color name="home_list_item1">#FFFFF1C9</color>
+    <color name="home_list_item2">#FFFFEEBB</color>
     <color name="topic_row1">#FFFFF5D7</color>
     <color name="topic_row2">#FFFFEEBB</color>
     <color name="article_title">#FF1D2A63</color>
