@@ -18,7 +18,7 @@
             android:layout_centerVertical="true" />
 
         <Button
-            android:id="@+id/articles_btn_pre"
+            android:id="@+id/articles_btn_refresh"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
@@ -41,27 +41,43 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" >
 
-        <Button
-            android:id="@+id/articles_btn_pre"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/btn_bg_pre" />
-
         <LinearLayout
             android:id="@+id/articles_tab_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/articles_page_selector"
             android:gravity="center"
             android:orientation="horizontal" />
 
-        <Button
-            android:id="@+id/articles_btn_next"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <LinearLayout
+            android:id="@+id/articles_page_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/btn_bg_next" />
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/articles_btn_pre"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/btn_bg_pre" />
+
+            <TextView
+                android:id="@+id/articles_page_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/article_bg1" />
+
+            <Button
+                android:id="@+id/articles_btn_next"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/btn_bg_next" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

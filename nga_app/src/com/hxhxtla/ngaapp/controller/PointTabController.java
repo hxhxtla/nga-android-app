@@ -19,18 +19,19 @@ public class PointTabController {
 	}
 
 	public void changePageOn(int pageIndex) {
-		if (pageIndex < 0 || pageIndex >= linearLayout.getChildCount()) {
-			return;
-		}
-		ImageSwitcher is = (ImageSwitcher) linearLayout.getChildAt(pageIndex);
-		if (is == curOnPoint) {
+		if (pageIndex < 0) {
 			return;
 		}
 		if (curOnPoint != null) {
 			curOnPoint.showNext();
+			curOnPoint = null;
 		}
-		curOnPoint = is;
-		curOnPoint.showNext();
+		if (pageIndex < linearLayout.getChildCount()) {
+			ImageSwitcher is = (ImageSwitcher) linearLayout
+					.getChildAt(pageIndex);
+			curOnPoint = is;
+			curOnPoint.showNext();
+		}
 	}
 
 	private View getNewPoint() {
