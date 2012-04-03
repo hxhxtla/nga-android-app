@@ -134,5 +134,10 @@
     
     <string name="nga_rss_keyword1">(最后回复 )</string>
     <string name="nga_rss_keyword2">个回复 于</string>
+    
+    <string name="articles_pd_title">请稍候。。。</string>
+    <string name="articles_pd_msg1">连接服务端。。。</string>
+    <string name="articles_pd_msg2">获取数据。。。</string>
+    <string name="articles_pd_msg3">载入中。。。</string>
 
 </resources>

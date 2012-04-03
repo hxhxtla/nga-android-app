@@ -32,6 +32,11 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 	}
 
 	@Override
+	protected void onPreExecute() {
+		iactivity.showContectionProgressDialog();
+	}
+
+	@Override
 	protected Document doInBackground(String... arg0) {
 		String url = getArticlesListURL(arg0[0]);
 		if (url == null) {
@@ -54,6 +59,7 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 			conn = (HttpURLConnection) url_rss.openConnection();
 			conn.setRequestProperty("User-Agent", "3rd_part_android_app");
 			conn.connect();
+			publishProgress();
 			is = conn.getInputStream();
 			res = IOUtils.toString(is, "GBK");
 		} catch (IOException e) {
@@ -70,9 +76,15 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 		}
 		return document;
 	}
+	
+	@Override
+	protected void onProgressUpdate(String... arg0) {
+		iactivity.showGettingProgressDialog();
+	}
 
 	@Override
 	protected void onPostExecute(Document result) {
+		iactivity.showLoadingProgressDialog();
 		iactivity.callbackGetArticlesList(result);
 	}
 
