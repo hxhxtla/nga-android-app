@@ -10,13 +10,19 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.IActivity;
+import com.hxhxtla.ngaapp.controller.PointTabController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetArticlesListTask;
 
@@ -27,6 +33,15 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	private ProgressDialog progressDialog;
 
 	private HistoryTopicListAdapter htla;
+
+	private PointTabController pointTabController;
+
+	private int curPageNum = 0;
+
+	private Button btn_next;
+	private Button btn_pre;
+
+	private TextView tv;
 
 	private void initView() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -66,10 +81,56 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 			}
 		});
 
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.articles_tab_bar);
+
+		pointTabController = new PointTabController(linearLayout);
+
+		pointTabController.setNumPage(10);
+
+		tv = (TextView) findViewById(R.id.articles_page_num);
+
+		showNextPage();
+
+		btn_next = (Button) findViewById(R.id.articles_btn_next);
+		btn_pre = (Button) findViewById(R.id.articles_btn_pre);
+
+		OnClickListener btnClickListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (v == btn_next) {
+					showNextPage();
+				} else if (v == btn_pre) {
+					showPreviousPage();
+				}
+			}
+
+		};
+		btn_next.setOnClickListener(btnClickListener);
+		btn_pre.setOnClickListener(btnClickListener);
+
 	}
 
 	private void initData() {
 		refreshView();
+	}
+
+	private void showNextPage() {
+		curPageNum++;
+		// TODO Auto-generated method stub
+		tv.setText(String.valueOf(curPageNum));
+		pointTabController.changePageOn(curPageNum - 1);
+
+	}
+
+	private void showPreviousPage() {
+		if (curPageNum > 1) {
+			curPageNum--;
+			// TODO Auto-generated method stub
+			tv.setText(String.valueOf(curPageNum));
+			pointTabController.changePageOn(curPageNum - 1);
+		}
+
 	}
 
 	private void refreshView() {

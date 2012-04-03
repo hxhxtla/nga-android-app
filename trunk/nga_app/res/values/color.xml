@@ -10,5 +10,6 @@
     <color name="article_bg1">#FFFFF8E5</color>
     <color name="article_bg2">#FFFEF3D1</color>
     <color name="article_count">#FFFF8FD7</color>
+    <color name="article_pagenum">#FFFFFFEE</color>
 
 </resources>
