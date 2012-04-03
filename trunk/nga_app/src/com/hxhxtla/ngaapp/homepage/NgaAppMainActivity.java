@@ -126,13 +126,14 @@ public class NgaAppMainActivity extends Activity {
 			gv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
 						int position, long id) {
-					String curTopicId = getCurrentHomeListAdapter().getItem(
-							position).getId();
+					TopicInfo ti = getCurrentHomeListAdapter()
+							.getItem(position);
+					String curTopicId = ti.getId();
 					if (curTopicId.equals(NgaAppMainActivity.this
 							.getString(R.string.add_topic_id))) {
 						showTopicPicker();
 					} else {
-						SharedInfoController.DISPLAYED_ARTICLE = curTopicId;
+						SharedInfoController.addTopicHistory(ti);
 						startActivity(new Intent(NgaAppMainActivity.this,
 								ArticlesListPageActivity.class));
 					}
