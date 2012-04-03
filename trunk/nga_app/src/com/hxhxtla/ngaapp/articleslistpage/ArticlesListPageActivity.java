@@ -9,9 +9,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -41,14 +40,18 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	private Button btn_next;
 	private Button btn_pre;
 
+	private Button btn_refresh;
+
 	private TextView tv;
+
+	private ListView lv;
 
 	private void initView() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.articles_list_page);
 
-		ListView lv = (ListView) findViewById(R.id.articles_list);
+		lv = (ListView) findViewById(R.id.articles_list);
 
 		ala = new ArticlesListAdapter(this);
 
@@ -94,6 +97,8 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 		btn_next = (Button) findViewById(R.id.articles_btn_next);
 		btn_pre = (Button) findViewById(R.id.articles_btn_pre);
 
+		btn_refresh = (Button) findViewById(R.id.articles_btn_refresh);
+
 		OnClickListener btnClickListener = new OnClickListener() {
 
 			@Override
@@ -102,22 +107,25 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 					showNextPage();
 				} else if (v == btn_pre) {
 					showPreviousPage();
+				} else if (v == btn_refresh) {
+					refreshView();
 				}
 			}
 
 		};
 		btn_next.setOnClickListener(btnClickListener);
 		btn_pre.setOnClickListener(btnClickListener);
+		btn_refresh.setOnClickListener(btnClickListener);
 
 	}
 
 	private void initData() {
-		refreshView();
+
 	}
 
 	private void showNextPage() {
 		curPageNum++;
-		// TODO Auto-generated method stub
+		refreshView();
 		tv.setText(String.valueOf(curPageNum));
 		pointTabController.changePageOn(curPageNum - 1);
 
@@ -126,7 +134,7 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	private void showPreviousPage() {
 		if (curPageNum > 1) {
 			curPageNum--;
-			// TODO Auto-generated method stub
+			refreshView();
 			tv.setText(String.valueOf(curPageNum));
 			pointTabController.changePageOn(curPageNum - 1);
 		}
@@ -138,7 +146,7 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 				ArticlesListPageActivity.this);
 
 		galt.execute(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
-				.getId());
+				.getId(), String.valueOf(curPageNum));
 	}
 
 	public void showContectionProgressDialog() {
@@ -178,6 +186,7 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 			ala.setData(it);
 			ala.notifyDataSetChanged();
 			htla.notifyDataSetChanged();
+			lv.setSelectionAfterHeaderView();
 			closeContectionProgressDialog();
 		} else {
 			// TODO
