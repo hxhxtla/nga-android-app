@@ -38,7 +38,7 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 
 	@Override
 	protected Document doInBackground(String... arg0) {
-		String url = getArticlesListURL(arg0[0]);
+		String url = getArticlesListURL(arg0[0], arg0[1]);
 		if (url == null) {
 			// TODO
 			return null;
@@ -76,7 +76,7 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 		}
 		return document;
 	}
-	
+
 	@Override
 	protected void onProgressUpdate(String... arg0) {
 		iactivity.showGettingProgressDialog();
@@ -88,13 +88,14 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 		iactivity.callbackGetArticlesList(result);
 	}
 
-	private String getArticlesListURL(String fid) {
+	private String getArticlesListURL(String fid, String pagenum) {
 		try {
 			Integer.parseInt(fid);
 		} catch (NumberFormatException e) {
 			return null;
 		}
-		String res = SERVER_URL + "/thread.php?fid=" + fid + "&rss=1";
+		String res = SERVER_URL + "/thread.php?fid=" + fid + "&page=" + pagenum
+				+ "&rss=1";
 		return res;
 	}
 
