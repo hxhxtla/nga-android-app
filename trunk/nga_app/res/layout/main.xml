@@ -20,12 +20,12 @@
         android:layout_marginRight="10dp"
         android:gravity="center_horizontal" >
 
-        <Button
+        <ImageButton
             android:id="@+id/home_btn_pre"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/btn_bg_pre" />
+            android:src="@drawable/btn_bg_pre" />
 
         <LinearLayout
             android:id="@+id/home_tab_bar"
@@ -35,12 +35,12 @@
             android:gravity="center"
             android:orientation="horizontal" />
 
-        <Button
+        <ImageButton
             android:id="@+id/home_btn_next"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/btn_bg_next" />
+            android:src="@drawable/btn_bg_next" />
     </RelativeLayout>
 
 </RelativeLayout>
