@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rss_channel">channel</string>
+    <string name="rss_item">item</string>
+    <string name="rss_author">author</string>
+    <string name="rss_title">title</string>
+    <string name="rss_link">guid</string>
+    <string name="rss_description">description</string>
+    
+    
+    <string name="post_item">forumbox postbox</string>
+    <string name="post_author">author</string>
+    
+</resources>
