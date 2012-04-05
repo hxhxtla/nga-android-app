@@ -57,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -70,6 +69,7 @@
                 android:id="@+id/articles_page_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:background="@color/article_bg1" />
 
             <ImageButton

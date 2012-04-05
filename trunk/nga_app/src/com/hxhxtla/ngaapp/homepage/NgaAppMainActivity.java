@@ -17,8 +17,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -46,8 +46,8 @@ public class NgaAppMainActivity extends Activity {
 
 	private ConfigController cctrl;
 
-	private Button btn_next;
-	private Button btn_pre;
+	private ImageButton btn_next;
+	private ImageButton btn_pre;
 
 	private void initView() {
 		setContentView(R.layout.main);
@@ -76,8 +76,8 @@ public class NgaAppMainActivity extends Activity {
 
 		pointTabController.changePageOn(curPageIndex);
 
-		btn_next = (Button) findViewById(R.id.home_btn_next);
-		btn_pre = (Button) findViewById(R.id.home_btn_pre);
+		btn_next = (ImageButton) findViewById(R.id.home_btn_next);
+		btn_pre = (ImageButton) findViewById(R.id.home_btn_pre);
 
 		OnClickListener btnClickListener = new OnClickListener() {
 

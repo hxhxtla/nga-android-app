@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -37,10 +37,10 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 	private int curPageNum = 0;
 
-	private Button btn_next;
-	private Button btn_pre;
+	private ImageButton btn_next;
+	private ImageButton btn_pre;
 
-	private Button btn_refresh;
+	private ImageButton btn_refresh;
 
 	private TextView tv;
 
@@ -94,10 +94,10 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 		showNextPage();
 
-		btn_next = (Button) findViewById(R.id.articles_btn_next);
-		btn_pre = (Button) findViewById(R.id.articles_btn_pre);
+		btn_next = (ImageButton) findViewById(R.id.articles_btn_next);
+		btn_pre = (ImageButton) findViewById(R.id.articles_btn_pre);
 
-		btn_refresh = (Button) findViewById(R.id.articles_btn_refresh);
+		btn_refresh = (ImageButton) findViewById(R.id.articles_btn_refresh);
 
 		OnClickListener btnClickListener = new OnClickListener() {
 
