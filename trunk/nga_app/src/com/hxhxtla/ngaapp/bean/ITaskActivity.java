@@ -1,9 +1,7 @@
 package com.hxhxtla.ngaapp.bean;
 
-import org.dom4j.Document;
-
-public interface IActivity {
-	public void callbackGetArticlesList(Document doc);
+public interface ITaskActivity {
+	public void callbackHander(String doc);
 
 	public void showContectionProgressDialog();
 

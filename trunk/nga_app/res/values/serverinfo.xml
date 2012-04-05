@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="server_url">http://bbs.ngacn.cc</string>
+    <string name="server_rss">rss=1</string>
+    <string name="article_keyword">/thread.php?</string>
+    <string name="article_keyword1">fid=</string>
+    <string name="article_keyword2">page=</string>
     
 </resources>
