@@ -62,6 +62,8 @@ public class GetArticlesListTask extends AsyncTask<String, String, Document> {
 			publishProgress();
 			is = conn.getInputStream();
 			res = IOUtils.toString(is, "GBK");
+			is.close();
+			conn.disconnect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
