@@ -3,6 +3,8 @@ package com.hxhxtla.ngaapp.articleslistpage;
 import java.util.Iterator;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import android.app.Activity;
@@ -10,7 +12,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -20,11 +21,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.hxhxtla.ngaapp.R;
-import com.hxhxtla.ngaapp.bean.IActivity;
+import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
-import com.hxhxtla.ngaapp.task.GetArticlesListTask;
+import com.hxhxtla.ngaapp.task.GetServerDataTask;
 
-public class ArticlesListPageActivity extends Activity implements IActivity {
+public class ArticlesListPageActivity extends Activity implements ITaskActivity {
 
 	private ArticlesListAdapter ala;
 
@@ -41,6 +42,11 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	private Button btn_refresh;
 
 	private ListView lv;
+
+	private String urlKeyword;
+	private String urlKeyword1;
+	private String urlKeyword2;
+	private String urlKeyword3;
 
 	private void initView() {
 
@@ -117,7 +123,14 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	}
 
 	private void initData() {
-
+		if (SharedInfoController.SERVER_URL == null) {
+			SharedInfoController.SERVER_URL = this
+					.getString(R.string.server_url);
+		}
+		urlKeyword = this.getString(R.string.article_keyword);
+		urlKeyword1 = this.getString(R.string.article_keyword1);
+		urlKeyword2 = this.getString(R.string.article_keyword2);
+		urlKeyword3 = this.getString(R.string.server_rss);
 	}
 
 	private void showPageByIndex(int index) {
@@ -129,11 +142,16 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 	}
 
 	private void refreshView() {
-		GetArticlesListTask galt = new GetArticlesListTask(
+		GetServerDataTask gsdt = new GetServerDataTask(
 				ArticlesListPageActivity.this);
+		String url = SharedInfoController.SERVER_URL
+				+ urlKeyword
+				+ urlKeyword1
+				+ SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
+						.getId() + "&" + urlKeyword2
+				+ String.valueOf(curPageNum) + "&" + urlKeyword3;
 
-		galt.execute(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
-				.getId(), String.valueOf(curPageNum));
+		gsdt.execute(url);
 	}
 
 	public void showContectionProgressDialog() {
@@ -163,10 +181,17 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 		this.initView();
 	}
 
-	@Override
-	public void callbackGetArticlesList(Document doc) {
+	public void callbackHander(String doc) {
 		if (doc != null) {
-			Element channel = (Element) doc.getRootElement().element(
+			Document document;
+			try {
+				document = DocumentHelper.parseText(doc);
+			} catch (DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+			Element channel = (Element) document.getRootElement().element(
 					this.getString(R.string.channel));
 			Iterator it = channel
 					.elementIterator(this.getString(R.string.item));

@@ -25,6 +25,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentLeft="true"
+            android:background="@color/home_list_item1"
             android:src="@drawable/btn_bg_pre" />
 
         <LinearLayout
@@ -40,6 +41,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
+            android:background="@color/home_list_item1"
             android:src="@drawable/btn_bg_next" />
     </RelativeLayout>
 
