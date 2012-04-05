@@ -4,85 +4,37 @@
     android:layout_height="match_parent"
     android:background="@color/home_page" >
 
-    <RelativeLayout
-        android:id="@+id/articles_titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" >
-
-        <Spinner
-            android:id="@+id/articles_history_topiclist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" />
-
-        <ImageButton
-            android:id="@+id/articles_btn_refresh"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/btn_bg_refresh" />
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/articles_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/articles_tool"
-        android:layout_below="@+id/articles_titlebar" />
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/articles_tool"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" >
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp" >
 
-        <LinearLayout
-            android:id="@+id/articles_tab_bar"
+        <Spinner
+            android:id="@+id/articles_history_topiclist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/articles_page_selector"
-            android:gravity="center"
-            android:orientation="horizontal" />
+            android:layout_toRightOf="@+id/articles_page_selector" />
 
-        <LinearLayout
+        <include
             android:id="@+id/articles_page_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:orientation="horizontal" >
-            <ImageButton
-                android:id="@+id/articles_btn_top"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/btn_bg_pre" />
-
-            <ImageButton
-                android:id="@+id/articles_btn_pre"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/btn_bg_pre" />
-
-            <TextView
-                android:id="@+id/articles_page_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@color/article_bg1" />
-
-            <ImageButton
-                android:id="@+id/articles_btn_next"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/btn_bg_next" />
-        </LinearLayout>
+            layout="@layout/page_control_bar" />
     </RelativeLayout>
 
 </RelativeLayout>
