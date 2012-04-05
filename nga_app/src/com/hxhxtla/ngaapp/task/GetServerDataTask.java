@@ -15,15 +15,9 @@ import com.hxhxtla.ngaapp.bean.ITaskActivity;
 public class GetServerDataTask extends AsyncTask<String, String, String> {
 	private ITaskActivity iactivity;
 
-	// public static String SERVER_URL;
-
 	public GetServerDataTask(ITaskActivity value) {
 		super();
 		iactivity = value;
-		// Context c = (Context) iactivity;
-		// if (SERVER_URL == null) {
-		// SERVER_URL = c.getString(R.string.server_url);
-		// }
 	}
 
 	@Override
@@ -76,16 +70,5 @@ public class GetServerDataTask extends AsyncTask<String, String, String> {
 		iactivity.showLoadingProgressDialog();
 		iactivity.callbackHander(result);
 	}
-
-	// private String getArticlesListURL(String fid, String pagenum) {
-	// try {
-	// Integer.parseInt(fid);
-	// } catch (NumberFormatException e) {
-	// return null;
-	// }
-	// String res = SERVER_URL + "/thread.php?fid=" + fid + "&page=" + pagenum
-	// + "&rss=1";
-	// return res;
-	// }
 
 }
