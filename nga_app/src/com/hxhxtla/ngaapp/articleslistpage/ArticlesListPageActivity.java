@@ -35,10 +35,11 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 	private PointTabController pointTabController;
 
-	private int curPageNum = 0;
+	private int curPageNum = 1;
 
 	private ImageButton btn_next;
 	private ImageButton btn_pre;
+	private ImageButton btn_top;
 
 	private ImageButton btn_refresh;
 
@@ -92,10 +93,11 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 		tv = (TextView) findViewById(R.id.articles_page_num);
 
-		showNextPage();
+		showPageByIndex(curPageNum);
 
 		btn_next = (ImageButton) findViewById(R.id.articles_btn_next);
 		btn_pre = (ImageButton) findViewById(R.id.articles_btn_pre);
+		btn_top = (ImageButton) findViewById(R.id.articles_btn_top);
 
 		btn_refresh = (ImageButton) findViewById(R.id.articles_btn_refresh);
 
@@ -104,9 +106,11 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 			@Override
 			public void onClick(View v) {
 				if (v == btn_next) {
-					showNextPage();
-				} else if (v == btn_pre) {
-					showPreviousPage();
+					showPageByIndex(curPageNum + 1);
+				} else if (v == btn_pre && curPageNum > 1) {
+					showPageByIndex(curPageNum - 1);
+				} else if (v == btn_top) {
+					showPageByIndex(1);
 				} else if (v == btn_refresh) {
 					refreshView();
 				}
@@ -115,6 +119,7 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 		};
 		btn_next.setOnClickListener(btnClickListener);
 		btn_pre.setOnClickListener(btnClickListener);
+		btn_top.setOnClickListener(btnClickListener);
 		btn_refresh.setOnClickListener(btnClickListener);
 
 	}
@@ -123,22 +128,13 @@ public class ArticlesListPageActivity extends Activity implements IActivity {
 
 	}
 
-	private void showNextPage() {
-		curPageNum++;
-		refreshView();
-		tv.setText(String.valueOf(curPageNum));
-		pointTabController.changePageOn(curPageNum - 1);
-
-	}
-
-	private void showPreviousPage() {
-		if (curPageNum > 1) {
-			curPageNum--;
+	private void showPageByIndex(int index) {
+		if (index > 0) {
+			curPageNum = index;
 			refreshView();
-			tv.setText(String.valueOf(curPageNum));
-			pointTabController.changePageOn(curPageNum - 1);
+			tv.setText(String.valueOf(index));
+			pointTabController.changePageOn(index - 1);
 		}
-
 	}
 
 	private void refreshView() {
