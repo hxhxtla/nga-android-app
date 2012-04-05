@@ -1,12 +1,5 @@
 package com.hxhxtla.ngaapp.articleslistpage;
 
-import java.util.Iterator;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -183,19 +176,7 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 
 	public void callbackHander(String doc) {
 		if (doc != null) {
-			Document document;
-			try {
-				document = DocumentHelper.parseText(doc);
-			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
-			Element channel = (Element) document.getRootElement().element(
-					this.getString(R.string.channel));
-			Iterator it = channel
-					.elementIterator(this.getString(R.string.item));
-			ala.setData(it);
+			ala.setData(doc);
 			ala.notifyDataSetChanged();
 			htla.notifyDataSetChanged();
 			lv.setSelectionAfterHeaderView();
