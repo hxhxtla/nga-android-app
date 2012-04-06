@@ -2,10 +2,12 @@ package com.hxhxtla.ngaapp.articleslistpage;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,8 +16,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
+import com.hxhxtla.ngaapp.postlistpage.PostListPageActivity;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
 
 public class ArticlesListPageActivity extends Activity implements ITaskActivity {
@@ -112,6 +116,17 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 		btn_pre.setOnClickListener(btnClickListener);
 		btn_top.setOnClickListener(btnClickListener);
 		btn_refresh.setOnClickListener(btnClickListener);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				ArticleInfo ai = ala.getItem(arg2);
+				SharedInfoController.RECENT_POST_URL = ai.getLink();
+				startActivity(new Intent(ArticlesListPageActivity.this,
+						PostListPageActivity.class));
+			}
+		});
 
 	}
 

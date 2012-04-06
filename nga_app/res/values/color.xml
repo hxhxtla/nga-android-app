@@ -11,5 +11,7 @@
     <color name="article_bg2">#FFFEF3D1</color>
     <color name="article_count">#FFFF8FD7</color>
     <color name="article_pagenum">#FFFFFFEE</color>
+    
+    <color name="post_text_color">#FF000000</color>
 
 </resources>

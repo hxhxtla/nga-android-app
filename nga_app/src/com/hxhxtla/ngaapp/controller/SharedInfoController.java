@@ -12,6 +12,8 @@ public class SharedInfoController {
 	public static final int DISPLAYED_HISTORY_TOPICLIST_LIMIT = 5;
 	
 	public static String SERVER_URL;
+	
+	public static String RECENT_POST_URL;
 
 	public SharedInfoController() {
 		// TODO Auto-generated constructor stub

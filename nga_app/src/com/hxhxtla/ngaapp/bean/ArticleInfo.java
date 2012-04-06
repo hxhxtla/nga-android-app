@@ -14,13 +14,27 @@ public class ArticleInfo {
 	private String author;
 
 	private String lastpost;
-	
-	private String postcount;
 
+	private String postcount;
+	////////////////////////////////
 	private View view;
+
+	private TextView tvTitle;
+
+	private TextView tvAuthor;
+
+	private TextView tvLastpost;
+
+	private TextView tvPostcount;
 
 	public ArticleInfo(View value) {
 		view = value;
+		tvTitle = (TextView) view.findViewById(R.id.articles_list_item_title);
+		tvAuthor = (TextView) view.findViewById(R.id.articles_list_item_author);
+		tvLastpost = (TextView) view
+				.findViewById(R.id.articles_list_item_lastpost);
+		tvPostcount = (TextView) view
+				.findViewById(R.id.articles_list_item_count);
 	}
 
 	public String getTitle() {
@@ -29,9 +43,7 @@ public class ArticleInfo {
 
 	public void setTitle(String title) {
 		this.title = title;
-		TextView tv = (TextView) view
-				.findViewById(R.id.articles_list_item_title);
-		tv.setText(title);
+		tvTitle.setText(title);
 	}
 
 	public String getLink() {
@@ -48,9 +60,7 @@ public class ArticleInfo {
 
 	public void setAuthor(String author) {
 		this.author = author;
-		TextView tv = (TextView) view
-				.findViewById(R.id.articles_list_item_author);
-		tv.setText(author);
+		tvAuthor.setText(author);
 	}
 
 	public String getLastpost() {
@@ -59,9 +69,7 @@ public class ArticleInfo {
 
 	public void setLastpost(String lastpost) {
 		this.lastpost = lastpost;
-		TextView tv = (TextView) view
-				.findViewById(R.id.articles_list_item_lastpost);
-		tv.setText(lastpost);
+		tvLastpost.setText(lastpost);
 	}
 
 	public String getPostcount() {
@@ -70,9 +78,7 @@ public class ArticleInfo {
 
 	public void setPostcount(String postcount) {
 		this.postcount = postcount;
-		TextView tv = (TextView) view
-				.findViewById(R.id.articles_list_item_count);
-		tv.setText(postcount);
+		tvPostcount.setText(postcount);
 	}
 
 	public View getView() {
