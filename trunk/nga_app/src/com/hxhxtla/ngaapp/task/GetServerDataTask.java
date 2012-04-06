@@ -45,6 +45,7 @@ public class GetServerDataTask extends AsyncTask<String, String, String> {
 		String res;
 		try {
 			conn = (HttpURLConnection) url_rss.openConnection();
+			conn.setReadTimeout(3000);
 			conn.connect();
 			publishProgress();
 			is = conn.getInputStream();

@@ -23,6 +23,8 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 
 	private static List<ArticleInfo> articleInfoList;
 
+	private int articlesListSize = 0;
+
 	private Activity mContext;
 
 	private static String rss_author;
@@ -62,11 +64,12 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 		}
 		Element channel = (Element) document.getRootElement().element(
 				rss_channel);
+		int index;
 		Iterator<?> it = channel.elementIterator(rss_item);
-		while (it.hasNext()) {
-			int index = 0;
+		for (index = 0; it.hasNext(); index++) {
+
 			Element item = (Element) it.next();
-			while (getCount() <= index) {
+			while (articleInfoList.size() <= index) {
 				LinearLayout ll = (LinearLayout) mContext.getLayoutInflater()
 						.inflate(R.layout.articles_list_item, null);
 				if (index % 2 == 0) {
@@ -87,8 +90,9 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 			String[] arr = description.split(nga_rss_keyword2);
 			ai.setPostcount(arr[0].trim());
 			ai.setLastpost(arr[1].trim());
-			index++;
 		}
+
+		articlesListSize = index;
 	}
 
 	public String cleanDirty(String value) {
@@ -97,7 +101,7 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 
 	@Override
 	public int getCount() {
-		return articleInfoList.size();
+		return articlesListSize;
 	}
 
 	@Override
