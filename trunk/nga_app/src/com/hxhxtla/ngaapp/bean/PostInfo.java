@@ -1,9 +1,11 @@
 package com.hxhxtla.ngaapp.bean;
 
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 
 public class PostInfo {
 
@@ -18,7 +20,7 @@ public class PostInfo {
 	private TextView tvFloor;
 	private TextView tvDatetime;
 
-	private TextView tvContent;
+	private WebView wvContent;
 
 	public PostInfo(View value) {
 		view = value;
@@ -26,7 +28,7 @@ public class PostInfo {
 		tvFloor = (TextView) view.findViewById(R.id.post_floor);
 		tvDatetime = (TextView) view.findViewById(R.id.post_datetime);
 
-		tvContent = (TextView) view.findViewById(R.id.post_content);
+		wvContent = (WebView) view.findViewById(R.id.post_content);
 	}
 
 	public String getAuthor() {
@@ -62,7 +64,9 @@ public class PostInfo {
 
 	public void setContent(String content) {
 		this.content = content;
-		tvContent.setText(content);
+		wvContent.loadDataWithBaseURL(null,
+				PostContentBuilder.buildContent(content), "text/html", "UTF-8",
+				null);
 	}
 
 	public View getView() {
