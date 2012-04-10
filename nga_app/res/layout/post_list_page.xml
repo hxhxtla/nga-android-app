@@ -4,10 +4,47 @@
     android:layout_height="match_parent"
     android:background="@color/home_page" >
 
+    <TextView
+        android:id="@+id/post_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/article_bg1"
+        android:textColor="@color/titlebar_text" />
+
     <ListView
         android:id="@+id/post_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_above="@+id/post_tool"
+        android:layout_below="@+id/post_title" />
+
+    <RelativeLayout
+        android:id="@+id/post_tool"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp" >
+
+        <LinearLayout
+            android:id="@+id/post_tab_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/post_page_selector"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <include
+            android:id="@+id/post_page_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            layout="@layout/page_control_bar" />
+    </RelativeLayout>
 
 </RelativeLayout>

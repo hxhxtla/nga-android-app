@@ -2,15 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="3dp"
     android:background="@color/article_pagenum"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="3dp" >
+        android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/post_author"
@@ -39,14 +37,5 @@
             android:text="2012-04-06 12:12"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
-
-    <WebView
-        android:id="@+id/post_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/msgbox2"
-        android:focusable="false" />
 
 </LinearLayout>
