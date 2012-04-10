@@ -25,6 +25,9 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private void initView() {
 		setContentView(R.layout.post_list_page);
 
+		this.setTitle(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
+				.getName());
+
 		lv = (ListView) findViewById(R.id.post_list);
 
 		pla = new PostListAdapter(this);

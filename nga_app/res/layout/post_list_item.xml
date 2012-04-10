@@ -44,6 +44,7 @@
         android:id="@+id/post_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp" />
+        android:layout_margin="3dp"
+        android:focusable="false" />
 
 </LinearLayout>
