@@ -3,7 +3,6 @@ package com.hxhxtla.ngaapp.postlistpage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -11,6 +10,7 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -46,11 +46,9 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		}
 	}
 
-	public void setData(String value) {
-		if (value != null) {
-			Document document = Jsoup.parse(value);
-			Elements postList = document.select("table[class=" + post_item
-					+ "]");
+	public void setData(Document document) {
+		if (document != null) {
+			Elements postList = document.select(post_item);
 			int index;
 			for (index = 0; index < postList.size(); index++) {
 				Element item = postList.get(index);
@@ -62,22 +60,20 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 					postInfoList.add(pi);
 				}
 				PostInfo pi = postInfoList.get(index);
-				String author = item.select("a[class=" + post_author + "]")
-						.text();
+				String author = item.select(post_author).text();
 				pi.setAuthor(author);
 
-				String floor = item.select("a[class=" + post_floor + "]")
-						.text();
+				String floor = item.select(post_floor).text();
 				pi.setFloor(floor);
 
 				String datetime = item.select(
-						"span[id=" + post_datetime + String.valueOf(index)
-								+ "]").text();
+						post_datetime + String.valueOf(index) + "]").text();
 				pi.setDatetime(datetime);
 
-				String content = item
-						.select("span[class=" + post_content + "]").html();
-				pi.setContent(content);
+				String content = item.select(post_content).html();
+				WebView wvContent = (WebView) mContext.getLayoutInflater()
+						.inflate(R.layout.post_content_view, null);
+				pi.setContent(content, wvContent);
 			}
 			postListSize = index;
 		}

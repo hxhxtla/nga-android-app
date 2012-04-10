@@ -83,7 +83,10 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 		});
 
 		LinearLayout articles_page_selector = (LinearLayout) findViewById(R.id.articles_page_selector);
-
+		articles_page_selector.findViewById(R.id.bar_separator_end)
+				.setVisibility(View.GONE);
+		articles_page_selector.findViewById(R.id.bar_btn_end).setVisibility(
+				View.GONE);
 		btn_next = (ImageButton) articles_page_selector
 				.findViewById(R.id.bar_btn_next);
 		btn_pre = (ImageButton) articles_page_selector
