@@ -13,15 +13,6 @@
         android:layout_marginTop="3dp" >
 
         <TextView
-            android:id="@+id/post_floor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/post_author"
-            android:text="[2楼]"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
             android:id="@+id/post_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +20,15 @@
             android:layout_centerVertical="true"
             android:text="lpplhyy"
             android:textColor="@color/post_text_color" />
+
+        <TextView
+            android:id="@+id/post_floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/post_author"
+            android:text="[2楼]"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/post_datetime"
@@ -44,7 +44,9 @@
         android:id="@+id/post_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginRight="3dp"
+        android:background="@drawable/msgbox2"
         android:focusable="false" />
 
 </LinearLayout>
