@@ -21,9 +21,7 @@
         <activity
             android:name=".articleslistpage.ArticlesListPageActivity"
             android:label="@string/app_name" />
-        <activity
-            android:name=".postlistpage.PostListPageActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".postlistpage.PostListPageActivity" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
