@@ -76,7 +76,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				pi.setDatetime(datetime);
 
 				String content = item
-						.select("span[class=" + post_content + "]").text();
+						.select("span[class=" + post_content + "]").html();
 				pi.setContent(content);
 			}
 			postListSize = index;

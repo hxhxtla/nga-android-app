@@ -205,7 +205,8 @@ public class PostContentBuilder {
 				+ ".silver {color:#888}" + ".chocolate {color:chocolate}"
 				+ ".img {max-width:100%}" + ".color {color:#D00}"
 				+ ".del {text-decoration:line-through;color:#666}"
-				+ "</style></head>" + "<body><section><p>" + value
+				+ "</style></head>"
+				+ "<body style='padding-left: 10px'><section><p>" + value
 				+ "</p></section></body></html>";
 		return value;
 	}

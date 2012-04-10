@@ -29,6 +29,7 @@ public class PostInfo {
 		tvDatetime = (TextView) view.findViewById(R.id.post_datetime);
 
 		wvContent = (WebView) view.findViewById(R.id.post_content);
+		wvContent.setBackgroundColor(0);
 	}
 
 	public String getAuthor() {
