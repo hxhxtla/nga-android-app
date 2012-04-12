@@ -36,7 +36,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private boolean initialization = true;
 
 	private int curPageNum = 1;
-	private int maxPageNum;
+	private int maxPageNum = 1;
 
 	private String urlKeyword2;
 
@@ -82,13 +82,13 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			@Override
 			public void onClick(View v) {
 				if (v == btn_next) {
-					showPageByIndex(curPageNum + 1);
+					showPageByIndex(curPageNum + 1, false);
 				} else if (v == btn_pre && curPageNum > 1) {
-					showPageByIndex(curPageNum - 1);
+					showPageByIndex(curPageNum - 1, false);
 				} else if (v == btn_top) {
-					showPageByIndex(1);
+					showPageByIndex(1, false);
 				} else if (v == btn_end) {
-					showPageByIndex(maxPageNum);
+					showPageByIndex(maxPageNum, false);
 				} else if (v == btn_refresh) {
 					refreshView(true);
 				}
@@ -101,17 +101,17 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_end.setOnClickListener(btnClickListener);
 		btn_refresh.setOnClickListener(btnClickListener);
 
-		refreshView(true);
+		showPageByIndex(1, true);
 	}
 
 	private void initData() {
 		urlKeyword2 = this.getString(R.string.article_keyword2);
 	}
 
-	private void showPageByIndex(int index) {
+	private void showPageByIndex(int index, boolean status) {
 		if (index > 0 && index <= maxPageNum) {
 			curPageNum = index;
-			refreshView(false);
+			refreshView(status);
 			btn_refresh.setText(String.valueOf(index));
 		}
 	}
