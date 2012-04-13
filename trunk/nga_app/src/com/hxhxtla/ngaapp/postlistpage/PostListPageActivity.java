@@ -10,9 +10,13 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +29,8 @@ import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
 
 public class PostListPageActivity extends Activity implements ITaskActivity {
+
+	private static final int MENU_ADDHIGHLIGHT = 1;
 
 	private ProgressDialog progressDialog;
 
@@ -77,6 +83,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_refresh = (Button) post_page_selector
 				.findViewById(R.id.bar_btn_refresh);
 
+		showPageByIndex(1, true);
+
 		OnClickListener btnClickListener = new OnClickListener() {
 
 			@Override
@@ -101,7 +109,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_end.setOnClickListener(btnClickListener);
 		btn_refresh.setOnClickListener(btnClickListener);
 
-		showPageByIndex(1, true);
+		this.registerForContextMenu(lv);
 	}
 
 	private void initData() {
@@ -120,8 +128,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		initialization = status;
 		GetServerDataTask gsdt = new GetServerDataTask(
 				PostListPageActivity.this);
-		String url = SharedInfoController.RECENT_POST_URL + "&" + urlKeyword2
-				+ String.valueOf(curPageNum);
+		String url = SharedInfoController.RECENT_POST.getLink() + "&"
+				+ urlKeyword2 + String.valueOf(curPageNum);
 
 		gsdt.execute(url);
 	}
@@ -132,6 +140,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			if (initialization) {
 				setTitle(document);
 				setPageNum(document);
+				pla.setHighlightAuthor(SharedInfoController.RECENT_POST
+						.getAuthor());
 			}
 			pla.setData(document);
 			pla.notifyDataSetChanged();
@@ -166,6 +176,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		}
 	}
 
+	private void menuHandler_addHighlight(int index) {
+		pla.setHighlightAuthor(index);
+		pla.refreshHighlightAuthor();
+	}
+
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
 				getString(R.string.articles_pd_title),
@@ -191,6 +206,31 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 		this.initData();
 		this.initView();
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, MENU_ADDHIGHLIGHT, 0,
+				this.getString(R.string.menu_add_highlight));
+
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+
+		switch (item.getItemId()) {
+		case MENU_ADDHIGHLIGHT:
+			int index = info.position;
+			menuHandler_addHighlight(index);
+			break;
+
+		}
+
+		return super.onContextItemSelected(item);
 	}
 
 }

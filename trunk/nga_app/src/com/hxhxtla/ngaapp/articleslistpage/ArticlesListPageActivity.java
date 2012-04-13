@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.hxhxtla.ngaapp.R;
-import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.postlistpage.PostListPageActivity;
@@ -124,8 +123,7 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				ArticleInfo ai = ala.getItem(arg2);
-				SharedInfoController.RECENT_POST_URL = ai.getLink();
+				SharedInfoController.RECENT_POST = ala.getItem(arg2);
 				startActivity(new Intent(ArticlesListPageActivity.this,
 						PostListPageActivity.class));
 			}
