@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
 
 public class PostListAdapter extends BaseAdapter implements ListAdapter {
@@ -31,6 +32,10 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private static String post_floor;
 	private static String post_datetime;
 	private static String post_content;
+	private static String post_comment;
+	private static String post_subtitle;
+	private static String post_comment_author;
+	private static String post_comment_content;
 
 	public PostListAdapter(Activity value) {
 		mContext = value;
@@ -40,6 +45,11 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		post_floor = mContext.getString(R.string.post_floor);
 		post_content = mContext.getString(R.string.post_content);
 		post_datetime = mContext.getString(R.string.post_datetime);
+		post_comment = mContext.getString(R.string.post_comment);
+		post_subtitle = mContext.getString(R.string.post_subtitle);
+		post_comment_author = mContext.getString(R.string.post_comment_author);
+		post_comment_content = mContext
+				.getString(R.string.post_comment_content);
 
 		if (postInfoList == null) {
 			postInfoList = new ArrayList<PostInfo>();
@@ -66,14 +76,28 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				String floor = item.select(post_floor).text();
 				pi.setFloor(floor);
 
-				String datetime = item.select(
-						post_datetime + String.valueOf(index) + "]").text();
+				String datetime = item.select(post_datetime).text();
 				pi.setDatetime(datetime);
 
 				String content = item.select(post_content).html();
+				String sbutitle = item.select(post_subtitle).text();
 				WebView wvContent = (WebView) mContext.getLayoutInflater()
 						.inflate(R.layout.post_content_view, null);
-				pi.setContent(content, wvContent);
+
+				Elements comments = item.select(post_comment);
+				ArrayList<CommentInfo> cil = null;
+				if (comments.size() > 0) {
+					cil = new ArrayList<CommentInfo>();
+					for (Element comment : comments) {
+						CommentInfo ci = new CommentInfo();
+						ci.author = comment.select(post_comment_author).text();
+						ci.conntent = comment.select(post_comment_content)
+								.html();
+						cil.add(ci);
+					}
+				}
+
+				pi.setContent(content, sbutitle, cil, wvContent);
 			}
 			postListSize = index;
 		}

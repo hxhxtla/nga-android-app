@@ -1,5 +1,7 @@
 package com.hxhxtla.ngaapp.bean;
 
+import java.util.ArrayList;
+
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
@@ -28,9 +30,6 @@ public class PostInfo {
 		tvAuthor = (TextView) view.findViewById(R.id.post_author);
 		tvFloor = (TextView) view.findViewById(R.id.post_floor);
 		tvDatetime = (TextView) view.findViewById(R.id.post_datetime);
-
-		// wvContent = (WebView) view.findViewById(R.id.post_content);
-		// wvContent.setBackgroundColor(0);
 	}
 
 	public String getAuthor() {
@@ -64,14 +63,16 @@ public class PostInfo {
 		return content;
 	}
 
-	public void setContent(String content, WebView wv) {
+	public void setContent(String content, String subtitle,
+			ArrayList<CommentInfo> cil, WebView wv) {
 		this.content = content;
 		if (wvContent != null) {
 			view.removeView(wvContent);
 			wvContent = null;
 		}
 		wv.setBackgroundColor(0);
-		wv.loadDataWithBaseURL(null, PostContentBuilder.buildContent(content),
+		wv.loadDataWithBaseURL(null,
+				PostContentBuilder.buildContent(content, subtitle, cil),
 				"text/html", "UTF-8", null);
 		view.addView(wv);
 		wvContent = wv;
