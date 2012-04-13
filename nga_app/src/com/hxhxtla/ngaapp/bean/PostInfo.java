@@ -16,6 +16,9 @@ public class PostInfo {
 	private String floor;
 	private String datetime;
 	private String content;
+
+	private boolean highlight;
+
 	// ////////////////////////////////
 	private LinearLayout view;
 
@@ -74,12 +77,27 @@ public class PostInfo {
 		wv.loadDataWithBaseURL(null,
 				PostContentBuilder.buildContent(content, subtitle, cil),
 				"text/html", "UTF-8", null);
+		if (highlight) {
+			wv.setBackgroundResource(R.drawable.msgbox1);
+		}
 		view.addView(wv);
 		wvContent = wv;
 	}
 
 	public View getView() {
 		return view;
+	}
+
+	public WebView getContentView() {
+		return wvContent;
+	}
+
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	public void setHighlight(String highlight) {
+		this.highlight = (this.author.equals(highlight));
 	}
 
 }

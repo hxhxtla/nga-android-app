@@ -3,6 +3,7 @@ package com.hxhxtla.ngaapp.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 
 public class SharedInfoController {
@@ -10,10 +11,10 @@ public class SharedInfoController {
 	public static final List<TopicInfo> DISPLAYED_HISTORY_TOPICLIST = new ArrayList<TopicInfo>();
 
 	public static final int DISPLAYED_HISTORY_TOPICLIST_LIMIT = 5;
-	
+
 	public static String SERVER_URL;
-	
-	public static String RECENT_POST_URL;
+
+	public static ArticleInfo RECENT_POST;
 
 	public SharedInfoController() {
 		// TODO Auto-generated constructor stub

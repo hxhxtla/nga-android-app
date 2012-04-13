@@ -8,6 +8,8 @@
     
     <string name="menu_name1">删除此主题</string>
     
+    <string name="menu_add_highlight">加亮此用户</string>
+    
     <string name="add_topic">添加主题</string>
     <string name="add_topic_id">add</string>
     

@@ -37,6 +37,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private static String post_comment_author;
 	private static String post_comment_content;
 
+	private String curHighLightAuthor;
+
 	public PostListAdapter(Activity value) {
 		mContext = value;
 
@@ -54,6 +56,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		if (postInfoList == null) {
 			postInfoList = new ArrayList<PostInfo>();
 		}
+
 	}
 
 	public void setData(Document document) {
@@ -72,6 +75,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				PostInfo pi = postInfoList.get(index);
 				String author = item.select(post_author).text();
 				pi.setAuthor(author);
+
+				pi.setHighlight(curHighLightAuthor);
 
 				String floor = item.select(post_floor).text();
 				pi.setFloor(floor);
@@ -100,6 +105,27 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				pi.setContent(content, sbutitle, cil, wvContent);
 			}
 			postListSize = index;
+		}
+	}
+
+	public void setHighlightAuthor(String value) {
+		curHighLightAuthor = value;
+	}
+
+	public void setHighlightAuthor(int value) {
+		curHighLightAuthor = getItem(value).getAuthor();
+	}
+
+	public void refreshHighlightAuthor() {
+		for (PostInfo pi : postInfoList) {
+			boolean oldState = pi.isHighlight();
+
+			pi.setHighlight(curHighLightAuthor);
+			if (oldState && !pi.isHighlight()) {
+				pi.getContentView().setBackgroundResource(R.drawable.msgbox2);
+			} else if (!oldState && pi.isHighlight()) {
+				pi.getContentView().setBackgroundResource(R.drawable.msgbox1);
+			}
 		}
 	}
 
