@@ -8,11 +8,15 @@
     <string name="rss_link">guid</string>
     <string name="rss_description">description</string>
     <string name="post_item">table[class=forumbox postbox]</string>
-    <string name="post_author">a[class=author]</string>
-    <string name="post_floor">a[class=blue right]</string>
-    <string name="post_datetime">span[id=postdate</string>
-    <string name="post_content">span[class=postcontent ubbcode]</string>
+    <string name="post_author">b[id~=postauthor\d+]</string>
+    <string name="post_floor">a[name~=l\d+]</string>
+    <string name="post_datetime">span[id~=postdate\d+]</string>
+    <string name="post_content">span[id~=postcontent\d+]</string>
     <string name="post_maxpage">span[class=max_page]</string>
     <string name="post_title">h2[id=postsubject]</string>
+    <string name="post_subtitle">h3[id~=postsubject\d+]</string>
+    <string name="post_comment">table[class~=left defaultcolor pc\d+]</string>
+    <string name="post_comment_author">a[class=author]</string>
+    <string name="post_comment_content">span[id~=postcomment\d+]</string>
 
 </resources>
