@@ -3,8 +3,8 @@ package com.hxhxtla.ngaapp.bean;
 import java.util.ArrayList;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
@@ -19,8 +19,10 @@ public class PostInfo {
 
 	private boolean highlight;
 
+	private int pageIndex;
+
 	// ////////////////////////////////
-	private LinearLayout view;
+	private ViewGroup view;
 
 	private TextView tvAuthor;
 	private TextView tvFloor;
@@ -28,11 +30,18 @@ public class PostInfo {
 
 	private WebView wvContent;
 
-	public PostInfo(LinearLayout value) {
+	public PostInfo(ViewGroup value) {
 		view = value;
 		tvAuthor = (TextView) view.findViewById(R.id.post_author);
 		tvFloor = (TextView) view.findViewById(R.id.post_floor);
 		tvDatetime = (TextView) view.findViewById(R.id.post_datetime);
+		wvContent = (WebView) view.findViewById(R.id.post_content);
+		wvContent.setBackgroundColor(0);
+	}
+
+	public PostInfo(int index, ViewGroup value) {
+		pageIndex = index;
+		view = value;
 	}
 
 	public String getAuthor() {
@@ -67,21 +76,15 @@ public class PostInfo {
 	}
 
 	public void setContent(String content, String subtitle,
-			ArrayList<CommentInfo> cil, WebView wv) {
+			ArrayList<CommentInfo> cil) {
 		this.content = content;
-		if (wvContent != null) {
-			view.removeView(wvContent);
-			wvContent = null;
-		}
-		wv.setBackgroundColor(0);
-		wv.loadDataWithBaseURL(null,
+
+		wvContent.loadDataWithBaseURL(null,
 				PostContentBuilder.buildContent(content, subtitle, cil),
 				"text/html", "UTF-8", null);
 		if (highlight) {
-			wv.setBackgroundResource(R.drawable.msgbox1);
+			wvContent.setBackgroundResource(R.drawable.msgbox1);
 		}
-		view.addView(wv);
-		wvContent = wv;
 	}
 
 	public View getView() {
@@ -98,6 +101,14 @@ public class PostInfo {
 
 	public void setHighlight(String highlight) {
 		this.highlight = (this.author.equals(highlight));
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
 	}
 
 }

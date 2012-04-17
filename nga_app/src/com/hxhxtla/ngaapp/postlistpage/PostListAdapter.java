@@ -1,7 +1,8 @@
 package com.hxhxtla.ngaapp.postlistpage;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Iterator;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,20 +11,20 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
+import com.hxhxtla.ngaapp.bean.PageInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
 
 public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
-	private static List<PostInfo> postInfoList;
+	private ArrayList<PageInfo> pageinfoList;
 
-	private int postListSize = 0;
+	private ArrayList<PostInfo> postInfoList;
 
 	private Activity mContext;
 
@@ -53,26 +54,38 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		post_comment_content = mContext
 				.getString(R.string.post_comment_content);
 
-		if (postInfoList == null) {
-			postInfoList = new ArrayList<PostInfo>();
-		}
+		pageinfoList = new ArrayList<PageInfo>();
+		postInfoList = new ArrayList<PostInfo>();
 
 	}
 
-	public void setData(Document document) {
+	public void setData(Document document, int pagenum) {
 		if (document != null) {
+			PageInfo ipage = null;
+			for (PageInfo pi : pageinfoList) {
+				if (pi.getIndex() == pagenum) {
+					ipage = pi;
+					break;
+				}
+			}
+			if (ipage == null) {
+				ipage = new PageInfo(pagenum);
+				pageinfoList.add(ipage);
+			}
+
 			Elements postList = document.select(post_item);
-			int index;
-			for (index = 0; index < postList.size(); index++) {
+			for (int index = 0; index < postList.size(); index++) {
 				Element item = postList.get(index);
-				while (postInfoList.size() <= index) {
+				PostInfo pi;
+				if (ipage.getPostList().size() <= index) {
 					LinearLayout ll = (LinearLayout) mContext
 							.getLayoutInflater().inflate(
 									R.layout.post_list_item, null);
-					PostInfo pi = new PostInfo(ll);
-					postInfoList.add(pi);
+					pi = new PostInfo(ll);
+					ipage.getPostList().add(pi);
+				} else {
+					pi = ipage.getPostList().get(index);
 				}
-				PostInfo pi = postInfoList.get(index);
 				String author = item.select(post_author).text();
 				pi.setAuthor(author);
 
@@ -86,8 +99,6 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 				String content = item.select(post_content).html();
 				String sbutitle = item.select(post_subtitle).text();
-				WebView wvContent = (WebView) mContext.getLayoutInflater()
-						.inflate(R.layout.post_content_view, null);
 
 				Elements comments = item.select(post_comment);
 				ArrayList<CommentInfo> cil = null;
@@ -102,9 +113,29 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 					}
 				}
 
-				pi.setContent(content, sbutitle, cil, wvContent);
+				pi.setContent(content, sbutitle, cil);
 			}
-			postListSize = index;
+			syncToPostInfoList();
+
+		}
+	}
+
+	private void syncToPostInfoList() {
+		Collections.sort(pageinfoList);
+		postInfoList.clear();
+		for (int index = 0; index < pageinfoList.size(); index++) {
+			PageInfo cpi = pageinfoList.get(index);
+			if (index > 0) {
+				PageInfo ppi = pageinfoList.get(index - 1);
+				if (cpi.getIndex() - ppi.getIndex() != 1) {
+					LinearLayout ll = (LinearLayout) mContext
+							.getLayoutInflater().inflate(
+									R.layout.post_load_item, null);
+					PostInfo ipage = new PostInfo(ppi.getIndex() + 1, ll);
+					postInfoList.add(ipage);
+				}
+			}
+			postInfoList.addAll(cpi.getPostList());
 		}
 	}
 
@@ -129,9 +160,34 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		}
 	}
 
+	public int getPositionByPageIndex(int index) {
+		PageInfo pi = getPageInfoByIndex(index);
+		if (pi != null) {
+			return postInfoList.indexOf(pi.getPostList().get(0));
+		}
+		return -1;
+	}
+
+	public boolean checkLoaded(int pageIndex) {
+		PageInfo pi = getPageInfoByIndex(pageIndex);
+		return (pi != null);
+	}
+
+	private PageInfo getPageInfoByIndex(int index) {
+
+		Iterator<PageInfo> ipi = pageinfoList.iterator();
+		while (ipi.hasNext()) {
+			PageInfo pi = ipi.next();
+			if (pi.getIndex() == index) {
+				return pi;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public int getCount() {
-		return postListSize;
+		return postInfoList.size();
 	}
 
 	@Override

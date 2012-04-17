@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
+import com.hxhxtla.ngaapp.bean.PostInfo;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
 
@@ -83,22 +86,32 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_refresh = (Button) post_page_selector
 				.findViewById(R.id.bar_btn_refresh);
 
-		showPageByIndex(1, true);
+		refreshView(true);
 
 		OnClickListener btnClickListener = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				int targetPageNum = 0;
 				if (v == btn_next) {
-					showPageByIndex(curPageNum + 1, false);
+					targetPageNum = curPageNum + 1;
 				} else if (v == btn_pre && curPageNum > 1) {
-					showPageByIndex(curPageNum - 1, false);
+					targetPageNum = curPageNum - 1;
 				} else if (v == btn_top) {
-					showPageByIndex(1, false);
+					targetPageNum = 1;
 				} else if (v == btn_end) {
-					showPageByIndex(maxPageNum, false);
+					targetPageNum = maxPageNum;
 				} else if (v == btn_refresh) {
 					refreshView(true);
+					return;
+				}
+				if (targetPageNum > 0 && targetPageNum <= maxPageNum) {
+					curPageNum = targetPageNum;
+					if (pla.checkLoaded(targetPageNum)) {
+						locatePageByIndex(curPageNum);
+					} else {
+						refreshView(false);
+					}
 				}
 			}
 
@@ -110,18 +123,24 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_refresh.setOnClickListener(btnClickListener);
 
 		this.registerForContextMenu(lv);
+
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				PostInfo pi = pla.getItem(arg2);
+				if (pi.getPageIndex() != 0) {
+					curPageNum = pi.getPageIndex();
+					refreshView(false);
+				}
+
+			}
+		});
 	}
 
 	private void initData() {
 		urlKeyword2 = this.getString(R.string.article_keyword2);
-	}
-
-	private void showPageByIndex(int index, boolean status) {
-		if (index > 0 && index <= maxPageNum) {
-			curPageNum = index;
-			refreshView(status);
-			btn_refresh.setText(String.valueOf(index));
-		}
 	}
 
 	private void refreshView(boolean status) {
@@ -134,6 +153,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		gsdt.execute(url);
 	}
 
+	private void locatePageByIndex(int index) {
+		btn_refresh.setText(String.valueOf(index));
+		lv.setSelection(pla.getPositionByPageIndex(index));
+	}
+
 	public void callbackHander(String doc) {
 		if (doc != null) {
 			Document document = Jsoup.parse(doc);
@@ -143,8 +167,9 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 				pla.setHighlightAuthor(SharedInfoController.RECENT_POST
 						.getAuthor());
 			}
-			pla.setData(document);
+			pla.setData(document, curPageNum);
 			pla.notifyDataSetChanged();
+			locatePageByIndex(curPageNum);
 			closeContectionProgressDialog();
 		}
 	}
