@@ -158,7 +158,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			public void onClick(View v) {
 				final Dialog dialog = new Dialog(PostListPageActivity.this);
 				dialog.setContentView(R.layout.post_list_navigate_dialog);
-				dialog.setTitle("请输入要跳转的页/楼");
+				dialog.setTitle(R.string.post_list_navigate_dialog_title);
 				Button btn_go = (Button) dialog.findViewById(R.id.plnd_go);
 				final EditText et_input = (EditText) dialog
 						.findViewById(R.id.plnd_input);

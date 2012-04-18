@@ -148,5 +148,7 @@
     
     <string name="post_list_page">页</string>
     <string name="post_list_floor">楼</string>
+    
+    <string name="post_list_navigate_dialog_title">请输入要跳转的页/楼</string>
 
 </resources>
