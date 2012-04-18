@@ -251,16 +251,24 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public void callbackHander(String doc) {
 		if (doc != null) {
 			Document document = Jsoup.parse(doc);
-			if (initialization) {
-				setTitle(document);
-				setPageNum(document);
-				pla.setHighlightAuthor(SharedInfoController.RECENT_POST
-						.getAuthor());
+			if (document.title().equals(getString(R.string.keyword_ads_check))) {
+				Toast.makeText(
+						PostListPageActivity.this,
+						PostListPageActivity.this
+								.getString(R.string.msg_adsAlert),
+						Toast.LENGTH_LONG).show();
+			} else {
+				if (initialization) {
+					setTitle(document);
+					setPageNum(document);
+					pla.setHighlightAuthor(SharedInfoController.RECENT_POST
+							.getAuthor());
+				}
+				pla.setData(document, curPageNum);
+				pla.notifyDataSetChanged();
+				locatePageByIndex(curPageNum);
+				closeContectionProgressDialog();
 			}
-			pla.setData(document, curPageNum);
-			pla.notifyDataSetChanged();
-			locatePageByIndex(curPageNum);
-			closeContectionProgressDialog();
 		}
 	}
 
