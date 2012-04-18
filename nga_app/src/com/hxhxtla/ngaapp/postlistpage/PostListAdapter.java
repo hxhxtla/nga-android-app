@@ -40,6 +40,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	private String curHighLightAuthor;
 
+	private int pageSize = 20;
+
 	public PostListAdapter(Activity value) {
 		mContext = value;
 
@@ -160,12 +162,24 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		}
 	}
 
-	public int getPositionByPageIndex(int index) {
+	public int getPositionByPageIndex(int index, int floorInPage) {
 		PageInfo pi = getPageInfoByIndex(index);
 		if (pi != null) {
-			return postInfoList.indexOf(pi.getPostList().get(0));
+			if (floorInPage >= pi.getPostList().size()) {
+				floorInPage = 0;
+			}
+			return postInfoList.indexOf(pi.getPostList().get(floorInPage));
 		}
 		return -1;
+	}
+
+	public int getFloorInPageByFloorIndex(int index) {
+		return index % pageSize;
+	}
+
+	public int getPageIndexByFloorIndex(int index) {
+		Double pageIndex = Math.ceil((double) index / (double) pageSize);
+		return pageIndex.intValue();
 	}
 
 	public boolean checkLoaded(int pageIndex) {

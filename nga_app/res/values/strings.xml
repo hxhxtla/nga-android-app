@@ -5,6 +5,7 @@
     
     <string name="msg_topicExist">添加的主题已存在</string>
     <string name="msg_delTopicSucc">删除主题成功</string>
+    <string name="msg_outOfPageIndex">超出页码范围</string>
     
     <string name="menu_name1">删除此主题</string>
     
@@ -144,5 +145,8 @@
     
     
     <string name="post_load_text">点击载入缺页</string>
+    
+    <string name="post_list_page">页</string>
+    <string name="post_list_floor">楼</string>
 
 </resources>
