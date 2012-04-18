@@ -14,7 +14,7 @@ public class PostContentBuilder {
 			"\\[quote\\](.+?)\\[/quote\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_REPLY = Pattern.compile(
-			"\\[[pt]id\\S+\\](Reply|Topic)\\[/pid\\]", Pattern.DOTALL
+			"\\[[pt]id=\\d+\\](.+?)\\[/pid\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_B = Pattern.compile("\\[b\\](.+?)\\[/b\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
