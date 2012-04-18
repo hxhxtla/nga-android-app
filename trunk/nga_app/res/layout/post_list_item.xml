@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="lpplhyy"
             android:textColor="@color/post_text_color" />
 
         <TextView
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/post_author"
-            android:text="[2楼]"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -34,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="2012-04-06 12:12"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 

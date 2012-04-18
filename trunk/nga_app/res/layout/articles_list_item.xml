@@ -44,7 +44,6 @@
         android:layout_height="match_parent"
         android:layout_weight="9"
         android:gravity="center"
-        android:text="27"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/article_count" />
 

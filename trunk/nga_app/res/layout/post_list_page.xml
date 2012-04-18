@@ -28,16 +28,6 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="3dp" >
 
-        <LinearLayout
-            android:id="@+id/post_tab_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/post_page_selector"
-            android:gravity="center"
-            android:orientation="horizontal" />
-
         <include
             android:id="@+id/post_page_selector"
             android:layout_width="wrap_content"
@@ -45,6 +35,31 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             layout="@layout/page_control_bar" />
+
+        <Button
+            android:id="@+id/post_tab_floorTo"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/post_page_selector"
+            android:text="@string/post_list_floor" />
+
+        <Button
+            android:id="@+id/post_tab_pageTo"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/post_tab_floorTo"
+            android:text="@string/post_list_page" />
+
+        <TextView
+            android:id="@+id/post_tab_maxPageNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
 </RelativeLayout>

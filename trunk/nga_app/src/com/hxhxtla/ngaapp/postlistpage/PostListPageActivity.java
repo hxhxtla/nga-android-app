@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -20,10 +21,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
@@ -55,6 +58,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private ImageButton btn_end;
 
 	private Button btn_refresh;
+	private Button btn_pageTo;
+	private Button btn_floorTo;
+
+	private TextView tv;
+
+	private int navigateFloorInPage = 0;
 
 	private void initView() {
 
@@ -86,9 +95,14 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		btn_refresh = (Button) post_page_selector
 				.findViewById(R.id.bar_btn_refresh);
 
+		btn_pageTo = (Button) findViewById(R.id.post_tab_pageTo);
+		btn_floorTo = (Button) findViewById(R.id.post_tab_floorTo);
+
+		tv = (TextView) findViewById(R.id.post_tab_maxPageNum);
+
 		refreshView(true);
 
-		OnClickListener btnClickListener = new OnClickListener() {
+		OnClickListener postTabBtnClickListener = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -116,11 +130,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			}
 
 		};
-		btn_next.setOnClickListener(btnClickListener);
-		btn_pre.setOnClickListener(btnClickListener);
-		btn_top.setOnClickListener(btnClickListener);
-		btn_end.setOnClickListener(btnClickListener);
-		btn_refresh.setOnClickListener(btnClickListener);
+		btn_next.setOnClickListener(postTabBtnClickListener);
+		btn_pre.setOnClickListener(postTabBtnClickListener);
+		btn_top.setOnClickListener(postTabBtnClickListener);
+		btn_end.setOnClickListener(postTabBtnClickListener);
+		btn_refresh.setOnClickListener(postTabBtnClickListener);
 
 		this.registerForContextMenu(lv);
 
@@ -137,6 +151,81 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 			}
 		});
+
+		OnClickListener navigateBtnClickListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				final Dialog dialog = new Dialog(PostListPageActivity.this);
+				dialog.setContentView(R.layout.post_list_navigate_dialog);
+				dialog.setTitle("请输入要跳转的页/楼");
+				Button btn_go = (Button) dialog.findViewById(R.id.plnd_go);
+				final EditText et_input = (EditText) dialog
+						.findViewById(R.id.plnd_input);
+				if (v == btn_pageTo) {
+					btn_go.setText(PostListPageActivity.this
+							.getString(R.string.post_list_page));
+					btn_go.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							int targetNum = Integer.parseInt(et_input.getText()
+									.toString());
+							if (targetNum > 0 && targetNum <= maxPageNum) {
+								curPageNum = targetNum;
+								curPageNum = targetNum;
+								if (pla.checkLoaded(targetNum)) {
+									locatePageByIndex(curPageNum);
+								} else {
+									refreshView(false);
+								}
+								dialog.dismiss();
+							} else {
+								Toast.makeText(
+										PostListPageActivity.this,
+										PostListPageActivity.this
+												.getString(R.string.msg_outOfPageIndex),
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+					});
+				} else if (v == btn_floorTo) {
+					btn_go.setText(PostListPageActivity.this
+							.getString(R.string.post_list_floor));
+					btn_go.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							int targetNum = Integer.parseInt(et_input.getText()
+									.toString());
+							int pageIndexNum = pla
+									.getPageIndexByFloorIndex(targetNum);
+							if (pageIndexNum > 0 && pageIndexNum <= maxPageNum) {
+								curPageNum = pageIndexNum;
+								navigateFloorInPage = pla
+										.getFloorInPageByFloorIndex(targetNum);
+								if (pla.checkLoaded(curPageNum)) {
+									locatePageByIndex(curPageNum);
+								} else {
+									refreshView(false);
+								}
+								dialog.dismiss();
+							} else {
+								Toast.makeText(
+										PostListPageActivity.this,
+										PostListPageActivity.this
+												.getString(R.string.msg_outOfPageIndex),
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+					});
+				}
+				dialog.show();
+
+			}
+		};
+		btn_pageTo.setOnClickListener(navigateBtnClickListener);
+		btn_floorTo.setOnClickListener(navigateBtnClickListener);
 	}
 
 	private void initData() {
@@ -155,7 +244,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 	private void locatePageByIndex(int index) {
 		btn_refresh.setText(String.valueOf(index));
-		lv.setSelection(pla.getPositionByPageIndex(index));
+		lv.setSelection(pla.getPositionByPageIndex(index, navigateFloorInPage));
+		navigateFloorInPage = 0;
 	}
 
 	public void callbackHander(String doc) {
@@ -198,6 +288,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			} else {
 				maxPageNum = 1;
 			}
+
+			tv.setText("(共 " + String.valueOf(maxPageNum) + " 页)");
 		}
 	}
 
