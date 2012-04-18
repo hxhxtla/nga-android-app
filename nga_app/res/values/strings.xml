@@ -2,18 +2,14 @@
 <resources>
 
     <string name="app_name">艾泽拉斯国家地理</string>
-    
     <string name="msg_topicExist">添加的主题已存在</string>
     <string name="msg_delTopicSucc">删除主题成功</string>
     <string name="msg_outOfPageIndex">超出页码范围</string>
-    
+    <string name="msg_adsAlert">广告页面，请稍后刷新</string>
     <string name="menu_name1">删除此主题</string>
-    
     <string name="menu_add_highlight">加亮此用户</string>
-    
     <string name="add_topic">添加主题</string>
     <string name="add_topic_id">add</string>
-    
     <string name="topic1">艾泽拉斯议事厅</string>
     <string name="topic1_id">7</string>
     <string name="topic2">台服讨论区</string>
@@ -132,23 +128,17 @@
     <string name="topic58_id">-308670</string>
     <string name="topic59">八圣祠</string>
     <string name="topic59_id">-112905</string>
-    
     <string name="topic_picker_toast_add">请选择你要添加的主题</string>
-    
     <string name="nga_rss_keyword1">(最后回复 )</string>
     <string name="nga_rss_keyword2">个回复 于</string>
-    
     <string name="articles_pd_title">请稍候。。。</string>
     <string name="articles_pd_msg1">连接服务端。。。</string>
     <string name="articles_pd_msg2">获取数据。。。</string>
     <string name="articles_pd_msg3">载入中。。。</string>
-    
-    
     <string name="post_load_text">点击载入缺页</string>
-    
     <string name="post_list_page">页</string>
     <string name="post_list_floor">楼</string>
-    
     <string name="post_list_navigate_dialog_title">请输入要跳转的页/楼</string>
+    <string name="keyword_ads_check">欢迎访问魔兽世界中文网·艾泽拉斯国家地理</string>
 
 </resources>
