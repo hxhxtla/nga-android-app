@@ -1,12 +1,13 @@
 package com.hxhxtla.ngaapp.task;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
 
@@ -32,33 +33,27 @@ public class GetServerDataTask extends AsyncTask<String, String, String> {
 			// TODO
 			return null;
 		}
-		URL url_rss;
+		String strResult = null;
+		HttpGet httpRequest = new HttpGet(url);
 		try {
-			url_rss = new URL(url);
-		} catch (MalformedURLException e) {
+			HttpResponse httpResponse = new DefaultHttpClient()
+					.execute(httpRequest);
+			if (httpResponse != null
+					&& httpResponse.getStatusLine().getStatusCode() == 200) {
+				strResult = EntityUtils.toString(httpResponse.getEntity(),
+						"GBK");
+			}
+		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
-		}
-		InputStream is;
-		HttpURLConnection conn;
-		String res;
-		try {
-			conn = (HttpURLConnection) url_rss.openConnection();
-			conn.setReadTimeout(10000);
-			conn.connect();
-			publishProgress();
-			is = conn.getInputStream();
-			res = IOUtils.toString(is, "GBK");
-			IOUtils.closeQuietly(is);
-			is.close();
-			conn.disconnect();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
-		return res;
+		return strResult;
 	}
 
 	@Override
