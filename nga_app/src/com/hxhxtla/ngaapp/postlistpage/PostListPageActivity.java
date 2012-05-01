@@ -169,23 +169,25 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 						@Override
 						public void onClick(View v) {
-							int targetNum = Integer.parseInt(et_input.getText()
-									.toString());
-							if (targetNum > 0 && targetNum <= maxPageNum) {
-								curPageNum = targetNum;
-								curPageNum = targetNum;
-								if (pla.checkLoaded(targetNum)) {
-									locatePageByIndex(curPageNum);
+							String input = et_input.getText().toString().trim();
+							if (!input.isEmpty()) {
+								int targetNum = Integer.parseInt(input);
+								if (targetNum > 0 && targetNum <= maxPageNum) {
+									curPageNum = targetNum;
+									curPageNum = targetNum;
+									if (pla.checkLoaded(targetNum)) {
+										locatePageByIndex(curPageNum);
+									} else {
+										refreshView(false);
+									}
+									dialog.dismiss();
 								} else {
-									refreshView(false);
+									Toast.makeText(
+											PostListPageActivity.this,
+											PostListPageActivity.this
+													.getString(R.string.msg_outOfPageIndex),
+											Toast.LENGTH_SHORT).show();
 								}
-								dialog.dismiss();
-							} else {
-								Toast.makeText(
-										PostListPageActivity.this,
-										PostListPageActivity.this
-												.getString(R.string.msg_outOfPageIndex),
-										Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
@@ -196,26 +198,29 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 						@Override
 						public void onClick(View v) {
-							int targetNum = Integer.parseInt(et_input.getText()
-									.toString());
-							int pageIndexNum = pla
-									.getPageIndexByFloorIndex(targetNum);
-							if (pageIndexNum > 0 && pageIndexNum <= maxPageNum) {
-								curPageNum = pageIndexNum;
-								navigateFloorInPage = pla
-										.getFloorInPageByFloorIndex(targetNum);
-								if (pla.checkLoaded(curPageNum)) {
-									locatePageByIndex(curPageNum);
+							String input = et_input.getText().toString().trim();
+							if (!input.isEmpty()) {
+								int targetNum = Integer.parseInt(input);
+								int pageIndexNum = pla
+										.getPageIndexByFloorIndex(targetNum);
+								if (pageIndexNum > 0
+										&& pageIndexNum <= maxPageNum) {
+									curPageNum = pageIndexNum;
+									navigateFloorInPage = pla
+											.getFloorInPageByFloorIndex(targetNum);
+									if (pla.checkLoaded(curPageNum)) {
+										locatePageByIndex(curPageNum);
+									} else {
+										refreshView(false);
+									}
+									dialog.dismiss();
 								} else {
-									refreshView(false);
+									Toast.makeText(
+											PostListPageActivity.this,
+											PostListPageActivity.this
+													.getString(R.string.msg_outOfPageIndex),
+											Toast.LENGTH_SHORT).show();
 								}
-								dialog.dismiss();
-							} else {
-								Toast.makeText(
-										PostListPageActivity.this,
-										PostListPageActivity.this
-												.getString(R.string.msg_outOfPageIndex),
-										Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
@@ -356,6 +361,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public Activity getActivity() {
+		return this;
 	}
 
 }

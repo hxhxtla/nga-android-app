@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,12 +26,14 @@ import android.widget.Toast;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.articleslistpage.ArticlesListPageActivity;
+import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
+import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
-public class NgaAppMainActivity extends Activity {
+public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	private static final int MENU_DEL = 1;
 
@@ -99,6 +102,8 @@ public class NgaAppMainActivity extends Activity {
 
 	private void initData() {
 		cctrl = new ConfigController(this);
+		LoginController.initializeHttpClient(cctrl.getNgaPassportUid(),
+				cctrl.getNgaPassportCid());
 		HomeListAdapter.setTopicInfoList(cctrl.getTopiclist());
 	}
 
@@ -265,7 +270,8 @@ public class NgaAppMainActivity extends Activity {
 			super.onCreateContextMenu(menu, v, menuInfo);
 			menu.setHeaderTitle(getCurrentHomeListAdapter().getItem(
 					info.position).getName());
-			menu.add(0, MENU_DEL, 0, this.getString(R.string.menu_name1));
+			menu.add(Menu.NONE, MENU_DEL, Menu.NONE,
+					this.getString(R.string.menu_name1));
 		}
 	}
 
@@ -283,5 +289,68 @@ public class NgaAppMainActivity extends Activity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.mainmenu_login:
+			LoginController.showLoginWindow(this);
+			break;
+		case R.id.mainmenu_setting:
+			// TODO
+			break;
+		case R.id.mainmenu_exit:
+			// TODO
+			break;
+
+		}
+		return true;
+	}
+
+	@Override
+	public void callbackHander(String doc) {
+		LoginController.btn_login.setEnabled(true);
+		LoginController.btn_login.setText(R.string.menu_login);
+		String msg;
+		if (LoginController.logged) {
+			msg = getString(R.string.msg_login_success);
+			LoginController.dialog.dismiss();
+			cctrl.saveLoginInfo(LoginController.ngaPassportUid,
+					LoginController.ngaPassportCid);
+		} else {
+			msg = getString(R.string.msg_login_fail);
+		}
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+	}
+
+	@Override
+	public void showContectionProgressDialog() {
+		LoginController.btn_login.setEnabled(false);
+		LoginController.btn_login.setText(R.string.btn_login);
+	}
+
+	@Override
+	public void showGettingProgressDialog() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void showLoadingProgressDialog() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Activity getActivity() {
+		return this;
 	}
 }

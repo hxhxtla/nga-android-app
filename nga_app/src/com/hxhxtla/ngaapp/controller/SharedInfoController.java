@@ -3,6 +3,8 @@ package com.hxhxtla.ngaapp.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 
@@ -15,6 +17,8 @@ public class SharedInfoController {
 	public static String SERVER_URL;
 
 	public static ArticleInfo RECENT_POST;
+	
+	public static final DefaultHttpClient httpClient = new DefaultHttpClient();
 
 	public SharedInfoController() {
 		// TODO Auto-generated constructor stub

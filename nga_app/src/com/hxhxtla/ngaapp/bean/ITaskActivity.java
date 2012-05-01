@@ -1,5 +1,7 @@
 package com.hxhxtla.ngaapp.bean;
 
+import android.app.Activity;
+
 public interface ITaskActivity {
 	public void callbackHander(String doc);
 
@@ -8,4 +10,6 @@ public interface ITaskActivity {
 	public void showGettingProgressDialog();
 
 	public void showLoadingProgressDialog();
+	
+	public Activity getActivity();
 }

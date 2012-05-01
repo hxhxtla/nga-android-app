@@ -203,4 +203,9 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 
 	}
 
+	@Override
+	public Activity getActivity() {
+		return this;
+	}
+
 }

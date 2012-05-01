@@ -6,8 +6,17 @@
     <string name="msg_delTopicSucc">删除主题成功</string>
     <string name="msg_outOfPageIndex">超出页码范围</string>
     <string name="msg_adsAlert">广告页面，请稍后刷新</string>
+    <string name="msg_login_cantNull">账号与密码不能为空</string>
+    <string name="msg_login_success">登录成功</string>
+    <string name="msg_login_fail">登录失败！\n账号或密码错误</string>
     <string name="menu_name1">删除此主题</string>
     <string name="menu_add_highlight">加亮此用户</string>
+    <string name="menu_login">登录</string>
+    <string name="btn_login">登录中</string>
+    <string name="menu_setting">设置</string>
+    <string name="menu_exit">退出</string>
+    <string name="login_account">账号</string>
+    <string name="login_password">密码</string>
     <string name="add_topic">添加主题</string>
     <string name="add_topic_id">add</string>
     <string name="topic1">艾泽拉斯议事厅</string>
