@@ -36,12 +36,28 @@ public class ConfigController {
 
 	public boolean saveTopiclist(List<TopicInfo> til) {
 		List<TopicInfo> JSONList = new ArrayList<TopicInfo>();
-		for(TopicInfo ti: til){
+		for (TopicInfo ti : til) {
 			JSONList.add(ti.clone());
 		}
 		Editor editor = getConfig().edit();
 		editor.putString(context.getString(R.string.TOPIC_LIST),
 				JSON.toJSONString(JSONList));
 		return editor.commit();
+	}
+
+	public boolean saveLoginInfo(String uid, String cid) {
+		Editor editor = getConfig().edit();
+		editor.putString(context.getString(R.string.nga_uid), uid);
+		editor.putString(context.getString(R.string.nga_cid), cid);
+		return editor.commit();
+
+	}
+
+	public String getNgaPassportUid() {
+		return getConfig().getString(context.getString(R.string.nga_uid), null);
+	}
+
+	public String getNgaPassportCid() {
+		return getConfig().getString(context.getString(R.string.nga_cid), null);
 	}
 }

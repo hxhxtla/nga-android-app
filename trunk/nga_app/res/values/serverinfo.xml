@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="server_url">http://bbs.ngacn.cc</string>
     <string name="server_rss">rss=1</string>
     <string name="article_keyword">/thread.php?</string>
     <string name="article_keyword1">fid=</string>
     <string name="article_keyword2">page=</string>
-    
+    <string name="login_url">http://account.178.com/q_account.php</string>
+    <string name="nga_uid">ngaPassportUid</string>
+    <string name="nga_cid">ngaPassportCid</string>
+
 </resources>

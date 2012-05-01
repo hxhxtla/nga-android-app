@@ -8,13 +8,11 @@
     android:padding="3dp" >
 
     <ImageView
-        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/post_load_icon" />
 
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dp"
