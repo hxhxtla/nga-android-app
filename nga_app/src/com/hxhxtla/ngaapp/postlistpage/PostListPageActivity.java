@@ -260,12 +260,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		if (doc != null) {
 			Document document = Jsoup.parse(doc);
 			if (document.title().equals(getString(R.string.keyword_ads_check))) {
-				Toast.makeText(PostListPageActivity.this,
-						R.string.msg_adsAlert, Toast.LENGTH_LONG).show();
+				SharedInfoController.showCommonAlertDialog(this,
+						R.string.msg_adsAlert);
 			} else if (document.title().equals(
 					getString(R.string.keyword_tip_check))) {
-				Toast.makeText(PostListPageActivity.this,
-						R.string.msg_needLogin, Toast.LENGTH_LONG).show();
+				SharedInfoController.showCommonAlertDialog(this,
+						R.string.msg_needLogin);
 			} else {
 				if (initialization) {
 					setTitle(document);

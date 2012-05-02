@@ -5,6 +5,7 @@ import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +52,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	private ImageButton btn_next;
 	private ImageButton btn_pre;
+
+	private ProgressDialog progressDialog;
 
 	private void initView() {
 		setContentView(R.layout.main);
@@ -309,9 +312,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	@Override
 	public void callbackHander(String doc) {
-		LoginController.getInstance().btn_login.setEnabled(true);
-		LoginController.getInstance().btn_login.setText(R.string.menu_login);
 		int msg;
+		closeContectionProgressDialog();
 		if (LoginController.logged) {
 			msg = R.string.msg_login_success;
 			LoginController.getInstance().dialog.dismiss();
@@ -320,6 +322,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 			LoginController.clearCache();
 		} else {
 			msg = R.string.msg_login_fail;
+			LoginController.getInstance().showLoginWindow(this, cctrl);
 		}
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
@@ -327,8 +330,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	@Override
 	public void showContectionProgressDialog() {
-		LoginController.getInstance().btn_login.setEnabled(false);
-		LoginController.getInstance().btn_login.setText(R.string.btn_login);
+		progressDialog = ProgressDialog.show(this,
+				getString(R.string.menu_login), getString(R.string.btn_login));
 	}
 
 	@Override
@@ -341,6 +344,11 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	public void showLoadingProgressDialog() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void closeContectionProgressDialog() {
+		if (progressDialog != null)
+			progressDialog.dismiss();
 	}
 
 	@Override
