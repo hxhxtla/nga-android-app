@@ -8,8 +8,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -156,75 +158,78 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 			@Override
 			public void onClick(View v) {
-				final Dialog dialog = new Dialog(PostListPageActivity.this);
-				dialog.setContentView(R.layout.post_list_navigate_dialog);
-				dialog.setTitle(R.string.post_list_navigate_dialog_title);
-				Button btn_go = (Button) dialog.findViewById(R.id.plnd_go);
-				final EditText et_input = (EditText) dialog
+
+				final View input_navigate = getLayoutInflater().inflate(
+						R.layout.post_list_navigate_dialog, null);
+				Builder br = new AlertDialog.Builder(PostListPageActivity.this);
+				br.setView(input_navigate);
+				br.setTitle(R.string.post_list_navigate_dialog_title);
+				final EditText et_input = (EditText) input_navigate
 						.findViewById(R.id.plnd_input);
 				if (v == btn_pageTo) {
-					btn_go.setText(PostListPageActivity.this
-							.getString(R.string.post_list_page));
-					btn_go.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							String input = et_input.getText().toString().trim();
-							if (!input.isEmpty()) {
-								int targetNum = Integer.parseInt(input);
-								if (targetNum > 0 && targetNum <= maxPageNum) {
-									curPageNum = targetNum;
-									curPageNum = targetNum;
-									if (pla.checkLoaded(targetNum)) {
-										locatePageByIndex(curPageNum);
-									} else {
-										refreshView(false);
+					br.setPositiveButton(R.string.post_list_page,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									String input = et_input.getText()
+											.toString().trim();
+									if (!input.isEmpty()) {
+										int targetNum = Integer.parseInt(input);
+										if (targetNum > 0
+												&& targetNum <= maxPageNum) {
+											curPageNum = targetNum;
+											curPageNum = targetNum;
+											if (pla.checkLoaded(targetNum)) {
+												locatePageByIndex(curPageNum);
+											} else {
+												refreshView(false);
+											}
+											dialog.dismiss();
+										} else {
+											Toast.makeText(
+													PostListPageActivity.this,
+													PostListPageActivity.this
+															.getString(R.string.msg_outOfPageIndex),
+													Toast.LENGTH_SHORT).show();
+										}
 									}
-									dialog.dismiss();
-								} else {
-									Toast.makeText(
-											PostListPageActivity.this,
-											PostListPageActivity.this
-													.getString(R.string.msg_outOfPageIndex),
-											Toast.LENGTH_SHORT).show();
 								}
-							}
-						}
-					});
+							});
 				} else if (v == btn_floorTo) {
-					btn_go.setText(PostListPageActivity.this
-							.getString(R.string.post_list_floor));
-					btn_go.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							String input = et_input.getText().toString().trim();
-							if (!input.isEmpty()) {
-								int targetNum = Integer.parseInt(input);
-								int pageIndexNum = pla
-										.getPageIndexByFloorIndex(targetNum);
-								if (pageIndexNum > 0
-										&& pageIndexNum <= maxPageNum) {
-									curPageNum = pageIndexNum;
-									navigateFloorInPage = pla
-											.getFloorInPageByFloorIndex(targetNum);
-									if (pla.checkLoaded(curPageNum)) {
-										locatePageByIndex(curPageNum);
-									} else {
-										refreshView(false);
+					br.setPositiveButton(R.string.post_list_floor,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									String input = et_input.getText()
+											.toString().trim();
+									if (!input.isEmpty()) {
+										int targetNum = Integer.parseInt(input);
+										int pageIndexNum = pla
+												.getPageIndexByFloorIndex(targetNum);
+										if (pageIndexNum > 0
+												&& pageIndexNum <= maxPageNum) {
+											curPageNum = pageIndexNum;
+											navigateFloorInPage = pla
+													.getFloorInPageByFloorIndex(targetNum);
+											if (pla.checkLoaded(curPageNum)) {
+												locatePageByIndex(curPageNum);
+											} else {
+												refreshView(false);
+											}
+											dialog.dismiss();
+										} else {
+											Toast.makeText(
+													PostListPageActivity.this,
+													PostListPageActivity.this
+															.getString(R.string.msg_outOfPageIndex),
+													Toast.LENGTH_SHORT).show();
+										}
 									}
-									dialog.dismiss();
-								} else {
-									Toast.makeText(
-											PostListPageActivity.this,
-											PostListPageActivity.this
-													.getString(R.string.msg_outOfPageIndex),
-											Toast.LENGTH_SHORT).show();
 								}
-							}
-						}
-					});
+							});
 				}
+
+				AlertDialog dialog = br.create();
 				dialog.show();
 
 			}
