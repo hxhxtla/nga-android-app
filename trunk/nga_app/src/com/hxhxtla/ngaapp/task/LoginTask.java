@@ -56,6 +56,9 @@ public class LoginTask extends AsyncTask<String, String, HttpResponse> {
 			e.printStackTrace();
 		}
 		HttpResponse httpResponse = null;
+		if (SharedInfoController.httpClient.getCookieStore() != null) {
+			SharedInfoController.httpClient.getCookieStore().clear();
+		}
 		try {
 			httpResponse = SharedInfoController.httpClient.execute(httpRequest);
 		} catch (ClientProtocolException e) {
@@ -89,9 +92,16 @@ public class LoginTask extends AsyncTask<String, String, HttpResponse> {
 								.split("%23")[0];
 					}
 				}
-				LoginController.logged = true;
-			} else if (result.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
-				LoginController.logged = false;
+				if (LoginController.ngaPassportUid != null
+						&& !LoginController.ngaPassportUid.isEmpty()
+						&& LoginController.ngaPassportCid != null
+						&& !LoginController.ngaPassportCid.isEmpty()) {
+					LoginController.logged = true;
+				} else {
+					LoginController.logged = false;
+				}
+			} else {
+				// TODO
 			}
 		} else {
 			// TODO

@@ -53,6 +53,13 @@ public class ConfigController {
 
 	}
 
+	public boolean clearLoginInfo() {
+		Editor editor = getConfig().edit();
+		editor.remove(context.getString(R.string.nga_uid));
+		editor.remove(context.getString(R.string.nga_cid));
+		return editor.commit();
+	}
+
 	public String getNgaPassportUid() {
 		return getConfig().getString(context.getString(R.string.nga_uid), null);
 	}

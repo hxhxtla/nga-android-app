@@ -188,11 +188,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 					alert.cancel();
 					saveTopicInfoListToConfig();
 				} else {
-					Toast.makeText(
-							NgaAppMainActivity.this,
-							NgaAppMainActivity.this
-									.getString(R.string.msg_topicExist),
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(NgaAppMainActivity.this,
+							R.string.msg_topicExist, Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -223,10 +220,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 			}
 
 			notifyAllDataSetChanged();
-			Toast.makeText(
-					NgaAppMainActivity.this,
-					NgaAppMainActivity.this
-							.getString(R.string.msg_delTopicSucc),
+			Toast.makeText(NgaAppMainActivity.this, R.string.msg_delTopicSucc,
 					Toast.LENGTH_SHORT).show();
 			saveTopicInfoListToConfig();
 			if (atla != null) {
@@ -270,8 +264,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 			super.onCreateContextMenu(menu, v, menuInfo);
 			menu.setHeaderTitle(getCurrentHomeListAdapter().getItem(
 					info.position).getName());
-			menu.add(Menu.NONE, MENU_DEL, Menu.NONE,
-					this.getString(R.string.menu_name1));
+			menu.add(Menu.NONE, MENU_DEL, Menu.NONE, R.string.menu_topic_del);
 		}
 	}
 
@@ -301,7 +294,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.mainmenu_login:
-			LoginController.showLoginWindow(this);
+			LoginController.getInstance().showLoginWindow(this, cctrl);
 			break;
 		case R.id.mainmenu_setting:
 			// TODO
@@ -316,16 +309,17 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	@Override
 	public void callbackHander(String doc) {
-		LoginController.btn_login.setEnabled(true);
-		LoginController.btn_login.setText(R.string.menu_login);
-		String msg;
+		LoginController.getInstance().btn_login.setEnabled(true);
+		LoginController.getInstance().btn_login.setText(R.string.menu_login);
+		int msg;
 		if (LoginController.logged) {
-			msg = getString(R.string.msg_login_success);
-			LoginController.dialog.dismiss();
+			msg = R.string.msg_login_success;
+			LoginController.getInstance().dialog.dismiss();
 			cctrl.saveLoginInfo(LoginController.ngaPassportUid,
 					LoginController.ngaPassportCid);
+			LoginController.clearCache();
 		} else {
-			msg = getString(R.string.msg_login_fail);
+			msg = R.string.msg_login_fail;
 		}
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
@@ -333,8 +327,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	@Override
 	public void showContectionProgressDialog() {
-		LoginController.btn_login.setEnabled(false);
-		LoginController.btn_login.setText(R.string.btn_login);
+		LoginController.getInstance().btn_login.setEnabled(false);
+		LoginController.getInstance().btn_login.setText(R.string.btn_login);
 	}
 
 	@Override

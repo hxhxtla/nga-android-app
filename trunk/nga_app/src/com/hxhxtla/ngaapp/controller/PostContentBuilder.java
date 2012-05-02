@@ -64,6 +64,8 @@ public class PostContentBuilder {
 
 		String value = "<!DOCTYPE HTML><html><head>"
 				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
+				+ "<META http-equiv='Cache-Control' content='no-cache'>"
+				+ "<META http-equiv='Cache-Control' content='no-store'>"
 				+ "<style type='text/css'>"
 				+ ".quote {background:#E8E8E8;border:1px solid #888;margin:10px 10px 10px 10px;padding:10px}"
 				+ ".silver {color:#888}"
