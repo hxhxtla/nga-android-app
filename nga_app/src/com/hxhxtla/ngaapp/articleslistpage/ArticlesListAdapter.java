@@ -1,7 +1,6 @@
 package com.hxhxtla.ngaapp.articleslistpage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -53,22 +52,25 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 		}
 	}
 
-	public void setData(String value) {
+	public boolean setData(String value) {
 		Document document;
 		try {
 			document = DocumentHelper.parseText(value);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return;
+			return false;
 		}
 		Element channel = (Element) document.getRootElement().element(
 				rss_channel);
 		int index;
-		Iterator<?> it = channel.elementIterator(rss_item);
-		for (index = 0; it.hasNext(); index++) {
+		List<?> itemList = channel.elements(rss_item);
+		if (itemList.size() <= 1) {
+			return false;
+		}
+		for (index = 0; index < itemList.size(); index++) {
 
-			Element item = (Element) it.next();
+			Element item = (Element) itemList.get(index);
 			while (articleInfoList.size() <= index) {
 				LinearLayout ll = (LinearLayout) mContext.getLayoutInflater()
 						.inflate(R.layout.articles_list_item, null);
@@ -88,11 +90,14 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 			String description = cleanDirty(item.elementText(rss_description));
 			description = description.substring(ai.getTitle().length());
 			String[] arr = description.split(nga_rss_keyword2);
-			ai.setPostcount(arr[0].trim());
-			ai.setLastpost(arr[1].trim());
+			if (arr.length > 1) {
+				ai.setPostcount(arr[0].trim());
+				ai.setLastpost(arr[1].trim());
+			}
 		}
 
 		articlesListSize = index;
+		return true;
 	}
 
 	public String cleanDirty(String value) {

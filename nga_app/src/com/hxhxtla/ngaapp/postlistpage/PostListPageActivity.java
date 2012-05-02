@@ -188,8 +188,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 										} else {
 											Toast.makeText(
 													PostListPageActivity.this,
-													PostListPageActivity.this
-															.getString(R.string.msg_outOfPageIndex),
+													R.string.msg_outOfPageIndex,
 													Toast.LENGTH_SHORT).show();
 										}
 									}
@@ -220,8 +219,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 										} else {
 											Toast.makeText(
 													PostListPageActivity.this,
-													PostListPageActivity.this
-															.getString(R.string.msg_outOfPageIndex),
+													R.string.msg_outOfPageIndex,
 													Toast.LENGTH_SHORT).show();
 										}
 									}
@@ -262,11 +260,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		if (doc != null) {
 			Document document = Jsoup.parse(doc);
 			if (document.title().equals(getString(R.string.keyword_ads_check))) {
-				Toast.makeText(
-						PostListPageActivity.this,
-						PostListPageActivity.this
-								.getString(R.string.msg_adsAlert),
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(PostListPageActivity.this,
+						R.string.msg_adsAlert, Toast.LENGTH_LONG).show();
+			} else if (document.title().equals(
+					getString(R.string.keyword_tip_check))) {
+				Toast.makeText(PostListPageActivity.this,
+						R.string.msg_needLogin, Toast.LENGTH_LONG).show();
 			} else {
 				if (initialization) {
 					setTitle(document);
@@ -347,8 +346,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.add(0, MENU_ADDHIGHLIGHT, 0,
-				this.getString(R.string.menu_add_highlight));
+		menu.add(0, MENU_ADDHIGHLIGHT, 0, R.string.menu_add_highlight);
 
 	}
 

@@ -7,11 +7,15 @@
     <string name="msg_outOfPageIndex">超出页码范围</string>
     <string name="msg_adsAlert">广告页面，请稍后刷新</string>
     <string name="msg_login_cantNull">账号与密码不能为空</string>
+    <string name="msg_needLogin">遇到提示信息页\n可能是由于未登录造成\n请确认后重试</string>
     <string name="msg_login_success">登录成功</string>
+    <string name="msg_logout_success">注销成功</string>
     <string name="msg_login_fail">登录失败！\n账号或密码错误</string>
-    <string name="menu_name1">删除此主题</string>
+    <string name="menu_topic_del">删除此主题</string>
     <string name="menu_add_highlight">加亮此用户</string>
+    <string name="menu_log">登录注销</string>
     <string name="menu_login">登录</string>
+    <string name="menu_logout">注销</string>
     <string name="btn_login">登录中</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
@@ -149,5 +153,6 @@
     <string name="post_list_floor">楼</string>
     <string name="post_list_navigate_dialog_title">请输入要跳转的页/楼</string>
     <string name="keyword_ads_check">欢迎访问魔兽世界中文网·艾泽拉斯国家地理</string>
+    <string name="keyword_tip_check">提示信息</string>
 
 </resources>
