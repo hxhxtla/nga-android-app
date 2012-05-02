@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+
+import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 
@@ -17,7 +22,7 @@ public class SharedInfoController {
 	public static String SERVER_URL;
 
 	public static ArticleInfo RECENT_POST;
-	
+
 	public static final DefaultHttpClient httpClient = new DefaultHttpClient();
 
 	public SharedInfoController() {
@@ -39,6 +44,14 @@ public class SharedInfoController {
 			DISPLAYED_HISTORY_TOPICLIST.remove(DISPLAYED_HISTORY_TOPICLIST
 					.size() - 1);
 		}
+	}
+
+	public static void showCommonAlertDialog(Activity value, int messageResId) {
+		Builder br = new AlertDialog.Builder(value);
+		br.setTitle(R.string.keyword_tip_check);
+		br.setMessage(messageResId);
+		br.setPositiveButton(R.string.menu_confirm, null);
+		br.create().show();
 	}
 
 }

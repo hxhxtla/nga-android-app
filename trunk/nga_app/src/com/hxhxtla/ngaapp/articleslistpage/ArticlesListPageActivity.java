@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
@@ -198,8 +197,8 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				htla.notifyDataSetChanged();
 				lv.setSelectionAfterHeaderView();
 			} else {
-				Toast.makeText(this, R.string.msg_needLogin, Toast.LENGTH_LONG)
-						.show();
+				SharedInfoController.showCommonAlertDialog(this,
+						R.string.msg_needLogin);
 			}
 		} else {
 			// TODO

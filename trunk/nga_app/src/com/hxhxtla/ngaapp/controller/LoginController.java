@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,10 +19,6 @@ public class LoginController {
 	public static String ngaPassportCid;
 	public static String ngaPassportUid;
 
-	public Button btn_login;
-
-	public Button btn_logout;
-
 	public AlertDialog dialog;
 
 	private EditText input_act;
@@ -33,6 +28,10 @@ public class LoginController {
 	private Activity activity;
 
 	private ConfigController configController;
+
+	private String act;
+
+	private String pwd;
 
 	private static LoginController _instance;
 
@@ -58,61 +57,65 @@ public class LoginController {
 	public void showLoginWindow(Activity valuea, ConfigController valuecc) {
 		activity = valuea;
 		configController = valuecc;
-		final View input_login = activity.getLayoutInflater().inflate(
-				R.layout.login_window, null);
-
-		input_act = (EditText) input_login.findViewById(R.id.input_account);
-		input_pwd = (EditText) input_login.findViewById(R.id.input_passwoed);
 		Builder br = new AlertDialog.Builder(activity);
 		br.setTitle(R.string.menu_log);
-		br.setView(input_login);
-		br.setPositiveButton(R.string.menu_login,
-				new DialogInterface.OnClickListener() {
+		br.setMessage(R.string.menu_askForconfirm);
+		if (logged) {
+			br.setPositiveButton(R.string.menu_confirm,
+					new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						String act = input_act.getText().toString().trim();
-						String pwd = input_pwd.getText().toString().trim();
-						if (act.isEmpty() || pwd.isEmpty()) {
-							Toast.makeText(activity,
-									R.string.msg_login_cantNull,
-									Toast.LENGTH_SHORT).show();
-						} else if (activity instanceof ITaskActivity) {
-							LoginTask loginTask = new LoginTask(
-									(ITaskActivity) activity);
-							loginTask.execute(act, pwd);
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							logged = false;
+							ngaPassportCid = null;
+							ngaPassportUid = null;
+							if (configController.clearLoginInfo()) {
+								Toast.makeText(activity,
+										R.string.msg_logout_success,
+										Toast.LENGTH_SHORT).show();
+								showLoginWindow(activity, configController);
+							} else {
+								// TODO
+							}
 						}
-					}
-				});
-		br.setNegativeButton(R.string.menu_logout,
-				new DialogInterface.OnClickListener() {
+					});
+			br.setNegativeButton(R.string.menu_cancel, null);
+		} else {
+			final View input_login = activity.getLayoutInflater().inflate(
+					R.layout.login_window, null);
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						logged = false;
-						ngaPassportCid = null;
-						ngaPassportUid = null;
-						if (configController.clearLoginInfo()) {
-							Toast.makeText(activity,
-									R.string.msg_logout_success,
-									Toast.LENGTH_SHORT).show();
-							btn_logout.setVisibility(View.GONE);
-							btn_login.setVisibility(View.VISIBLE);
-						} else {
-							// TODO
+			input_act = (EditText) input_login.findViewById(R.id.input_account);
+			input_pwd = (EditText) input_login
+					.findViewById(R.id.input_passwoed);
+			if (act != null) {
+				input_act.setText(act);
+			}
+			if (pwd != null) {
+				input_pwd.setText(pwd);
+			}
+			br.setView(input_login);
+			br.setPositiveButton(R.string.menu_login,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							act = input_act.getText().toString().trim();
+							pwd = input_pwd.getText().toString().trim();
+							if (act.isEmpty() || pwd.isEmpty()) {
+								Toast.makeText(activity,
+										R.string.msg_login_cantNull,
+										Toast.LENGTH_SHORT).show();
+								showLoginWindow(activity, configController);
+							} else if (activity instanceof ITaskActivity) {
+								LoginTask loginTask = new LoginTask(
+										(ITaskActivity) activity);
+								loginTask.execute(act, pwd);
+							}
 						}
-					}
-				});
+					});
+
+		}
 		dialog = br.create();
 		dialog.show();
-		btn_login = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-		btn_logout = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-		if (logged) {
-			btn_login.setVisibility(View.GONE);
-			btn_logout.setVisibility(View.VISIBLE);
-		} else {
-			btn_logout.setVisibility(View.GONE);
-			btn_login.setVisibility(View.VISIBLE);
-		}
 	}
 }
