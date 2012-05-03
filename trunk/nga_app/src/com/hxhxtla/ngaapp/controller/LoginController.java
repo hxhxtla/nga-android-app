@@ -59,8 +59,8 @@ public class LoginController {
 		configController = valuecc;
 		Builder br = new AlertDialog.Builder(activity);
 		br.setTitle(R.string.menu_log);
-		br.setMessage(R.string.menu_askForconfirm);
 		if (logged) {
+			br.setMessage(R.string.menu_askForconfirm);
 			br.setPositiveButton(R.string.menu_confirm,
 					new DialogInterface.OnClickListener() {
 
