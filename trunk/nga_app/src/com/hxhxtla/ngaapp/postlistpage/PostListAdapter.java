@@ -199,6 +199,14 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		return null;
 	}
 
+	public void clearWebViewCache() {
+		if (postInfoList != null && postInfoList.size() > 0) {
+			for (PostInfo pi : postInfoList) {
+				pi.clearCache();
+			}
+		}
+	}
+
 	@Override
 	public int getCount() {
 		return postInfoList.size();

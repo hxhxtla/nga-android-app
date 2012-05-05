@@ -111,4 +111,11 @@ public class PostInfo {
 		this.pageIndex = pageIndex;
 	}
 
+	public void clearCache() {
+		if (wvContent != null) {
+			wvContent.clearCache(true);
+			wvContent.clearHistory();
+		}
+	}
+
 }
