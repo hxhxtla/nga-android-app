@@ -371,4 +371,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		return this;
 	}
 
+	@Override
+	protected void onStop() {
+		if (pla != null) {
+			pla.clearWebViewCache();
+		}
+		super.onStop();
+	}
+
 }
