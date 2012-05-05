@@ -14,12 +14,12 @@ public class PostContentBuilder {
 			"\\[quote\\](.+?)\\[/quote\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_REPLY = Pattern.compile(
-			"\\[[pt]id=\\d+\\](.+?)\\[/pid\\]", Pattern.DOTALL
+			"\\[[pt]id=?\\d{0,20}\\](.+?)\\[/pid\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_B = Pattern.compile("\\[b\\](.+?)\\[/b\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_URL = Pattern.compile(
-			"\\[url(\\S*)\\](.+?)\\[/url\\]", Pattern.DOTALL
+			"\\[url=?(.*?)\\](.+?)\\[/url\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_SMILES = Pattern.compile("\\[s:(\\d+)\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
@@ -27,7 +27,7 @@ public class PostContentBuilder {
 			"\\[img\\](.+?)\\[/img\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_COLOR = Pattern.compile(
-			"\\[color\\S*\\](.+?)\\[/color\\]", Pattern.DOTALL
+			"\\[color.*?\\](.+?)\\[/color\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_FLASH = Pattern.compile(
 			"\\[flash\\](.+?)\\[/flash\\]", Pattern.DOTALL
@@ -36,10 +36,10 @@ public class PostContentBuilder {
 			"\\[del\\](.+?)\\[/del\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_FONT = Pattern.compile(
-			"\\[font\\S*\\](.+?)\\[/font\\]", Pattern.DOTALL
+			"\\[font.*?\\](.+?)\\[/font\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_SIZE = Pattern.compile(
-			"\\[size=(\\d+)%?\\](.+?)\\[/size\\]", Pattern.DOTALL
+			"\\[size=(\\d{1,3})%?\\](.+?)\\[/size\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_U = Pattern.compile("\\[u\\](.+?)\\[/u\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
@@ -49,11 +49,13 @@ public class PostContentBuilder {
 			"\\[(custom)?achieve\\](.+?)\\[/(custom)?achieve\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_COLLAPSE = Pattern.compile(
-			"\\[collapse(\\S*)\\](.+?)\\[/collapse\\]", Pattern.DOTALL
+			"\\[collapse=?.*?\\](.+?)\\[/collapse\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern P_HTTP = Pattern.compile("^http",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+	
+	public static final Pattern P_PAGENUM = Pattern.compile("\\d+");
 
 	public PostContentBuilder() {
 		// TODO Auto-generated constructor stub
@@ -218,7 +220,7 @@ public class PostContentBuilder {
 			matcher = P_COLLAPSE.matcher(value);
 			sb = new StringBuffer();
 			while (matcher.find()) {
-				temp = matcher.group(2);
+				temp = matcher.group(1);
 				matcher.appendReplacement(sb, getR_FONT(temp));
 			}
 			matcher.appendTail(sb);

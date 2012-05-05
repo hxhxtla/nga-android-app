@@ -1,7 +1,6 @@
 package com.hxhxtla.ngaapp.postlistpage;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,6 +32,7 @@ import android.widget.Toast;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
 
@@ -298,8 +298,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			Elements maxpage = document.select(this
 					.getString(R.string.post_maxpage));
 			if (maxpage.size() > 0) {
-				Pattern pagenum = Pattern.compile("\\d+?");
-				Matcher matcher = pagenum.matcher(maxpage.get(0).text());
+				Matcher matcher = PostContentBuilder.P_PAGENUM.matcher(maxpage
+						.get(0).text());
 				matcher.find();
 				maxPageNum = Integer.parseInt(matcher.group());
 			} else {
