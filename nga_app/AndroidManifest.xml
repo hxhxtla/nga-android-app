@@ -11,15 +11,19 @@
         android:label="@string/app_name" >
         <activity
             android:name=".homepage.NgaAppMainActivity"
-            android:label="@string/app_name" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".articleslistpage.ArticlesListPageActivity" />
-        <activity android:name=".postlistpage.PostListPageActivity" />
+        <activity
+            android:name=".articleslistpage.ArticlesListPageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".postlistpage.PostListPageActivity"
+            android:screenOrientation="portrait" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
