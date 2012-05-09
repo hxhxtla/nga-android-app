@@ -49,6 +49,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private static String post_user_info2;
 	private static String post_user_info3;
 	private static String post_user_info4;
+	private static String keyword_url;
 
 	private String curHighLightAuthor;
 
@@ -71,6 +72,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		post_user_info2 = mContext.getString(R.string.post_user_info2);
 		post_user_info3 = mContext.getString(R.string.post_user_info3);
 		post_user_info4 = mContext.getString(R.string.post_user_info4);
+
+		keyword_url = mContext.getString(R.string.keyword_url);
 
 		pageinfoList = new ArrayList<PageInfo>();
 		postInfoList = new ArrayList<PostInfo>();
@@ -142,11 +145,35 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				userInfo = clearUserInfo(userInfo);
 				if (userInfo != null) {
 					String[] values = userInfo.split(",");
+					pi.setPrestige(mContext
+							.getString(R.string.user_info_prestige) + values[7]);
+					pi.setPostcount(mContext
+							.getString(R.string.user_info_postcount)
+							+ values[19].replaceAll("\"", ""));
+					String url = checkURL(values[11]);
+					if (url != null && !url.isEmpty()) {
+						pi.setUrlAvatar(url.replaceAll("\"", ""));
+					}
 				}
 			}
 			syncToPostInfoList();
 
 		}
+	}
+
+	private String checkURL(String url) {
+		if (url != null && !url.isEmpty() && url.indexOf(keyword_url) != -1) {
+			return url;
+		} else if (tempInfo.containsKey(url)) {
+			String[] values = tempInfo.get(url).split("\"");
+			for (String value : values) {
+				value = checkURL(value);
+				if (value != null) {
+					return value;
+				}
+			}
+		}
+		return null;
 	}
 
 	private String clearUserInfo(String value) {

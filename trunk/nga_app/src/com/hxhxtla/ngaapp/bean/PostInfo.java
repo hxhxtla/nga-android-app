@@ -2,13 +2,16 @@ package com.hxhxtla.ngaapp.bean;
 
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.controller.PostContentBuilder;
+import com.hxhxtla.ngaapp.task.GetAvatarTask;
 
 public class PostInfo {
 
@@ -16,6 +19,9 @@ public class PostInfo {
 	private String floor;
 	private String datetime;
 	private String content;
+	private String prestige;
+	private String postcount;
+	private String urlAvatar;
 
 	private boolean highlight;
 
@@ -27,16 +33,23 @@ public class PostInfo {
 	private TextView tvAuthor;
 	private TextView tvFloor;
 	private TextView tvDatetime;
+	private TextView tvPrestige;
+	private TextView tvPostcount;
 
 	private WebView wvContent;
+
+	private ImageView ivAvatar;
 
 	public PostInfo(ViewGroup value) {
 		view = value;
 		tvAuthor = (TextView) view.findViewById(R.id.post_author);
 		tvFloor = (TextView) view.findViewById(R.id.post_floor);
 		tvDatetime = (TextView) view.findViewById(R.id.post_datetime);
+		tvPrestige = (TextView) view.findViewById(R.id.post_prestige);
+		tvPostcount = (TextView) view.findViewById(R.id.post_count);
 		wvContent = (WebView) view.findViewById(R.id.post_content);
 		wvContent.setBackgroundColor(0);
+		ivAvatar = (ImageView) view.findViewById(R.id.post_avatar);
 	}
 
 	public PostInfo(int index, ViewGroup value) {
@@ -71,6 +84,24 @@ public class PostInfo {
 		tvDatetime.setText(datetime);
 	}
 
+	public String getPrestige() {
+		return prestige;
+	}
+
+	public void setPrestige(String prestige) {
+		this.prestige = prestige;
+		tvPrestige.setText(prestige);
+	}
+
+	public String getPostcount() {
+		return postcount;
+	}
+
+	public void setPostcount(String postcount) {
+		this.postcount = postcount;
+		tvPostcount.setText(postcount);
+	}
+
 	public String getContent() {
 		return content;
 	}
@@ -85,6 +116,19 @@ public class PostInfo {
 		if (highlight) {
 			wvContent.setBackgroundResource(R.drawable.msgbox1);
 		}
+	}
+
+	public String getUrlAvatar() {
+		return urlAvatar;
+	}
+
+	public void setUrlAvatar(String urlAvatar) {
+		this.urlAvatar = urlAvatar;
+		new GetAvatarTask(this).execute(urlAvatar);
+	}
+
+	public void getAvatarHandler(Bitmap bitmap) {
+		ivAvatar.setImageBitmap(bitmap);
 	}
 
 	public View getView() {

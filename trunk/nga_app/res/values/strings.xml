@@ -157,5 +157,8 @@
     <string name="post_list_navigate_dialog_title">请输入要跳转的页/楼</string>
     <string name="keyword_ads_check">欢迎访问魔兽世界中文网·艾泽拉斯国家地理</string>
     <string name="keyword_tip_check">提示信息</string>
+    <string name="user_info_prestige">威望: </string>
+    <string name="user_info_postcount">发帖: </string>
+    <string name="keyword_url">http://</string>
 
 </resources>
