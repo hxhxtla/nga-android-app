@@ -129,13 +129,17 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 			PageInfo cpi = pageinfoList.get(index);
 			if (index > 0) {
 				PageInfo ppi = pageinfoList.get(index - 1);
+				LinearLayout ll = (LinearLayout) mContext.getLayoutInflater()
+						.inflate(R.layout.post_load_item, null);
+				PostInfo ipage;
 				if (cpi.getIndex() - ppi.getIndex() != 1) {
-					LinearLayout ll = (LinearLayout) mContext
-							.getLayoutInflater().inflate(
-									R.layout.post_load_item, null);
-					PostInfo ipage = new PostInfo(ppi.getIndex() + 1, ll);
-					postInfoList.add(ipage);
+					ipage = new PostInfo(ppi.getIndex() + 1, ll);
+					ll.findViewById(R.id.pli_icon).setVisibility(View.VISIBLE);
+					ll.findViewById(R.id.pli_text).setVisibility(View.VISIBLE);
+				} else {
+					ipage = new PostInfo(0, ll);
 				}
+				postInfoList.add(ipage);
 			}
 			postInfoList.addAll(cpi.getPostList());
 		}
