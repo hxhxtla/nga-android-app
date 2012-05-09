@@ -14,13 +14,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.hxhxtla.ngaapp.bean.PostInfo;
+
 public class GetAvatarTask extends AsyncTask<String, String, HttpResponse> {
 
 	private DefaultHttpClient httpClient;
 
-	public GetAvatarTask() {
+	private PostInfo pi;
+
+	public GetAvatarTask(PostInfo value) {
 		super();
 		httpClient = new DefaultHttpClient();
+		pi = value;
 	}
 
 	@Override
@@ -55,6 +60,7 @@ public class GetAvatarTask extends AsyncTask<String, String, HttpResponse> {
 				is = httpEntity.getContent();
 				Bitmap bitmap = BitmapFactory.decodeStream(is);
 				is.close();
+				pi.getAvatarHandler(bitmap);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
