@@ -2,7 +2,10 @@ package com.hxhxtla.ngaapp.postlistpage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
+import java.util.regex.Matcher;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,6 +22,7 @@ import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.PageInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 
 public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
@@ -27,6 +31,10 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private ArrayList<PostInfo> postInfoList;
 
 	private Activity mContext;
+
+	private HashMap<String, String> tempInfo;
+
+	private Random randKey;
 
 	private static String post_item;
 	private static String post_author;
@@ -37,6 +45,10 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private static String post_subtitle;
 	private static String post_comment_author;
 	private static String post_comment_content;
+	private static String post_user_info1;
+	private static String post_user_info2;
+	private static String post_user_info3;
+	private static String post_user_info4;
 
 	private String curHighLightAuthor;
 
@@ -55,10 +67,16 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		post_comment_author = mContext.getString(R.string.post_comment_author);
 		post_comment_content = mContext
 				.getString(R.string.post_comment_content);
+		post_user_info1 = mContext.getString(R.string.post_user_info1);
+		post_user_info2 = mContext.getString(R.string.post_user_info2);
+		post_user_info3 = mContext.getString(R.string.post_user_info3);
+		post_user_info4 = mContext.getString(R.string.post_user_info4);
 
 		pageinfoList = new ArrayList<PageInfo>();
 		postInfoList = new ArrayList<PostInfo>();
 
+		tempInfo = new HashMap<String, String>();
+		randKey = new Random();
 	}
 
 	public void setData(Document document, int pagenum) {
@@ -116,9 +134,56 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				}
 
 				pi.setContent(content, sbutitle, cil);
+
+				String userInfo = item.select(post_user_info1)
+						.select(post_user_info2).get(1).attr(post_user_info3)
+						.replace(post_user_info4, "");
+				userInfo = userInfo.substring(1, userInfo.length() - 1);
+				userInfo = clearUserInfo(userInfo);
+				if (userInfo != null) {
+					String[] values = userInfo.split(",");
+				}
 			}
 			syncToPostInfoList();
 
+		}
+	}
+
+	private String clearUserInfo(String value) {
+		if (value != null && !value.isEmpty()) {
+			Matcher matcher;
+			String temp;
+			StringBuffer sb;
+			Integer key;
+			String StrKey;
+
+			matcher = PostContentBuilder.P_SQUARE_BRACKETS.matcher(value);
+			sb = new StringBuffer();
+			while (matcher.find()) {
+				temp = matcher.group(0);
+				key = randKey.nextInt(10000);
+				StrKey = key.toString();
+				matcher.appendReplacement(sb, StrKey);
+				tempInfo.put(StrKey, temp);
+			}
+			matcher.appendTail(sb);
+			value = sb.toString();
+
+			matcher = PostContentBuilder.P_BRACES.matcher(value);
+			sb = new StringBuffer();
+			while (matcher.find()) {
+				temp = matcher.group(0);
+				key = randKey.nextInt(10000);
+				StrKey = key.toString();
+				matcher.appendReplacement(sb, StrKey);
+				tempInfo.put(StrKey, temp);
+			}
+			matcher.appendTail(sb);
+			value = sb.toString();
+
+			return value;
+		} else {
+			return null;
 		}
 	}
 

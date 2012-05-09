@@ -18,5 +18,9 @@
     <string name="post_comment">table[class~=left defaultcolor pc\d+]</string>
     <string name="post_comment_author">a[class=author]</string>
     <string name="post_comment_content">span[id~=postcomment\d+]</string>
+    <string name="post_user_info1">td[class~=c2 pc\d+]</string>
+    <string name="post_user_info2">img</string>
+    <string name="post_user_info3">onerror</string>
+    <string name="post_user_info4">commonui.postDisp</string>
 
 </resources>

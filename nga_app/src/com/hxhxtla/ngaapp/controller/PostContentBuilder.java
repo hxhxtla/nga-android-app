@@ -54,8 +54,14 @@ public class PostContentBuilder {
 
 	private static final Pattern P_HTTP = Pattern.compile("^http",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-	
+	//公用
 	public static final Pattern P_PAGENUM = Pattern.compile("\\d+");
+
+	public static final Pattern P_SQUARE_BRACKETS = Pattern.compile(
+			"\\[.+?\\]", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+
+	public static final Pattern P_BRACES = Pattern.compile(
+			"\\{.+?\\}", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
 	public PostContentBuilder() {
 		// TODO Auto-generated constructor stub
