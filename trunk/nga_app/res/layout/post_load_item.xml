@@ -4,19 +4,24 @@
     android:layout_height="wrap_content"
     android:background="@color/titlebar_text"
     android:gravity="center"
+    android:minHeight="3dp"
     android:orientation="horizontal"
     android:padding="3dp" >
 
     <ImageView
+        android:id="@+id/pli_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/post_load_icon" />
+        android:src="@drawable/post_load_icon"
+        android:visibility="gone" />
 
     <TextView
+        android:id="@+id/pli_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:text="@string/post_load_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
 
 </LinearLayout>
