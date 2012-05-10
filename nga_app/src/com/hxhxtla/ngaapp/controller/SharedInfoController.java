@@ -37,7 +37,7 @@ public class SharedInfoController {
 
 	}
 
-	public static final DefaultHttpClient httpClient = new DefaultHttpClient();
+	public static DefaultHttpClient httpClient;
 
 	public SharedInfoController() {
 		// TODO Auto-generated constructor stub

@@ -335,6 +335,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		PostInfo pi = postInfoList.get(arg0);
 		if (SharedInfoController.showAvatar()) {
 			pi.tryLoadAvatar();
+		} else {
+			pi.addAvatarLoadByClick();
 		}
 		return pi.getView();
 	}
