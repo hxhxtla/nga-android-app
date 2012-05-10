@@ -1,6 +1,7 @@
 package com.hxhxtla.ngaapp.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.graphics.Bitmap;
 import android.view.View;
@@ -15,6 +16,15 @@ import com.hxhxtla.ngaapp.task.GetAvatarTask;
 
 public class PostInfo {
 
+	public static final HashMap<String, GetAvatarTask> avatarTask = new HashMap<String, GetAvatarTask>();
+
+	private boolean highlight;
+
+	private int pageIndex;
+
+	private boolean avatarLoaded = false;
+
+	// var////////////////////////////////
 	private String author;
 	private String floor;
 	private String datetime;
@@ -23,11 +33,7 @@ public class PostInfo {
 	private String postcount;
 	private String urlAvatar;
 
-	private boolean highlight;
-
-	private int pageIndex;
-
-	// ////////////////////////////////
+	// view////////////////////////////////
 	private ViewGroup view;
 
 	private TextView tvAuthor;
@@ -124,11 +130,27 @@ public class PostInfo {
 
 	public void setUrlAvatar(String urlAvatar) {
 		this.urlAvatar = urlAvatar;
-		new GetAvatarTask(this).execute(urlAvatar);
+
 	}
 
-	public void getAvatarHandler(Bitmap bitmap) {
-		ivAvatar.setImageBitmap(bitmap);
+	public void callAvatarHandler(Bitmap bitmap) {
+		if (!avatarLoaded) {
+			ivAvatar.setImageBitmap(bitmap);
+			avatarLoaded = true;
+		}
+	}
+
+	public void tryLoadAvatar() {
+		if (!avatarLoaded) {
+			GetAvatarTask value = avatarTask.get(urlAvatar);
+			if (value != null) {
+				avatarTask.get(urlAvatar).addTaskDestination(this);
+			} else if (!avatarTask.containsKey(urlAvatar)) {
+				value = new GetAvatarTask(this);
+				avatarTask.put(urlAvatar, value);
+				value.execute(urlAvatar);
+			}
+		}
 	}
 
 	public View getView() {

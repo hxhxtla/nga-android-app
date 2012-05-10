@@ -2,6 +2,8 @@ package com.hxhxtla.ngaapp.task;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,29 +18,42 @@ import android.os.AsyncTask;
 
 import com.hxhxtla.ngaapp.bean.PostInfo;
 
-public class GetAvatarTask extends AsyncTask<String, String, HttpResponse> {
+public class GetAvatarTask extends AsyncTask<String, String, String> {
 
 	private DefaultHttpClient httpClient;
 
-	private PostInfo pi;
+	private List<PostInfo> pi;
+
+	private String avatarURL;
+
+	private Bitmap avatar;
 
 	public GetAvatarTask(PostInfo value) {
 		super();
 		httpClient = new DefaultHttpClient();
-		pi = value;
+		pi = new ArrayList<PostInfo>();
+		pi.add(value);
+	}
+
+	public void addTaskDestination(PostInfo value) {
+		if (avatar == null) {
+			pi.add(value);
+		} else {
+			value.callAvatarHandler(avatar);
+		}
 	}
 
 	@Override
-	protected HttpResponse doInBackground(String... arg0) {
-		String url = arg0[0];
-		if (url == null) {
+	protected String doInBackground(String... arg0) {
+		avatarURL = arg0[0];
+		if (avatarURL == null) {
 			// TODO
 			return null;
 		}
-		HttpGet httpRequest = new HttpGet(url);
+		HttpGet httpRequest = new HttpGet(avatarURL);
+		HttpResponse httpResponse = null;
 		try {
-			HttpResponse httpResponse = httpClient.execute(httpRequest);
-			return httpResponse;
+			httpResponse = httpClient.execute(httpRequest);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,21 +61,14 @@ public class GetAvatarTask extends AsyncTask<String, String, HttpResponse> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-	}
 
-	@Override
-	protected void onPostExecute(HttpResponse result) {
-
-		if (result != null
-				&& result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			HttpEntity httpEntity = result.getEntity();
-			InputStream is;
+		if (httpResponse != null
+				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			HttpEntity httpEntity = httpResponse.getEntity();
 			try {
-				is = httpEntity.getContent();
-				Bitmap bitmap = BitmapFactory.decodeStream(is);
+				InputStream is = httpEntity.getContent();
+				avatar = BitmapFactory.decodeStream(is);
 				is.close();
-				pi.getAvatarHandler(bitmap);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -69,6 +77,15 @@ public class GetAvatarTask extends AsyncTask<String, String, HttpResponse> {
 				e.printStackTrace();
 			}
 		}
+		return null;
 	}
 
+	@Override
+	protected void onPostExecute(String result) {
+		if (avatar != null) {
+			for (PostInfo item : pi) {
+				item.callAvatarHandler(avatar);
+			}
+		}
+	}
 }

@@ -16,7 +16,7 @@ import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
-public class GetServerDataTask extends AsyncTask<String, String, HttpResponse> {
+public class GetServerDataTask extends AsyncTask<String, String, String> {
 	private ITaskActivity iactivity;
 
 	public GetServerDataTask(ITaskActivity value) {
@@ -30,7 +30,7 @@ public class GetServerDataTask extends AsyncTask<String, String, HttpResponse> {
 	}
 
 	@Override
-	protected HttpResponse doInBackground(String... arg0) {
+	protected String doInBackground(String... arg0) {
 		String url = arg0[0];
 		if (url == null) {
 			// TODO
@@ -44,10 +44,9 @@ public class GetServerDataTask extends AsyncTask<String, String, HttpResponse> {
 					+ LoginController.ngaPassportCid;
 		}
 		HttpGet httpRequest = new HttpGet(url);
+		HttpResponse httpResponse = null;
 		try {
-			HttpResponse httpResponse = SharedInfoController.httpClient
-					.execute(httpRequest);
-			return httpResponse;
+			httpResponse = SharedInfoController.httpClient.execute(httpRequest);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,22 +54,12 @@ public class GetServerDataTask extends AsyncTask<String, String, HttpResponse> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-	}
-
-	@Override
-	protected void onProgressUpdate(String... arg0) {
-		iactivity.showGettingProgressDialog();
-	}
-
-	@Override
-	protected void onPostExecute(HttpResponse result) {
-		iactivity.showLoadingProgressDialog();
 		String strResult = null;
-		if (result != null
-				&& result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		if (httpResponse != null
+				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
-				strResult = EntityUtils.toString(result.getEntity(), "GBK");
+				strResult = EntityUtils.toString(httpResponse.getEntity(),
+						"GBK");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -79,7 +68,18 @@ public class GetServerDataTask extends AsyncTask<String, String, HttpResponse> {
 				e.printStackTrace();
 			}
 		}
-		iactivity.callbackHander(strResult);
+		return strResult;
+	}
+
+	@Override
+	protected void onProgressUpdate(String... arg0) {
+		iactivity.showGettingProgressDialog();
+	}
+
+	@Override
+	protected void onPostExecute(String result) {
+		iactivity.showLoadingProgressDialog();
+		iactivity.callbackHander(result);
 	}
 
 }
