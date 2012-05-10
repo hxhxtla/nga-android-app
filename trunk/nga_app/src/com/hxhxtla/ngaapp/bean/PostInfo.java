@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.graphics.Bitmap;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -157,6 +158,18 @@ public class PostInfo {
 				avatarTask.put(urlAvatar, value);
 				value.execute(urlAvatar);
 			}
+		}
+	}
+
+	public void addAvatarLoadByClick() {
+		if (!avatarLoaded && urlAvatar != null && !urlAvatar.isEmpty()) {
+			ivAvatar.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					tryLoadAvatar();
+				}
+			});
 		}
 	}
 

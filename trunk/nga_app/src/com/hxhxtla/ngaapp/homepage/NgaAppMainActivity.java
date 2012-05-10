@@ -1,12 +1,15 @@
 package com.hxhxtla.ngaapp.homepage;
 
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.taptwo.android.widget.ViewFlow;
 import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,6 +109,10 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	private void initData() {
 		cctrl = new ConfigController(this);
+		BasicHttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpConnectionParams.setSoTimeout(params, 10000);
+		SharedInfoController.httpClient = new DefaultHttpClient(params);
 		SharedInfoController.CTRL_AVATAR_SHOW = cctrl.getCtrlAvatarShow();
 		SharedInfoController.CTRL_AVATAR_SHOW_WIFI = cctrl
 				.getCtrlAvatarShowWifi();
