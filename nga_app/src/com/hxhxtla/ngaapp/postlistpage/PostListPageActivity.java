@@ -10,7 +10,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -238,6 +241,10 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 	private void initData() {
 		urlKeyword2 = this.getString(R.string.article_keyword2);
+		ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+				.getState();
+		SharedInfoController.HAS_WIFI = (wifi == State.CONNECTED);
 	}
 
 	private void refreshView(boolean status) {

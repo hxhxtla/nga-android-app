@@ -33,6 +33,7 @@ import com.hxhxtla.ngaapp.controller.ConfigController;
 import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
+import com.hxhxtla.ngaapp.optionscontrol.OptionsControlActivity;
 
 public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
@@ -105,6 +106,9 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 	private void initData() {
 		cctrl = new ConfigController(this);
+		SharedInfoController.CTRL_AVATAR_SHOW = cctrl.getCtrlAvatarShow();
+		SharedInfoController.CTRL_AVATAR_SHOW_WIFI = cctrl
+				.getCtrlAvatarShowWifi();
 		LoginController.initializeHttpClient(cctrl.getNgaPassportUid(),
 				cctrl.getNgaPassportCid());
 		HomeListAdapter.setTopicInfoList(cctrl.getTopiclist());
@@ -300,10 +304,11 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 			LoginController.getInstance().showLoginWindow(this, cctrl);
 			break;
 		case R.id.mainmenu_setting:
-			// TODO
+			startActivity(new Intent(NgaAppMainActivity.this,
+					OptionsControlActivity.class));
 			break;
 		case R.id.mainmenu_exit:
-			// TODO
+			this.finish();
 			break;
 
 		}

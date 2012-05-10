@@ -9,5 +9,6 @@
     <string name="login_url">http://account.178.com/q_account.php</string>
     <string name="nga_uid">ngaPassportUid</string>
     <string name="nga_cid">ngaPassportCid</string>
+    <string name="keyword_url">http://</string>
 
 </resources>

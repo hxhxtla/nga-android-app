@@ -23,6 +23,7 @@ import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.PageInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
 import com.hxhxtla.ngaapp.controller.PostContentBuilder;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
 public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
@@ -332,7 +333,9 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
 		PostInfo pi = postInfoList.get(arg0);
-		pi.tryLoadAvatar();
+		if (SharedInfoController.showAvatar()) {
+			pi.tryLoadAvatar();
+		}
 		return pi.getView();
 	}
 

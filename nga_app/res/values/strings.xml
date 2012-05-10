@@ -159,6 +159,10 @@
     <string name="keyword_tip_check">提示信息</string>
     <string name="user_info_prestige">威望: </string>
     <string name="user_info_postcount">发帖: </string>
-    <string name="keyword_url">http://</string>
+    <string name="control_avatar">头像</string>
+    <string name="control_avatar_show">显示</string>
+    <string name="control_avatar_without_wifi">非Wifi状态</string>
+    <string name="control_avatar_without_wifi_hint">(可点击默认头像按需单个加载)</string>
+     <string name="options_control">控制设置</string>
 
 </resources>
