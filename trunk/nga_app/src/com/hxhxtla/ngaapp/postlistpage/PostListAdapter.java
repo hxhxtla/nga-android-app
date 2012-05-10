@@ -138,21 +138,31 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 				pi.setContent(content, sbutitle, cil);
 
-				String userInfo = item.select(post_user_info1)
-						.select(post_user_info2).get(1).attr(post_user_info3)
-						.replace(post_user_info4, "");
-				userInfo = userInfo.substring(1, userInfo.length() - 1);
-				userInfo = clearUserInfo(userInfo);
-				if (userInfo != null) {
-					String[] values = userInfo.split(",");
-					pi.setPrestige(mContext
-							.getString(R.string.user_info_prestige) + values[7]);
-					pi.setPostcount(mContext
-							.getString(R.string.user_info_postcount)
-							+ values[19].replaceAll("\"", ""));
-					String url = checkURL(values[11]);
-					if (url != null && !url.isEmpty()) {
-						pi.setUrlAvatar(url.replaceAll("\"", ""));
+				Elements imgs = item.select(post_user_info1).select(
+						post_user_info2);
+				for (Element img : imgs) {
+					String onerror = img.attr(post_user_info3);
+					if (onerror != null && !onerror.isEmpty()
+							&& onerror.indexOf(post_user_info4) != -1) {
+						String userInfo = onerror.replace(post_user_info4, "");
+						userInfo = userInfo.substring(1, userInfo.length() - 1);
+						userInfo = clearUserInfo(userInfo);
+						if (userInfo != null) {
+							String[] values = userInfo.split(",");
+							if (values.length > 20) {
+								pi.setPrestige(mContext
+										.getString(R.string.user_info_prestige)
+										+ values[7]);
+								pi.setPostcount(mContext
+										.getString(R.string.user_info_postcount)
+										+ values[19].replaceAll("\"", ""));
+								String url = checkURL(values[11]);
+								if (url != null && !url.isEmpty()) {
+									pi.setUrlAvatar(url.replaceAll("\"", ""));
+								}
+							}
+						}
+						break;
 					}
 				}
 			}
