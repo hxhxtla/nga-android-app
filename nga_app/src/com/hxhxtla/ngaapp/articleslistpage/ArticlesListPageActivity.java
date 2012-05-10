@@ -156,8 +156,8 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 		String url = SharedInfoController.SERVER_URL
 				+ urlKeyword
 				+ urlKeyword1
-				+ SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
-						.getId() + "&" + urlKeyword2
+				+ getString(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST
+						.get(0).getId()) + "&" + urlKeyword2
 				+ String.valueOf(curPageNum) + "&" + urlKeyword3;
 
 		gsdt.execute(url);

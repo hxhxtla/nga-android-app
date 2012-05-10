@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="CONFIG">config</string>
-    <string name="TOPIC_LIST">topiclist</string>
+    <string name="TOPIC_LIST">topic_list</string>
     <string name="CTRL_AVATAR_SHOW">ctrl_avatar_show</string>
     <string name="CTRL_AVATAR_SHOW_WIFI">ctrl_avatar_show_wifi</string>
     

@@ -147,9 +147,8 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 						int position, long id) {
 					TopicInfo ti = getCurrentHomeListAdapter()
 							.getItem(position);
-					String curTopicId = ti.getId();
-					if (curTopicId.equals(NgaAppMainActivity.this
-							.getString(R.string.add_topic_id))) {
+					int curTopicId = ti.getId();
+					if (curTopicId == R.string.add_topic_id) {
 						showTopicPicker();
 					} else {
 						SharedInfoController.addTopicHistory(ti);
