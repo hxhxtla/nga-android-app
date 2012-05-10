@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
@@ -42,6 +43,8 @@ public class PostInfo {
 	private TextView tvPrestige;
 	private TextView tvPostcount;
 
+	private ProgressBar pbLoading;
+
 	private WebView wvContent;
 
 	private ImageView ivAvatar;
@@ -56,6 +59,8 @@ public class PostInfo {
 		wvContent = (WebView) view.findViewById(R.id.post_content);
 		wvContent.setBackgroundColor(0);
 		ivAvatar = (ImageView) view.findViewById(R.id.post_avatar);
+		pbLoading = (ProgressBar) view
+				.findViewById(R.id.post_author_progressBar);
 	}
 
 	public PostInfo(int index, ViewGroup value) {
@@ -137,11 +142,13 @@ public class PostInfo {
 		if (!avatarLoaded) {
 			ivAvatar.setImageBitmap(bitmap);
 			avatarLoaded = true;
+			pbLoading.setVisibility(View.GONE);
 		}
 	}
 
 	public void tryLoadAvatar() {
-		if (!avatarLoaded) {
+		if (!avatarLoaded && urlAvatar != null && !urlAvatar.isEmpty()) {
+			pbLoading.setVisibility(View.VISIBLE);
 			GetAvatarTask value = avatarTask.get(urlAvatar);
 			if (value != null) {
 				avatarTask.get(urlAvatar).addTaskDestination(this);
