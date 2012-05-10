@@ -3,34 +3,34 @@ package com.hxhxtla.ngaapp.bean;
 import android.view.View;
 
 public class TopicInfo {
-	private String name;
+	private int name;
 
 	private int icon;
 
-	private String id;
+	private int id;
 
 	private View view;
-	
-	public TopicInfo(){
-		
+
+	public TopicInfo() {
+
 	}
 
-	public TopicInfo(String d, String n, int i) {
+	public TopicInfo(int d, int n, int i) {
 		id = d;
 		name = n;
 		icon = i;
 	}
-	
-	public TopicInfo clone(){
+
+	public TopicInfo clone() {
 		TopicInfo value = new TopicInfo(id, name, icon);
 		return value;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -42,11 +42,11 @@ public class TopicInfo {
 		this.view = view;
 	}
 
-	public String getName() {
+	public int getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(int name) {
 		this.name = name;
 	}
 

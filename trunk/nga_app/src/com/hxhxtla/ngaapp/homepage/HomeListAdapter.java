@@ -69,7 +69,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 	public boolean checkItemNotExist(TopicInfo value) {
 		for (TopicInfo item : TopicInfoList) {
-			if (value.getId().equals(item.getId())) {
+			if (value.getId() == item.getId()) {
 				return false;
 			}
 		}
@@ -78,7 +78,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 	public TopicInfo deleteItemAt(int position) {
 		TopicInfo item = getItem(position);
-		if (item.getId().equals(mContext.getString(R.string.add_topic_id))) {
+		if (item.getId() == R.string.add_topic_id) {
 			return null;
 		}
 		this.removeItemAt(position);
@@ -97,7 +97,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		if (convertView == null) {
 			convertView = mContext.getLayoutInflater().inflate(
 					R.layout.home_list_item, null);
-			
+
 			ImageView imageView = (ImageView) convertView
 					.findViewById(R.id.home_list_item_icon);
 			TextView textView = (TextView) convertView
@@ -109,38 +109,37 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 			curTopicInfo.setView(convertView);
 		}
-		
+
 		return convertView;
 	}
 
 	private static void initializeTopicInfoList(Context context) {
 		TopicInfoList = new ArrayList<TopicInfo>();
 
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic1_id),
-				context.getString(R.string.topic1), R.drawable.p7));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic2_id),
-				context.getString(R.string.topic2), R.drawable.p323));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic3_id),
-				context.getString(R.string.topic3), R.drawable.p354));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic4_id),
-				context.getString(R.string.topic4), R.drawable.p318));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic5_id),
-				context.getString(R.string.topic5), R.drawable.p10));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic6_id),
-				context.getString(R.string.topic6), R.drawable.p230));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic7_id),
-				context.getString(R.string.topic7), R.drawable.p387));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic8_id),
-				context.getString(R.string.topic8), R.drawable.p320));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic9_id),
-				context.getString(R.string.topic9), R.drawable.p181));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic10_id),
-				context.getString(R.string.topic10), R.drawable.p182));
-		TopicInfoList.add(new TopicInfo(context.getString(R.string.topic11_id),
-				context.getString(R.string.topic11), R.drawable.p183));
-		TopicInfoList.add(new TopicInfo(context
-				.getString(R.string.add_topic_id), context
-				.getString(R.string.add_topic), R.drawable.add_icon));
+		TopicInfoList.add(new TopicInfo(R.string.topic1_id, R.string.topic1,
+				R.drawable.p7));
+		TopicInfoList.add(new TopicInfo(R.string.topic2_id, R.string.topic2,
+				R.drawable.p323));
+		TopicInfoList.add(new TopicInfo(R.string.topic3_id, R.string.topic3,
+				R.drawable.p354));
+		TopicInfoList.add(new TopicInfo(R.string.topic4_id, R.string.topic4,
+				R.drawable.p318));
+		TopicInfoList.add(new TopicInfo(R.string.topic5_id, R.string.topic5,
+				R.drawable.p10));
+		TopicInfoList.add(new TopicInfo(R.string.topic6_id, R.string.topic6,
+				R.drawable.p230));
+		TopicInfoList.add(new TopicInfo(R.string.topic7_id, R.string.topic7,
+				R.drawable.p387));
+		TopicInfoList.add(new TopicInfo(R.string.topic8_id, R.string.topic8,
+				R.drawable.p320));
+		TopicInfoList.add(new TopicInfo(R.string.topic9_id, R.string.topic9,
+				R.drawable.p181));
+		TopicInfoList.add(new TopicInfo(R.string.topic10_id, R.string.topic10,
+				R.drawable.p182));
+		TopicInfoList.add(new TopicInfo(R.string.topic11_id, R.string.topic11,
+				R.drawable.p183));
+		TopicInfoList.add(new TopicInfo(R.string.add_topic_id,
+				R.string.add_topic, R.drawable.add_icon));
 		if (context instanceof NgaAppMainActivity) {
 			((NgaAppMainActivity) context).saveTopicInfoListToConfig();
 		}

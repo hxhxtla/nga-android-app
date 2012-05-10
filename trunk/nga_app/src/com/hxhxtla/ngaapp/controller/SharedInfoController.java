@@ -45,7 +45,7 @@ public class SharedInfoController {
 
 	public static void addTopicHistory(TopicInfo value) {
 		for (TopicInfo ti : DISPLAYED_HISTORY_TOPICLIST) {
-			if (ti == value || ti.getId().equals(value.getId())) {
+			if (ti == value || ti.getId() == value.getId()) {
 				if (DISPLAYED_HISTORY_TOPICLIST.indexOf(ti) != 0) {
 					DISPLAYED_HISTORY_TOPICLIST.remove(ti);
 					DISPLAYED_HISTORY_TOPICLIST.add(0, ti);
