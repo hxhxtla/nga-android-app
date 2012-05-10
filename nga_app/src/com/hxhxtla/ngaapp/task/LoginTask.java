@@ -22,7 +22,7 @@ import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
-public class LoginTask extends AsyncTask<String, String, HttpResponse> {
+public class LoginTask extends AsyncTask<String, String, String> {
 	private ITaskActivity iactivity;
 
 	public LoginTask(ITaskActivity iactivity) {
@@ -36,7 +36,7 @@ public class LoginTask extends AsyncTask<String, String, HttpResponse> {
 	}
 
 	@Override
-	protected HttpResponse doInBackground(String... params) {
+	protected String doInBackground(String... params) {
 		String url = iactivity.getActivity().getString(R.string.login_url);
 		HttpPost httpRequest = new HttpPost(url);
 
@@ -68,7 +68,31 @@ public class LoginTask extends AsyncTask<String, String, HttpResponse> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return httpResponse;
+		if (httpResponse != null
+				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			List<Cookie> cookies = SharedInfoController.httpClient
+					.getCookieStore().getCookies();
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equalsIgnoreCase("_sid")) {
+					LoginController.ngaPassportCid = cookie.getValue();
+				}
+				if (cookie.getName().equalsIgnoreCase("_178c")) {
+					LoginController.ngaPassportUid = cookie.getValue().split(
+							"%23")[0];
+				}
+			}
+			if (LoginController.ngaPassportUid != null
+					&& !LoginController.ngaPassportUid.isEmpty()
+					&& LoginController.ngaPassportCid != null
+					&& !LoginController.ngaPassportCid.isEmpty()) {
+				LoginController.logged = true;
+			} else {
+				LoginController.logged = false;
+			}
+		} else {
+			// TODO
+		}
+		return null;
 	}
 
 	@Override
@@ -77,35 +101,8 @@ public class LoginTask extends AsyncTask<String, String, HttpResponse> {
 	}
 
 	@Override
-	protected void onPostExecute(HttpResponse result) {
+	protected void onPostExecute(String value) {
 		iactivity.showLoadingProgressDialog();
-		if (result != null) {
-			if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				List<Cookie> cookies = SharedInfoController.httpClient
-						.getCookieStore().getCookies();
-				for (Cookie cookie : cookies) {
-					if (cookie.getName().equalsIgnoreCase("_sid")) {
-						LoginController.ngaPassportCid = cookie.getValue();
-					}
-					if (cookie.getName().equalsIgnoreCase("_178c")) {
-						LoginController.ngaPassportUid = cookie.getValue()
-								.split("%23")[0];
-					}
-				}
-				if (LoginController.ngaPassportUid != null
-						&& !LoginController.ngaPassportUid.isEmpty()
-						&& LoginController.ngaPassportCid != null
-						&& !LoginController.ngaPassportCid.isEmpty()) {
-					LoginController.logged = true;
-				} else {
-					LoginController.logged = false;
-				}
-			} else {
-				// TODO
-			}
-		} else {
-			// TODO
-		}
 		iactivity.callbackHander(null);
 	}
 }
