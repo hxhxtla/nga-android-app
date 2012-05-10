@@ -53,6 +53,31 @@ public class ConfigController {
 
 	}
 
+	public boolean saveCtrlAvatarShow(boolean value) {
+		Editor editor = getConfig().edit();
+		editor.putBoolean(context.getString(R.string.CTRL_AVATAR_SHOW), value);
+		return editor.commit();
+
+	}
+
+	public boolean getCtrlAvatarShow() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_AVATAR_SHOW), true);
+	}
+
+	public boolean saveCtrlAvatarShowWifi(boolean value) {
+		Editor editor = getConfig().edit();
+		editor.putBoolean(context.getString(R.string.CTRL_AVATAR_SHOW_WIFI),
+				value);
+		return editor.commit();
+
+	}
+
+	public boolean getCtrlAvatarShowWifi() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_AVATAR_SHOW_WIFI), false);
+	}
+
 	public boolean clearLoginInfo() {
 		Editor editor = getConfig().edit();
 		editor.remove(context.getString(R.string.nga_uid));

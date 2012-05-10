@@ -2,5 +2,7 @@
 <resources>
     <string name="CONFIG">config</string>
     <string name="TOPIC_LIST">topiclist</string>
+    <string name="CTRL_AVATAR_SHOW">ctrl_avatar_show</string>
+    <string name="CTRL_AVATAR_SHOW_WIFI">ctrl_avatar_show_wifi</string>
     
 </resources>

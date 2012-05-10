@@ -23,6 +23,20 @@ public class SharedInfoController {
 
 	public static ArticleInfo RECENT_POST;
 
+	public static boolean CTRL_AVATAR_SHOW;
+	public static boolean CTRL_AVATAR_SHOW_WIFI;
+
+	public static boolean HAS_WIFI;
+
+	public static boolean showAvatar() {
+		if (CTRL_AVATAR_SHOW && (HAS_WIFI || CTRL_AVATAR_SHOW_WIFI)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 	public static final DefaultHttpClient httpClient = new DefaultHttpClient();
 
 	public SharedInfoController() {
