@@ -186,6 +186,24 @@ public class AllTopicListAdapter extends BaseAdapter implements ListAdapter {
 				R.string.topic46, R.drawable.p321));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic47_id,
 				R.string.topic47, R.drawable.pdefault));
+		
+
+		AllTopicInfoList.add(new TopicInfo(R.string.topic60_id,
+				R.string.topic60, R.drawable.p394));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic61_id,
+				R.string.topic61, R.drawable.p393));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic62_id,
+				R.string.topic62, R.drawable.pdefault));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic63_id,
+				R.string.topic63, R.drawable.p395));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic64_id,
+				R.string.topic64, R.drawable.p396));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic65_id,
+				R.string.topic65, R.drawable.p397));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic66_id,
+				R.string.topic66, R.drawable.p398));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic67_id,
+				R.string.topic67, R.drawable.p399));
 
 		AllTopicInfoList.add(new TopicInfo(R.string.topic48_id,
 				R.string.topic48, R.drawable.pdefault));

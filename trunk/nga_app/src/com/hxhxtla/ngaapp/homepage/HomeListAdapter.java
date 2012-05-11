@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -113,7 +112,7 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		return convertView;
 	}
 
-	private static void initializeTopicInfoList(Context context) {
+	private static void initializeTopicInfoList() {
 		TopicInfoList = new ArrayList<TopicInfo>();
 
 		TopicInfoList.add(new TopicInfo(R.string.topic1_id, R.string.topic1,
@@ -140,9 +139,6 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 				R.drawable.p183));
 		TopicInfoList.add(new TopicInfo(R.string.add_topic_id,
 				R.string.add_topic, R.drawable.add_icon));
-		if (context instanceof NgaAppMainActivity) {
-			((NgaAppMainActivity) context).saveTopicInfoListToConfig();
-		}
 	}
 
 	public int getIndex_view() {
@@ -161,9 +157,9 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		TopicInfoList = topicInfoList;
 	}
 
-	public static int getCurrentPageCount(Context value) {
+	public static int getCurrentPageCount() {
 		if (TopicInfoList == null) {
-			initializeTopicInfoList(value);
+			initializeTopicInfoList();
 		}
 		int numPage = (int) Math.ceil((double) TopicInfoList.size()
 				/ (double) NUM_PER_PAGE);
