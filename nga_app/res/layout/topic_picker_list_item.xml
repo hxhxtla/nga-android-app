@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FF1D2A63" />
 
 </LinearLayout>

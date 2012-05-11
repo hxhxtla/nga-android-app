@@ -82,7 +82,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
 		pointTabController = new PointTabController(linearLayout);
 
-		this.addNewPage(HomeListAdapter.getCurrentPageCount(this));
+		this.addNewPage(HomeListAdapter.getCurrentPageCount());
 
 		pointTabController.changePageOn(curPageIndex);
 
@@ -224,8 +224,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	private void menuHandler_deleteTopic(int position) {
 		TopicInfo item = getCurrentHomeListAdapter().deleteItemAt(position);
 		if (item != null) {
-			while (vf.getViewsCount() > HomeListAdapter
-					.getCurrentPageCount(this)) {
+			while (vf.getViewsCount() > HomeListAdapter.getCurrentPageCount()) {
 				PageListAdapter pla = (PageListAdapter) vf.getAdapter();
 				pla.removePage();
 				pla.notifyDataSetChanged();
