@@ -50,11 +50,18 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 
 		lv = (ListView) findViewById(R.id.articles_list);
 
+		Spinner spinner = (Spinner) findViewById(R.id.articles_history_topiclist);
+
+		LinearLayout articles_page_selector = (LinearLayout) findViewById(R.id.articles_page_selector);
+
+		btn_refresh = (Button) articles_page_selector
+				.findViewById(R.id.bar_btn_refresh);
+
+		showPageByIndex(curPageNum);
+
 		ala = new ArticlesListAdapter(this);
 
 		lv.setAdapter(ala);
-
-		Spinner spinner = (Spinner) findViewById(R.id.articles_history_topiclist);
 
 		htla = new HistoryTopicListAdapter(this,
 				SharedInfoController.DISPLAYED_HISTORY_TOPICLIST);
@@ -81,7 +88,6 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 			}
 		});
 
-		LinearLayout articles_page_selector = (LinearLayout) findViewById(R.id.articles_page_selector);
 		articles_page_selector.findViewById(R.id.bar_separator_end)
 				.setVisibility(View.GONE);
 		articles_page_selector.findViewById(R.id.bar_btn_end).setVisibility(
@@ -92,11 +98,6 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				.findViewById(R.id.bar_btn_pre);
 		btn_top = (ImageButton) articles_page_selector
 				.findViewById(R.id.bar_btn_top);
-
-		btn_refresh = (Button) articles_page_selector
-				.findViewById(R.id.bar_btn_refresh);
-
-		showPageByIndex(curPageNum);
 
 		OnClickListener btnClickListener = new OnClickListener() {
 

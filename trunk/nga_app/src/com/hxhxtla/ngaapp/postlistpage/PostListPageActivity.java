@@ -105,8 +105,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 		tv = (TextView) findViewById(R.id.post_tab_maxPageNum);
 
-		refreshView(true);
-
 		OnClickListener postTabBtnClickListener = new OnClickListener() {
 
 			@Override
@@ -240,6 +238,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	}
 
 	private void initData() {
+		refreshView(true);
 		urlKeyword2 = this.getString(R.string.article_keyword2);
 		ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
