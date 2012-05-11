@@ -25,8 +25,7 @@
     <string name="login_account">账号</string>
     <string name="login_password">密码</string>
     <string name="topic_picker_toast_add">请选择你要添加的主题</string>
-    <string name="nga_rss_keyword1">(最后回复 )</string>
-    <string name="nga_rss_keyword2">个回复 于</string>
+    <string name="nga_rss_keyword">个回复\\s于</string>
     <string name="articles_pd_title">请稍候。。。</string>
     <string name="articles_pd_msg1">连接服务端。。。</string>
     <string name="articles_pd_msg2">获取数据。。。</string>

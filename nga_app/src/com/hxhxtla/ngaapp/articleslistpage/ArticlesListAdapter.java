@@ -1,7 +1,13 @@
 package com.hxhxtla.ngaapp.articleslistpage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -20,20 +26,23 @@ import com.hxhxtla.ngaapp.bean.ArticleInfo;
 
 public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 
-	private static List<ArticleInfo> articleInfoList;
+	private List<ArticleInfo> articleInfoList;
 
 	private int articlesListSize = 0;
 
 	private Activity mContext;
 
-	private static String rss_author;
-	private static String rss_link;
-	private static String rss_title;
-	private static String rss_description;
-	private static String nga_rss_keyword1;
-	private static String nga_rss_keyword2;
-	private static String rss_channel;
-	private static String rss_item;
+	private Pattern P_BRACES;
+
+	private String rss_author;
+	private String rss_link;
+	private String rss_description;
+	private String nga_rss_keyword;
+	private String rss_channel;
+	private String rss_item;
+	private String rss_pubdate;
+
+	private SimpleDateFormat sdf;
 
 	public ArticlesListAdapter(Activity value) {
 		mContext = value;
@@ -42,14 +51,15 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 		rss_item = mContext.getString(R.string.rss_item);
 		rss_author = mContext.getString(R.string.rss_author);
 		rss_link = mContext.getString(R.string.rss_link);
-		rss_title = mContext.getString(R.string.rss_title);
 		rss_description = mContext.getString(R.string.rss_description);
-		nga_rss_keyword1 = mContext.getString(R.string.nga_rss_keyword1);
-		nga_rss_keyword2 = mContext.getString(R.string.nga_rss_keyword2);
-
+		rss_description = mContext.getString(R.string.rss_description);
+		rss_pubdate = mContext.getString(R.string.rss_pubdate);
+		P_BRACES = Pattern.compile("(.+?)(\\d+)" + nga_rss_keyword + "(.+)",
+				Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 		if (articleInfoList == null) {
 			articleInfoList = new ArrayList<ArticleInfo>();
 		}
+		sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	}
 
 	public boolean setData(String value) {
@@ -84,15 +94,28 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 			ArticleInfo ai = articleInfoList.get(index);
 			ai.setAuthor(cleanDirty(item.elementText(rss_author)));
 			ai.setLink(cleanDirty(item.elementText(rss_link)));
-			String title = cleanDirty(item.elementText(rss_title));
-			title = title.substring(0, title.lastIndexOf(nga_rss_keyword1));
-			ai.setTitle(title.trim());
-			String description = cleanDirty(item.elementText(rss_description));
-			description = description.substring(ai.getTitle().length());
-			String[] arr = description.split(nga_rss_keyword2);
-			if (arr.length > 1) {
-				ai.setPostcount(arr[0].trim());
-				ai.setLastpost(arr[1].trim());
+			String description = item.elementText(rss_description);
+
+			Matcher matcher = P_BRACES.matcher(description);
+			if (matcher.find()) {
+				String title = cleanDirty(matcher.group(1));
+				ai.setTitle(title);
+				String postCount = cleanDirty(matcher.group(2));
+				ai.setPostcount(postCount);
+				String lastpost = cleanDirty(matcher.group(3));
+				ai.setLastpost(lastpost);
+			}
+
+			String pubdate = cleanDirty(item.elementText(rss_pubdate));
+			Date postDate = null;
+			try {
+				postDate = sdf.parse(pubdate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+			}
+			if (postDate != null) {
+
 			}
 		}
 
@@ -101,7 +124,7 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 	}
 
 	public String cleanDirty(String value) {
-		return value.replace("\n", "");
+		return value.replace("\n", "").trim();
 	}
 
 	@Override
