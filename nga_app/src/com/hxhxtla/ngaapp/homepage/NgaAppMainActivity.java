@@ -12,6 +12,7 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -324,6 +325,9 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	public void callbackHander(String doc) {
 		int msg;
 		closeContectionProgressDialog();
+		if (LoginController.getInstance().loginTask != null) {
+			LoginController.getInstance().loginTask = null;
+		}
 		if (LoginController.logged) {
 			msg = R.string.msg_login_success;
 			LoginController.getInstance().dialog.dismiss();
@@ -341,7 +345,18 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	@Override
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
-				getString(R.string.menu_login), getString(R.string.btn_login));
+				getString(R.string.menu_login), getString(R.string.btn_login),
+				false, true, new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						if (LoginController.getInstance().loginTask != null) {
+							LoginController.getInstance().loginTask
+									.cancel(false);
+							LoginController.getInstance().loginTask = null;
+						}
+					}
+				});
 	}
 
 	@Override

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hxhxtla.ngaapp.bean.CommentInfo;
+import android.os.AsyncTask;
 
-public class PostContentBuilder {
+import com.hxhxtla.ngaapp.bean.CommentInfo;
+import com.hxhxtla.ngaapp.bean.PostInfo;
+
+public class PostContentBuilder extends AsyncTask<Object, String, String> {
 	private static String _IMG_SERVER_PATH;
 	private static String _IMG_SERVER_BASE;
 	// 正则表达式 检索器
@@ -51,42 +54,28 @@ public class PostContentBuilder {
 	private static final Pattern P_COLLAPSE = Pattern.compile(
 			"\\[collapse=?.*?\\](.+?)\\[/collapse\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
+	private static final Pattern P_LR = Pattern.compile(
+			"\\[[lr]\\](.+?)\\[/[lr]\\]", Pattern.DOTALL
+					| Pattern.CASE_INSENSITIVE);
+	private static final Pattern P_ALIGN = Pattern.compile(
+			"\\[align=\\w+\\](.+?)\\[/align\\]", Pattern.DOTALL
+					| Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern P_HTTP = Pattern.compile("^http",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-	//公用
+	// 公用
 	public static final Pattern P_PAGENUM = Pattern.compile("\\d+");
 
 	public static final Pattern P_SQUARE_BRACKETS = Pattern.compile(
 			"\\[.+?\\]", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
-	public static final Pattern P_BRACES = Pattern.compile(
-			"\\{.+?\\}", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+	public static final Pattern P_BRACES = Pattern.compile("\\{.+?\\}",
+			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
-	public PostContentBuilder() {
-		// TODO Auto-generated constructor stub
-	}
+	private PostInfo target;
 
-	public static String buildContent(String content, String title,
-			ArrayList<CommentInfo> comment) {
-
-		String value = "<!DOCTYPE HTML><html><head>"
-				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
-				+ "<META http-equiv='Cache-Control' content='no-cache'>"
-				+ "<META http-equiv='Cache-Control' content='no-store'>"
-				+ "<style type='text/css'>"
-				+ ".quote {background:#E8E8E8;border:1px solid #888;margin:10px 10px 10px 10px;padding:10px}"
-				+ ".silver {color:#888}"
-				+ ".chocolate {color:chocolate}"
-				+ ".img {max-width:100%}"
-				+ ".color {color:#D00}"
-				+ ".del {text-decoration:line-through;color:#666}"
-				+ ".comment_content {color:#AAA;font-size:14px;margin:0px 0px 0px 20px;}"
-				+ ".comment {color:#AAA;font-size:14px;font-weight:bold;border-bottom:1px solid #aaa;clear:both;margin-bottom:0px}"
-				+ "</style></head>" + "<body><section>" + getTitleHtml(title)
-				+ getContentHtml(content) + getCommentHtml(comment)
-				+ "</section></body></html>";
-		return value;
+	public PostContentBuilder(PostInfo value) {
+		target = value;
 	}
 
 	private static String getContentHtml(String value) {
@@ -232,17 +221,37 @@ public class PostContentBuilder {
 			matcher.appendTail(sb);
 			value = sb.toString();
 			value = "<p>" + value + "</p>";
+
+			matcher = P_LR.matcher(value);
+			sb = new StringBuffer();
+			while (matcher.find()) {
+				temp = matcher.group(1);
+				matcher.appendReplacement(sb, getR_FONT(temp));
+			}
+			matcher.appendTail(sb);
+			value = sb.toString();
+			value = "<p>" + value + "</p>";
+
+			matcher = P_ALIGN.matcher(value);
+			sb = new StringBuffer();
+			while (matcher.find()) {
+				temp = matcher.group(1);
+				matcher.appendReplacement(sb, getR_FONT(temp));
+			}
+			matcher.appendTail(sb);
+			value = sb.toString();
+			value = "<p>" + value + "</p>";
 		}
 		return value;
 	}
 
-	private static String getTitleHtml(String value) {
+	public static String getTitleHtml(String value) {
 		if (value != null && !value.isEmpty()) {
 			Matcher matcher = P_URL.matcher(value);
 			if (matcher.find()) {
 				value = matcher.group(2);
 			}
-			value = "<p><b>[" + value + "]</b></p>";
+			value = "[" + value + "]";
 		}
 		return value;
 	}
@@ -385,5 +394,35 @@ public class PostContentBuilder {
 
 	private static String getR_I(String temp) {
 		return "<i style='font-style:italic'>" + temp + "</i>";
+	}
+
+	@Override
+	protected String doInBackground(Object... params) {
+		String content = (String) params[0];
+		@SuppressWarnings("unchecked")
+		ArrayList<CommentInfo> comment = (ArrayList<CommentInfo>) params[1];
+
+		String value = "<!DOCTYPE HTML><html><head>"
+				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
+				+ "<META http-equiv='Cache-Control' content='no-cache'>"
+				+ "<META http-equiv='Cache-Control' content='no-store'>"
+				+ "<style type='text/css'>"
+				+ ".quote {background:#E8E8E8;border:1px solid #888;margin:10px 10px 10px 10px;padding:10px}"
+				+ ".silver {color:#888}"
+				+ ".chocolate {color:chocolate}"
+				+ ".img {max-width:100%}"
+				+ ".color {color:#D00}"
+				+ ".del {text-decoration:line-through;color:#666}"
+				+ ".comment_content {color:#AAA;font-size:14px;margin:0px 0px 0px 20px;}"
+				+ ".comment {color:#AAA;font-size:14px;font-weight:bold;border-bottom:1px solid #aaa;clear:both;margin-bottom:0px}"
+				+ "</style></head>" + "<body><section>"
+				+ getContentHtml(content) + getCommentHtml(comment)
+				+ "</section></body></html>";
+		return value;
+	}
+
+	@Override
+	protected void onPostExecute(String result) {
+		target.setContent(result);
 	}
 }

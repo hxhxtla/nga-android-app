@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
@@ -37,24 +38,26 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	private Random randKey;
 
-	private static String post_item;
-	private static String post_author;
-	private static String post_floor;
-	private static String post_datetime;
-	private static String post_content;
-	private static String post_comment;
-	private static String post_subtitle;
-	private static String post_comment_author;
-	private static String post_comment_content;
-	private static String post_user_info1;
-	private static String post_user_info2;
-	private static String post_user_info3;
-	private static String post_user_info4;
-	private static String keyword_url;
+	private String post_item;
+	private String post_author;
+	private String post_floor;
+	private String post_datetime;
+	private String post_content;
+	private String post_comment;
+	private String post_subtitle;
+	private String post_comment_author;
+	private String post_comment_content;
+	private String post_user_info1;
+	private String post_user_info2;
+	private String post_user_info3;
+	private String post_user_info4;
+	private String keyword_url;
 
 	private String curHighLightAuthor;
 
 	private int pageSize = 20;
+
+	private TextView title;
 
 	public PostListAdapter(Activity value) {
 		mContext = value;
@@ -81,6 +84,9 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 		tempInfo = new HashMap<String, String>();
 		randKey = new Random();
+
+		title = (TextView) mContext.getLayoutInflater().inflate(
+				R.layout.post_list_title, null);
 	}
 
 	public void setData(Document document, int pagenum) {
@@ -100,6 +106,10 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 			Elements postList = document.select(post_item);
 			for (int index = 0; index < postList.size(); index++) {
 				Element item = postList.get(index);
+				if (pagenum == 1 && index == 0) {
+					String sbutitle = item.select(post_subtitle).text();
+					title.setText(PostContentBuilder.getTitleHtml(sbutitle));
+				}
 				PostInfo pi;
 				if (ipage.getPostList().size() <= index) {
 					LinearLayout ll = (LinearLayout) mContext
@@ -122,7 +132,6 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				pi.setDatetime(datetime);
 
 				String content = item.select(post_content).html();
-				String sbutitle = item.select(post_subtitle).text();
 
 				Elements comments = item.select(post_comment);
 				ArrayList<CommentInfo> cil = null;
@@ -137,7 +146,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 					}
 				}
 
-				pi.setContent(content, sbutitle, cil);
+				pi.setContentSource(content, cil);
 
 				Elements imgs = item.select(post_user_info1).select(
 						post_user_info2);
@@ -316,7 +325,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	@Override
 	public int getCount() {
-		return postInfoList.size();
+		return postInfoList.size() + 1;
 	}
 
 	@Override
@@ -332,13 +341,17 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
-		PostInfo pi = postInfoList.get(arg0);
-		if (SharedInfoController.showAvatar()) {
-			pi.tryLoadAvatar();
+		if (arg0 == 0) {
+			return title;
 		} else {
-			pi.addAvatarLoadByClick();
+			PostInfo pi = getItem(arg0 - 1);
+			if (SharedInfoController.showAvatar()) {
+				pi.tryLoadAvatar();
+			} else {
+				pi.addAvatarLoadByClick();
+			}
+			return pi.getView();
 		}
-		return pi.getView();
 	}
 
 }

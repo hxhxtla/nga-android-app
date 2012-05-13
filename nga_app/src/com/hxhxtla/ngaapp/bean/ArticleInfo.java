@@ -1,11 +1,15 @@
 package com.hxhxtla.ngaapp.bean;
 
-import com.hxhxtla.ngaapp.R;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.view.View;
 import android.widget.TextView;
 
+import com.hxhxtla.ngaapp.R;
+
 public class ArticleInfo {
+	public static final Calendar lastBuildDate = Calendar.getInstance();
 
 	private String title;
 
@@ -16,7 +20,7 @@ public class ArticleInfo {
 	private String lastpost;
 
 	private String postcount;
-	////////////////////////////////
+	// //////////////////////////////
 	private View view;
 
 	private TextView tvTitle;
@@ -27,6 +31,8 @@ public class ArticleInfo {
 
 	private TextView tvPostcount;
 
+	private TextView tvPostTime;
+
 	public ArticleInfo(View value) {
 		view = value;
 		tvTitle = (TextView) view.findViewById(R.id.articles_list_item_title);
@@ -35,6 +41,8 @@ public class ArticleInfo {
 				.findViewById(R.id.articles_list_item_lastpost);
 		tvPostcount = (TextView) view
 				.findViewById(R.id.articles_list_item_count);
+		tvPostTime = (TextView) view
+				.findViewById(R.id.articles_list_item_posttime);
 	}
 
 	public String getTitle() {
@@ -79,6 +87,40 @@ public class ArticleInfo {
 	public void setPostcount(String postcount) {
 		this.postcount = postcount;
 		tvPostcount.setText(postcount);
+	}
+
+	public void setPostTime(Date value) {
+		Calendar postTime = Calendar.getInstance();
+		postTime.setTime(value);
+		int dif_year = lastBuildDate.get(Calendar.YEAR)
+				- postTime.get(Calendar.YEAR);
+		if (dif_year == 0) {
+			int dif_day = lastBuildDate.get(Calendar.DAY_OF_YEAR)
+					- postTime.get(Calendar.DAY_OF_YEAR);
+			if (dif_day == 0) {
+				int dif_hour = lastBuildDate.get(Calendar.HOUR_OF_DAY)
+						- postTime.get(Calendar.HOUR_OF_DAY);
+				if (dif_hour == 0) {
+					tvPostTime.setText(R.string.posttime_hour);
+				} else {
+					if (postTime.get(Calendar.HOUR_OF_DAY) < 12) {
+						tvPostTime.setText(R.string.posttime_morning);
+					} else {
+						tvPostTime.setText(R.string.posttime_afternoon);
+					}
+				}
+			} else if (dif_day == 1) {
+				tvPostTime.setText(R.string.posttime_yesterday);
+			} else {
+				tvPostTime.setText("("
+						+ String.valueOf(postTime.get(Calendar.MONTH)+1) + "-"
+						+ String.valueOf(postTime.get(Calendar.DAY_OF_MONTH))
+						+ ")");
+			}
+		} else {
+			tvPostTime.setText(R.string.posttime_grave);
+		}
+
 	}
 
 	public View getView() {
