@@ -41,7 +41,7 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 	private String rss_channel;
 	private String rss_item;
 	private String rss_pubdate;
-
+	private String rss_lastBuildDate;
 	private SimpleDateFormat sdf;
 
 	public ArticlesListAdapter(Activity value) {
@@ -51,15 +51,16 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 		rss_item = mContext.getString(R.string.rss_item);
 		rss_author = mContext.getString(R.string.rss_author);
 		rss_link = mContext.getString(R.string.rss_link);
-		rss_description = mContext.getString(R.string.rss_description);
+		nga_rss_keyword = mContext.getString(R.string.nga_rss_keyword);
 		rss_description = mContext.getString(R.string.rss_description);
 		rss_pubdate = mContext.getString(R.string.rss_pubdate);
+		rss_lastBuildDate = mContext.getString(R.string.rss_lastBuildDate);
 		P_BRACES = Pattern.compile("(.+?)(\\d+)" + nga_rss_keyword + "(.+)",
 				Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 		if (articleInfoList == null) {
 			articleInfoList = new ArrayList<ArticleInfo>();
 		}
-		sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.US);
 	}
 
 	public boolean setData(String value) {
@@ -77,6 +78,14 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 		List<?> itemList = channel.elements(rss_item);
 		if (itemList.size() <= 1) {
 			return false;
+		}
+
+		String lastBuildDate = cleanDirty(channel
+				.elementText(rss_lastBuildDate));
+		try {
+			ArticleInfo.lastBuildDate.setTime(sdf.parse(lastBuildDate));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 		}
 		for (index = 0; index < itemList.size(); index++) {
 
@@ -112,10 +121,9 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 				postDate = sdf.parse(pubdate);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-//				e.printStackTrace();
 			}
 			if (postDate != null) {
-
+				ai.setPostTime(postDate);
 			}
 		}
 

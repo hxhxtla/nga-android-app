@@ -4,20 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/home_page" >
 
-    <TextView
-        android:id="@+id/post_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/article_bg1"
-        android:textColor="@color/titlebar_text" />
-
     <ListView
         android:id="@+id/post_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/post_tool"
-        android:layout_below="@+id/post_title" />
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/post_tool"

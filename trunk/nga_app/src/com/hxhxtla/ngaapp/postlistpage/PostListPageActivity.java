@@ -12,6 +12,7 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,7 +48,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private PostListAdapter pla;
 
 	private ListView lv;
-	private TextView title;
 
 	private boolean initialization = true;
 
@@ -70,16 +69,14 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 	private int navigateFloorInPage = 0;
 
-	private void initView() {
+	private GetServerDataTask gsdt;
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+	private void initView() {
 
 		setContentView(R.layout.post_list_page);
 
 		this.setTitle(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST.get(0)
 				.getName());
-
-		title = (TextView) findViewById(R.id.post_title);
 
 		lv = (ListView) findViewById(R.id.post_list);
 
@@ -248,8 +245,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 	private void refreshView(boolean status) {
 		initialization = status;
-		GetServerDataTask gsdt = new GetServerDataTask(
-				PostListPageActivity.this);
+		gsdt = new GetServerDataTask(PostListPageActivity.this);
 		String url = SharedInfoController.RECENT_POST.getLink() + "&"
 				+ urlKeyword2 + String.valueOf(curPageNum);
 
@@ -274,7 +270,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 						R.string.msg_needLogin);
 			} else {
 				if (initialization) {
-					setTitle(document);
 					setPageNum(document);
 					pla.setHighlightAuthor(SharedInfoController.RECENT_POST
 							.getAuthor());
@@ -282,21 +277,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 				pla.setData(document, curPageNum);
 				pla.notifyDataSetChanged();
 				locatePageByIndex(curPageNum);
-				closeContectionProgressDialog();
 			}
 		}
-	}
-
-	private void setTitle(Document document) {
-		if (document != null && title != null) {
-			Elements maxpage = document.select(this
-					.getString(R.string.post_title));
-			if (maxpage.size() > 0) {
-				title.setText(maxpage.get(0).text());
-			} else {
-				// TODO
-			}
+		if (gsdt != null) {
+			gsdt = null;
 		}
+		closeContectionProgressDialog();
 	}
 
 	private void setPageNum(Document document) {
@@ -324,7 +310,17 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
 				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1));
+				getString(R.string.articles_pd_msg1), false, true,
+				new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						if (gsdt != null) {
+							gsdt.cancel(false);
+							gsdt = null;
+						}
+					}
+				});
 	}
 
 	public void showGettingProgressDialog() {

@@ -2,6 +2,8 @@ package com.hxhxtla.ngaapp.articleslistpage;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +45,8 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	private String urlKeyword1;
 	private String urlKeyword2;
 	private String urlKeyword3;
+
+	private GetServerDataTask gsdt;
 
 	private void initView() {
 
@@ -152,8 +156,7 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	}
 
 	private void refreshView() {
-		GetServerDataTask gsdt = new GetServerDataTask(
-				ArticlesListPageActivity.this);
+		gsdt = new GetServerDataTask(ArticlesListPageActivity.this);
 		String url = SharedInfoController.SERVER_URL
 				+ urlKeyword
 				+ urlKeyword1
@@ -167,7 +170,17 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
 				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1));
+				getString(R.string.articles_pd_msg1), false, true,
+				new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						if (gsdt != null) {
+							gsdt.cancel(false);
+							gsdt = null;
+						}
+					}
+				});
 	}
 
 	public void showGettingProgressDialog() {
@@ -201,8 +214,9 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				SharedInfoController.showCommonAlertDialog(this,
 						R.string.msg_needLogin);
 			}
-		} else {
-			// TODO
+		}
+		if (gsdt != null) {
+			gsdt = null;
 		}
 		closeContectionProgressDialog();
 

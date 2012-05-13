@@ -35,6 +35,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/articles_list_item_posttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/articles_list_item_author"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
     </LinearLayout>
 

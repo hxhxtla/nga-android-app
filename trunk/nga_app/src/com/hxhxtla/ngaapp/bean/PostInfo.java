@@ -30,7 +30,6 @@ public class PostInfo {
 	private String author;
 	private String floor;
 	private String datetime;
-	private String content;
 	private String prestige;
 	private String postcount;
 	private String urlAvatar;
@@ -114,20 +113,16 @@ public class PostInfo {
 		tvPostcount.setText(postcount);
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content, String subtitle,
-			ArrayList<CommentInfo> cil) {
-		this.content = content;
-
-		wvContent.loadDataWithBaseURL(null,
-				PostContentBuilder.buildContent(content, subtitle, cil),
-				"text/html", "UTF-8", null);
+	public void setContent(String content) {
+		wvContent
+				.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
 		if (highlight) {
 			wvContent.setBackgroundResource(R.drawable.msgbox1);
 		}
+	}
+
+	public void setContentSource(String value, ArrayList<CommentInfo> cil) {
+		new PostContentBuilder(this).execute(value, cil);
 	}
 
 	public String getUrlAvatar() {

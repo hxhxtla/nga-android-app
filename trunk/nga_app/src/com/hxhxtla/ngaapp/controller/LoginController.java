@@ -21,6 +21,8 @@ public class LoginController {
 
 	public AlertDialog dialog;
 
+	public LoginTask loginTask;
+
 	private EditText input_act;
 
 	private EditText input_pwd;
@@ -107,7 +109,7 @@ public class LoginController {
 										Toast.LENGTH_SHORT).show();
 								showLoginWindow(activity, configController);
 							} else if (activity instanceof ITaskActivity) {
-								LoginTask loginTask = new LoginTask(
+								loginTask = new LoginTask(
 										(ITaskActivity) activity);
 								loginTask.execute(act, pwd);
 							}
