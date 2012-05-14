@@ -7,7 +7,7 @@
     <string name="msg_outOfPageIndex">超出页码范围</string>
     <string name="msg_adsAlert">遇到广告页面，请稍后刷新</string>
     <string name="msg_login_cantNull">账号与密码不能为空</string>
-    <string name="msg_needLogin">遇到提示信息页\n可能是由于未登录造成\n请确认后重试</string>
+    <string name="msg_errerMsg">遇到提示信息页\n可能原因:\n\t1.未登录\n\t2.帖子被关闭\n请确认后重试</string>
     <string name="msg_login_success">登录成功</string>
     <string name="msg_logout_success">注销成功</string>
     <string name="msg_login_fail">登录失败！</string>
@@ -49,5 +49,7 @@
     <string name="posttime_morning">(上午)</string>
     <string name="posttime_afternoon">(下午)</string>
     <string name="posttime_yesterday">(昨天)</string>
+    <string name="post_page_title">标题</string>
+    <string name="post_page_content">内容</string>
 
 </resources>
