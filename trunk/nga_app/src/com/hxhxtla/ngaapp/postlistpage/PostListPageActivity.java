@@ -267,7 +267,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			} else if (document.title().equals(
 					getString(R.string.keyword_tip_check))) {
 				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_needLogin);
+						R.string.msg_errerMsg);
 			} else {
 				if (initialization) {
 					setPageNum(document);

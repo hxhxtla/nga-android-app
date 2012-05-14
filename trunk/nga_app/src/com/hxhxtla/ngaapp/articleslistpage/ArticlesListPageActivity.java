@@ -212,7 +212,7 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				lv.setSelectionAfterHeaderView();
 			} else {
 				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_needLogin);
+						R.string.msg_errerMsg);
 			}
 		}
 		if (gsdt != null) {
