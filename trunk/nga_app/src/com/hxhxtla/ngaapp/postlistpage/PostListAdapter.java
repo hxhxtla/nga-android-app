@@ -106,11 +106,14 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 			Elements postList = document.select(post_item);
 			for (int index = 0; index < postList.size(); index++) {
 				Element item = postList.get(index);
-				if (pagenum == 1 && index == 0) {
-					String sbutitle = item.select(post_subtitle).text();
-					title.setText(PostContentBuilder.getTitleHtml(sbutitle));
-				}
 				PostInfo pi;
+
+				String sbutitle = item.select(post_subtitle).text();
+				if (pagenum == 1 && index == 0) {
+					title.setText(PostContentBuilder.getTitleHtml(sbutitle));
+					sbutitle = null;
+				}
+
 				if (ipage.getPostList().size() <= index) {
 					LinearLayout ll = (LinearLayout) mContext
 							.getLayoutInflater().inflate(
@@ -145,8 +148,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						cil.add(ci);
 					}
 				}
-
-				pi.setContentSource(content, cil);
+				
+				pi.setContentSource(content, cil, sbutitle);
 
 				Elements imgs = item.select(post_user_info1).select(
 						post_user_info2);
@@ -159,7 +162,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						userInfo = clearUserInfo(userInfo);
 						if (userInfo != null) {
 							String[] values = userInfo.split(",");
-							if (values.length > 20) {
+							if (values.length == 27) {
 								pi.setPrestige(mContext
 										.getString(R.string.user_info_prestige)
 										+ values[7]);
