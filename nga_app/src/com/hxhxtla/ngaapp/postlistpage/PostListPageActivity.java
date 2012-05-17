@@ -12,12 +12,13 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,9 +36,9 @@ import android.widget.Toast;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.PostInfo;
-import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
+import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
 public class PostListPageActivity extends Activity implements ITaskActivity {
 
@@ -310,17 +311,23 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
 				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1), false, true,
-				new OnCancelListener() {
+				getString(R.string.articles_pd_msg1));
+		progressDialog.setOnKeyListener(new OnKeyListener() {
 
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						if (gsdt != null) {
-							gsdt.cancel(false);
-							gsdt = null;
-						}
+			@Override
+			public boolean onKey(DialogInterface dialog, int keyCode,
+					KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_BACK
+						&& event.getAction() == KeyEvent.ACTION_DOWN) {
+					dialog.cancel();
+					if (gsdt != null) {
+						gsdt.cancel(false);
+						gsdt = null;
 					}
-				});
+				}
+				return true;
+			}
+		});
 	}
 
 	public void showGettingProgressDialog() {

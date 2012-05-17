@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
-import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 import com.hxhxtla.ngaapp.task.GetAvatarTask;
+import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
 public class PostInfo {
 

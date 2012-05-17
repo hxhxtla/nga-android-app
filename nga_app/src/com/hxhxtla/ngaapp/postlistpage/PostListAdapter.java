@@ -23,8 +23,8 @@ import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.PageInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
-import com.hxhxtla.ngaapp.controller.PostContentBuilder;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
+import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
 public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
