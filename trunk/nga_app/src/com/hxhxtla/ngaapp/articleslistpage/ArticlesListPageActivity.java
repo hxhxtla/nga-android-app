@@ -3,9 +3,10 @@ package com.hxhxtla.ngaapp.articleslistpage;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -170,17 +171,24 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	public void showContectionProgressDialog() {
 		progressDialog = ProgressDialog.show(this,
 				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1), false, true,
-				new OnCancelListener() {
+				getString(R.string.articles_pd_msg1));
 
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						if (gsdt != null) {
-							gsdt.cancel(false);
-							gsdt = null;
-						}
+		progressDialog.setOnKeyListener(new OnKeyListener() {
+
+			@Override
+			public boolean onKey(DialogInterface dialog, int keyCode,
+					KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_BACK
+						&& event.getAction() == KeyEvent.ACTION_DOWN) {
+					dialog.cancel();
+					if (gsdt != null) {
+						gsdt.cancel(false);
+						gsdt = null;
 					}
-				});
+				}
+				return true;
+			}
+		});
 	}
 
 	public void showGettingProgressDialog() {

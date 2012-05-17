@@ -1,4 +1,4 @@
-package com.hxhxtla.ngaapp.controller;
+package com.hxhxtla.ngaapp.task;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -252,6 +252,8 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 				value = matcher.group(2);
 			}
 			value = "[" + value + "]";
+		} else {
+			value = "";
 		}
 		return value;
 	}
