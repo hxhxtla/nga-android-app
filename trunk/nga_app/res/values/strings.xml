@@ -16,6 +16,9 @@
     <string name="menu_log">登录注销</string>
     <string name="menu_login">登录</string>
     <string name="menu_logout">注销</string>
+    <string name="menu_floorTo">楼</string>
+    <string name="menu_pageTo">页</string>
+    <string name="menu_reply">回复</string>
     <string name="btn_login">登录中。。。</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
@@ -49,7 +52,9 @@
     <string name="posttime_morning">(上午)</string>
     <string name="posttime_afternoon">(下午)</string>
     <string name="posttime_yesterday">(昨天)</string>
+    <string name="post_page">发帖回复</string>
     <string name="post_page_title">标题</string>
     <string name="post_page_content">内容</string>
+    <string name="post_page_submit">提交</string>
 
 </resources>

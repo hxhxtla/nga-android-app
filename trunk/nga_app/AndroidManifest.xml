@@ -28,6 +28,10 @@
             android:name=".optionscontrol.OptionsControlActivity"
             android:label="@string/options_control"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".postaction.PostActionActivity"
+            android:label="@string/post_page"
+            android:screenOrientation="portrait" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

@@ -28,6 +28,8 @@ public class SharedInfoController {
 
 	public static boolean HAS_WIFI;
 
+	public static int POST_ACTION_TYPE;
+
 	public static boolean showAvatar() {
 		if (CTRL_AVATAR_SHOW && (HAS_WIFI || CTRL_AVATAR_SHOW_WIFI)) {
 			return true;

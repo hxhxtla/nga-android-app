@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/postlist_menu_floorTo"
+        android:title="@string/menu_floorTo">
+    </item>
+    <item
+        android:id="@+id/postlist_menu_pageTo"
+        android:title="@string/menu_pageTo">
+    </item>
+    <item
+        android:id="@+id/postlist_menu_reply"
+        android:title="@string/menu_reply">
+    </item>
+
+</menu>
