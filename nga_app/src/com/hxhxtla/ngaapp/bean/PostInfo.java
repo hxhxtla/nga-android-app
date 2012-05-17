@@ -121,8 +121,9 @@ public class PostInfo {
 		}
 	}
 
-	public void setContentSource(String value, ArrayList<CommentInfo> cil) {
-		new PostContentBuilder(this).execute(value, cil);
+	public void setContentSource(String value, ArrayList<CommentInfo> cil,
+			String title) {
+		new PostContentBuilder(this).execute(value, cil, title);
 	}
 
 	public String getUrlAvatar() {

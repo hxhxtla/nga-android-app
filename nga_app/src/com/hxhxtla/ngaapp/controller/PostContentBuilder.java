@@ -401,6 +401,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 		String content = (String) params[0];
 		@SuppressWarnings("unchecked")
 		ArrayList<CommentInfo> comment = (ArrayList<CommentInfo>) params[1];
+		String title = (String) params[2];
 
 		String value = "<!DOCTYPE HTML><html><head>"
 				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
@@ -415,7 +416,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 				+ ".del {text-decoration:line-through;color:#666}"
 				+ ".comment_content {color:#AAA;font-size:14px;margin:0px 0px 0px 20px;}"
 				+ ".comment {color:#AAA;font-size:14px;font-weight:bold;border-bottom:1px solid #aaa;clear:both;margin-bottom:0px}"
-				+ "</style></head>" + "<body><section>"
+				+ "</style></head>" + "<body><section>" + getTitleHtml(title)
 				+ getContentHtml(content) + getCommentHtml(comment)
 				+ "</section></body></html>";
 		return value;
