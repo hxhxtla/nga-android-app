@@ -13,12 +13,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +39,7 @@ import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.PostInfo;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
+import com.hxhxtla.ngaapp.postaction.PostActionActivity;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
 import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
@@ -63,9 +66,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private ImageButton btn_end;
 
 	private Button btn_refresh;
-	private Button btn_pageTo;
-	private Button btn_floorTo;
-
 	private TextView tv;
 
 	private int navigateFloorInPage = 0;
@@ -97,9 +97,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 				.findViewById(R.id.bar_btn_end);
 		btn_refresh = (Button) post_page_selector
 				.findViewById(R.id.bar_btn_refresh);
-
-		btn_pageTo = (Button) findViewById(R.id.post_tab_pageTo);
-		btn_floorTo = (Button) findViewById(R.id.post_tab_floorTo);
 
 		tv = (TextView) findViewById(R.id.post_tab_maxPageNum);
 
@@ -152,87 +149,6 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 			}
 		});
-
-		OnClickListener navigateBtnClickListener = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				final View input_navigate = getLayoutInflater().inflate(
-						R.layout.post_list_navigate_dialog, null);
-				Builder br = new AlertDialog.Builder(PostListPageActivity.this);
-				br.setView(input_navigate);
-				br.setTitle(R.string.post_list_navigate_dialog_title);
-				final EditText et_input = (EditText) input_navigate
-						.findViewById(R.id.plnd_input);
-				if (v == btn_pageTo) {
-					br.setPositiveButton(R.string.post_list_page,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									String input = et_input.getText()
-											.toString().trim();
-									if (!input.isEmpty()) {
-										int targetNum = Integer.parseInt(input);
-										if (targetNum > 0
-												&& targetNum <= maxPageNum) {
-											curPageNum = targetNum;
-											curPageNum = targetNum;
-											if (pla.checkLoaded(targetNum)) {
-												locatePageByIndex(curPageNum);
-											} else {
-												refreshView(false);
-											}
-											dialog.dismiss();
-										} else {
-											Toast.makeText(
-													PostListPageActivity.this,
-													R.string.msg_outOfPageIndex,
-													Toast.LENGTH_SHORT).show();
-										}
-									}
-								}
-							});
-				} else if (v == btn_floorTo) {
-					br.setPositiveButton(R.string.post_list_floor,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									String input = et_input.getText()
-											.toString().trim();
-									if (!input.isEmpty()) {
-										int targetNum = Integer.parseInt(input);
-										int pageIndexNum = pla
-												.getPageIndexByFloorIndex(targetNum);
-										if (pageIndexNum > 0
-												&& pageIndexNum <= maxPageNum) {
-											curPageNum = pageIndexNum;
-											navigateFloorInPage = pla
-													.getFloorInPageByFloorIndex(targetNum);
-											if (pla.checkLoaded(curPageNum)) {
-												locatePageByIndex(curPageNum);
-											} else {
-												refreshView(false);
-											}
-											dialog.dismiss();
-										} else {
-											Toast.makeText(
-													PostListPageActivity.this,
-													R.string.msg_outOfPageIndex,
-													Toast.LENGTH_SHORT).show();
-										}
-									}
-								}
-							});
-				}
-
-				AlertDialog dialog = br.create();
-				dialog.show();
-
-			}
-		};
-		btn_pageTo.setOnClickListener(navigateBtnClickListener);
-		btn_floorTo.setOnClickListener(navigateBtnClickListener);
 	}
 
 	private void initData() {
@@ -373,6 +289,95 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_post_list, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		if (itemId == R.id.postlist_menu_floorTo
+				|| itemId == R.id.postlist_menu_pageTo) {
+
+			final View input_navigate = getLayoutInflater().inflate(
+					R.layout.post_list_navigate_dialog, null);
+			Builder br = new AlertDialog.Builder(PostListPageActivity.this);
+			br.setView(input_navigate);
+			br.setTitle(R.string.post_list_navigate_dialog_title);
+			final EditText et_input = (EditText) input_navigate
+					.findViewById(R.id.plnd_input);
+			if (itemId == R.id.postlist_menu_pageTo) {
+				br.setPositiveButton(R.string.post_list_page,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String input = et_input.getText().toString()
+										.trim();
+								if (!input.isEmpty()) {
+									int targetNum = Integer.parseInt(input);
+									if (targetNum > 0
+											&& targetNum <= maxPageNum) {
+										curPageNum = targetNum;
+										curPageNum = targetNum;
+										if (pla.checkLoaded(targetNum)) {
+											locatePageByIndex(curPageNum);
+										} else {
+											refreshView(false);
+										}
+										dialog.dismiss();
+									} else {
+										Toast.makeText(
+												PostListPageActivity.this,
+												R.string.msg_outOfPageIndex,
+												Toast.LENGTH_SHORT).show();
+									}
+								}
+							}
+						});
+			} else if (itemId == R.id.postlist_menu_floorTo) {
+				br.setPositiveButton(R.string.post_list_floor,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String input = et_input.getText().toString()
+										.trim();
+								if (!input.isEmpty()) {
+									int targetNum = Integer.parseInt(input);
+									int pageIndexNum = pla
+											.getPageIndexByFloorIndex(targetNum);
+									if (pageIndexNum > 0
+											&& pageIndexNum <= maxPageNum) {
+										curPageNum = pageIndexNum;
+										navigateFloorInPage = pla
+												.getFloorInPageByFloorIndex(targetNum);
+										if (pla.checkLoaded(curPageNum)) {
+											locatePageByIndex(curPageNum);
+										} else {
+											refreshView(false);
+										}
+										dialog.dismiss();
+									} else {
+										Toast.makeText(
+												PostListPageActivity.this,
+												R.string.msg_outOfPageIndex,
+												Toast.LENGTH_SHORT).show();
+									}
+								}
+							}
+						});
+			}
+
+			AlertDialog dialog = br.create();
+			dialog.show();
+		} else if (itemId == R.id.postlist_menu_reply) {
+			SharedInfoController.POST_ACTION_TYPE = R.string.post_action_type_reply;
+			startActivity(new Intent(this, PostActionActivity.class));
+		}
+		return true;
 	}
 
 	@Override

@@ -10,5 +10,7 @@
     <string name="nga_uid">ngaPassportUid</string>
     <string name="nga_cid">ngaPassportCid</string>
     <string name="keyword_url">http://</string>
+    <string name="post_action_url">http://bbs.ngacn.cc/post.php</string>
+    <string name="post_action_type_reply">reply</string>
 
 </resources>
