@@ -8,6 +8,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface.OnClickListener;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ArticleInfo;
@@ -29,7 +30,7 @@ public class SharedInfoController {
 	public static boolean HAS_WIFI;
 
 	public static int POST_ACTION_TYPE;
-	
+
 	public static String POST_ACTION_CONTENT_PRE_ADD;
 
 	public static DefaultHttpClient httpClient;
@@ -64,11 +65,22 @@ public class SharedInfoController {
 		}
 	}
 
-	public static void showCommonAlertDialog(Activity value, int messageResId) {
+	public static void showCommonAlertDialog(Activity value, String msg,
+			OnClickListener listener) {
+
+		Builder br = new AlertDialog.Builder(value);
+		br.setTitle(R.string.keyword_tip_check);
+		br.setMessage(msg);
+		br.setPositiveButton(R.string.menu_confirm, listener);
+		br.create().show();
+	}
+
+	public static void showCommonAlertDialog(Activity value, int messageResId,
+			OnClickListener listener) {
 		Builder br = new AlertDialog.Builder(value);
 		br.setTitle(R.string.keyword_tip_check);
 		br.setMessage(messageResId);
-		br.setPositiveButton(R.string.menu_confirm, null);
+		br.setPositiveButton(R.string.menu_confirm, listener);
 		br.create().show();
 	}
 

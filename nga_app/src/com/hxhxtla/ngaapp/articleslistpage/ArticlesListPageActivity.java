@@ -20,7 +20,6 @@ import android.widget.Spinner;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
-import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.postlistpage.PostListPageActivity;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
@@ -224,16 +223,11 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 			} else {
 				int startIndex = doc.lastIndexOf("guestJs=");
 				if (startIndex != -1) {
-					int endIndex = doc.indexOf(";", startIndex);
-					String guestJs = doc.substring(startIndex, endIndex);
-					if (guestJs != null && guestJs.length() > 0) {
-						LoginController.guestJs = guestJs;
-						refreshView();
-						return;
-					}
+					refreshView();
+					return;
 				} else {
 					SharedInfoController.showCommonAlertDialog(this,
-							R.string.msg_errerMsg);
+							R.string.msg_errerMsg, null);
 				}
 			}
 		}
