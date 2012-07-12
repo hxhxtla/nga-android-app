@@ -184,8 +184,14 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 						R.string.msg_adsAlert, null);
 			} else if (document.title().equals(
 					getString(R.string.keyword_tip_check))) {
-				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_errerMsg, null);
+				int startIndex = doc.lastIndexOf("guestJs=");
+				if (startIndex != -1) {
+					refreshView(true);
+					return;
+				} else {
+					SharedInfoController.showCommonAlertDialog(this,
+							R.string.msg_errerMsg, null);
+				}
 			} else {
 				if (initialization) {
 					setPageNum(document);
@@ -226,25 +232,31 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	}
 
 	public void showContectionProgressDialog() {
-		progressDialog = ProgressDialog.show(this,
-				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1));
-		progressDialog.setOnKeyListener(new OnKeyListener() {
+		if (progressDialog != null) {
+			progressDialog.setTitle(R.string.articles_pd_title);
+			progressDialog
+					.setMessage(this.getString(R.string.articles_pd_msg1));
+		} else {
+			progressDialog = ProgressDialog.show(this,
+					getString(R.string.articles_pd_title),
+					getString(R.string.articles_pd_msg1));
+			progressDialog.setOnKeyListener(new OnKeyListener() {
 
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode,
-					KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK
-						&& event.getAction() == KeyEvent.ACTION_DOWN) {
-					dialog.cancel();
-					if (gsdt != null) {
-						gsdt.cancel(false);
-						gsdt = null;
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode,
+						KeyEvent event) {
+					if (keyCode == KeyEvent.KEYCODE_BACK
+							&& event.getAction() == KeyEvent.ACTION_DOWN) {
+						dialog.cancel();
+						if (gsdt != null) {
+							gsdt.cancel(false);
+							gsdt = null;
+						}
 					}
+					return true;
 				}
-				return true;
-			}
-		});
+			});
+		}
 	}
 
 	public void showGettingProgressDialog() {

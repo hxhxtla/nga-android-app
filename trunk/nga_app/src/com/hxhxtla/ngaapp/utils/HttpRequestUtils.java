@@ -35,10 +35,7 @@ public class HttpRequestUtils {
 		httpRequest.setHeader("Cache-Control", "max-age=0");
 		httpRequest.setHeader("Connection", "keep-alive");
 		httpRequest.setHeader("Host", "bbs.ngacn.cc");
-		httpRequest
-				.setHeader(
-						"User-Agent",
-						"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.43 Safari/536.11");
+		httpRequest.setHeader("User-Agent", "anroid-hxhxtla");
 
 		String CookieStr = "";
 		if (LoginController.logged) {
