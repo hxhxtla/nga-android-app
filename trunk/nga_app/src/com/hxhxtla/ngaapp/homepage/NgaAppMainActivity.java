@@ -109,6 +109,10 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 	}
 
 	private void initData() {
+		if (SharedInfoController.SERVER_URL == null) {
+			SharedInfoController.SERVER_URL = this
+					.getString(R.string.server_url);
+		}
 		cctrl = new ConfigController(this);
 		BasicHttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, 5000);

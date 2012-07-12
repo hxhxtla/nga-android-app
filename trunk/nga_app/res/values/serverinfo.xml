@@ -12,5 +12,4 @@
     <string name="keyword_url">http://</string>
     <string name="post_action_url">http://bbs.ngacn.cc/post.php</string>
     <string name="post_action_type_reply">reply</string>
-
 </resources>

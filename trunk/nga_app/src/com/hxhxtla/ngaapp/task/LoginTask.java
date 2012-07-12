@@ -56,9 +56,6 @@ public class LoginTask extends AsyncTask<String, String, String> {
 			e.printStackTrace();
 		}
 		HttpResponse httpResponse = null;
-		if (SharedInfoController.httpClient.getCookieStore() != null) {
-			SharedInfoController.httpClient.getCookieStore().clear();
-		}
 		try {
 			httpResponse = SharedInfoController.httpClient.execute(httpRequest);
 		} catch (ClientProtocolException e) {
@@ -72,23 +69,17 @@ public class LoginTask extends AsyncTask<String, String, String> {
 				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			List<Cookie> cookies = SharedInfoController.httpClient
 					.getCookieStore().getCookies();
+			String cid = null;
+			String uid = null;
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equalsIgnoreCase("_sid")) {
-					LoginController.ngaPassportCid = cookie.getValue();
+					cid = cookie.getValue();
 				}
 				if (cookie.getName().equalsIgnoreCase("_178c")) {
-					LoginController.ngaPassportUid = cookie.getValue().split(
-							"%23")[0];
+					uid = cookie.getValue().split("%23")[0];
 				}
 			}
-			if (LoginController.ngaPassportUid != null
-					&& !LoginController.ngaPassportUid.isEmpty()
-					&& LoginController.ngaPassportCid != null
-					&& !LoginController.ngaPassportCid.isEmpty()) {
-				LoginController.logged = true;
-			} else {
-				LoginController.logged = false;
-			}
+			LoginController.initializeHttpClient(uid, cid);
 		} else {
 			// TODO
 		}

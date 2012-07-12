@@ -2,19 +2,20 @@ package com.hxhxtla.ngaapp.task;
 
 import java.io.IOException;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
 
-import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
-import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
+import com.hxhxtla.ngaapp.utils.GzipUtils;
+import com.hxhxtla.ngaapp.utils.HttpRequestUtils;
 
 public class GetServerDataTask extends AsyncTask<String, String, String> {
 	private ITaskActivity iactivity;
@@ -36,15 +37,13 @@ public class GetServerDataTask extends AsyncTask<String, String, String> {
 			// TODO
 			return null;
 		}
-		if (LoginController.logged) {
-			url = url + "&"
-					+ iactivity.getActivity().getString(R.string.nga_uid) + "="
-					+ LoginController.ngaPassportUid + "&"
-					+ iactivity.getActivity().getString(R.string.nga_cid) + "="
-					+ LoginController.ngaPassportCid;
-		}
-		HttpGet httpRequest = new HttpGet(url);
+		HttpUriRequest httpRequest = HttpRequestUtils.getHttpRequest(
+				HttpRequestUtils.GET, url, iactivity);
+
 		HttpResponse httpResponse = null;
+		if (SharedInfoController.httpClient.getCookieStore() != null) {
+			SharedInfoController.httpClient.getCookieStore().clear();
+		}
 		try {
 			httpResponse = SharedInfoController.httpClient.execute(httpRequest);
 		} catch (ClientProtocolException e) {
@@ -58,8 +57,17 @@ public class GetServerDataTask extends AsyncTask<String, String, String> {
 		if (httpResponse != null
 				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
-				strResult = EntityUtils.toString(httpResponse.getEntity(),
-						"GBK");
+
+				Header contentEncoding = httpResponse
+						.getFirstHeader("Content-Encoding");
+				if (contentEncoding != null
+						&& contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+					strResult = GzipUtils.uncompressToString(httpResponse
+							.getEntity().getContent(), "GBK");
+				} else {
+					strResult = EntityUtils.toString(httpResponse.getEntity(),
+							"GBK");
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

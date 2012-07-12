@@ -2,6 +2,8 @@ package com.hxhxtla.ngaapp.bean;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +12,8 @@ import com.hxhxtla.ngaapp.R;
 
 public class ArticleInfo {
 	public static final Calendar lastBuildDate = Calendar.getInstance();
+
+	public static Pattern P_TID;
 
 	private String title;
 
@@ -113,7 +117,8 @@ public class ArticleInfo {
 				tvPostTime.setText(R.string.posttime_yesterday);
 			} else {
 				tvPostTime.setText("("
-						+ String.valueOf(postTime.get(Calendar.MONTH)+1) + "-"
+						+ String.valueOf(postTime.get(Calendar.MONTH) + 1)
+						+ "-"
 						+ String.valueOf(postTime.get(Calendar.DAY_OF_MONTH))
 						+ ")");
 			}
@@ -129,6 +134,16 @@ public class ArticleInfo {
 
 	public void setView(View view) {
 		this.view = view;
+	}
+
+	public String getTID() {
+		if (P_TID == null) {
+			P_TID = Pattern.compile("tid=(\\d+)", Pattern.DOTALL
+					| Pattern.CASE_INSENSITIVE);
+		}
+		Matcher matcher = P_TID.matcher(getLink());
+		matcher.find();
+		return matcher.group(1);
 	}
 
 }
