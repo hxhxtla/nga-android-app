@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
+import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.postlistpage.PostListPageActivity;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
@@ -138,10 +139,6 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	}
 
 	private void initData() {
-		if (SharedInfoController.SERVER_URL == null) {
-			SharedInfoController.SERVER_URL = this
-					.getString(R.string.server_url);
-		}
 		urlKeyword = this.getString(R.string.article_keyword);
 		urlKeyword1 = this.getString(R.string.article_keyword1);
 		urlKeyword2 = this.getString(R.string.article_keyword2);
@@ -169,26 +166,32 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	}
 
 	public void showContectionProgressDialog() {
-		progressDialog = ProgressDialog.show(this,
-				getString(R.string.articles_pd_title),
-				getString(R.string.articles_pd_msg1));
+		if (progressDialog != null) {
+			progressDialog.setTitle(R.string.articles_pd_title);
+			progressDialog
+					.setMessage(this.getString(R.string.articles_pd_msg1));
+		} else {
+			progressDialog = ProgressDialog.show(this,
+					getString(R.string.articles_pd_title),
+					getString(R.string.articles_pd_msg1));
 
-		progressDialog.setOnKeyListener(new OnKeyListener() {
+			progressDialog.setOnKeyListener(new OnKeyListener() {
 
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode,
-					KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK
-						&& event.getAction() == KeyEvent.ACTION_DOWN) {
-					dialog.cancel();
-					if (gsdt != null) {
-						gsdt.cancel(false);
-						gsdt = null;
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode,
+						KeyEvent event) {
+					if (keyCode == KeyEvent.KEYCODE_BACK
+							&& event.getAction() == KeyEvent.ACTION_DOWN) {
+						dialog.cancel();
+						if (gsdt != null) {
+							gsdt.cancel(false);
+							gsdt = null;
+						}
 					}
+					return true;
 				}
-				return true;
-			}
-		});
+			});
+		}
 	}
 
 	public void showGettingProgressDialog() {
@@ -219,8 +222,19 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				htla.notifyDataSetChanged();
 				lv.setSelectionAfterHeaderView();
 			} else {
-				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_errerMsg);
+				int startIndex = doc.lastIndexOf("guestJs=");
+				if (startIndex != -1) {
+					int endIndex = doc.indexOf(";", startIndex);
+					String guestJs = doc.substring(startIndex, endIndex);
+					if (guestJs != null && guestJs.length() > 0) {
+						LoginController.guestJs = guestJs;
+						refreshView();
+						return;
+					}
+				} else {
+					SharedInfoController.showCommonAlertDialog(this,
+							R.string.msg_errerMsg);
+				}
 			}
 		}
 		if (gsdt != null) {

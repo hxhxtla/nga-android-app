@@ -29,6 +29,10 @@ public class SharedInfoController {
 	public static boolean HAS_WIFI;
 
 	public static int POST_ACTION_TYPE;
+	
+	public static String POST_ACTION_CONTENT_PRE_ADD;
+
+	public static DefaultHttpClient httpClient;
 
 	public static boolean showAvatar() {
 		if (CTRL_AVATAR_SHOW && (HAS_WIFI || CTRL_AVATAR_SHOW_WIFI)) {
@@ -38,8 +42,6 @@ public class SharedInfoController {
 		}
 
 	}
-
-	public static DefaultHttpClient httpClient;
 
 	public SharedInfoController() {
 		// TODO Auto-generated constructor stub
