@@ -48,16 +48,23 @@ public class HttpRequestUtils {
 					+ iactivity.getActivity().getString(R.string.nga_cid) + "="
 					+ LoginController.ngaPassportCid;
 
-		} else if (LoginController.guestJs != null
-				&& !LoginController.guestJs.isEmpty()) {
+		} else {
 
 			List<Cookie> cookies = SharedInfoController.httpClient
 					.getCookieStore().getCookies();
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equalsIgnoreCase(
 						iactivity.getActivity().getString(R.string.nga_uid))) {
+					if (CookieStr.length() > 0) {
+						CookieStr = CookieStr + ";";
+					}
 					CookieStr = CookieStr + cookie.getName() + "="
-							+ cookie.getValue() + ";" + LoginController.guestJs;
+							+ cookie.getValue();
+				} else if (cookie.getName().equalsIgnoreCase("lastvisit")) {
+					if (CookieStr.length() > 0) {
+						CookieStr = CookieStr + ";";
+					}
+					CookieStr = CookieStr + "guestJs=" + cookie.getValue();
 				}
 			}
 		}

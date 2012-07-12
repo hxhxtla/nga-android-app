@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.postaction.PostActionActivity;
 import com.hxhxtla.ngaapp.task.GetServerDataTask;
@@ -180,11 +181,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			Document document = Jsoup.parse(doc);
 			if (document.title().equals(getString(R.string.keyword_ads_check))) {
 				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_adsAlert);
+						R.string.msg_adsAlert, null);
 			} else if (document.title().equals(
 					getString(R.string.keyword_tip_check))) {
 				SharedInfoController.showCommonAlertDialog(this,
-						R.string.msg_errerMsg);
+						R.string.msg_errerMsg, null);
 			} else {
 				if (initialization) {
 					setPageNum(document);
@@ -374,8 +375,13 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			AlertDialog dialog = br.create();
 			dialog.show();
 		} else if (itemId == R.id.postlist_menu_reply) {
-			SharedInfoController.POST_ACTION_TYPE = R.string.post_action_type_reply;
-			startActivity(new Intent(this, PostActionActivity.class));
+			if (LoginController.logged) {
+				SharedInfoController.POST_ACTION_TYPE = R.string.post_action_type_reply;
+				startActivity(new Intent(this, PostActionActivity.class));
+			} else {
+				SharedInfoController.showCommonAlertDialog(this,
+						R.string.msg_not_login, null);
+			}
 		}
 		return true;
 	}

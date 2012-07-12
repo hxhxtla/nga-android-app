@@ -18,7 +18,6 @@ public class LoginController {
 
 	public static String ngaPassportCid;
 	public static String ngaPassportUid;
-	public static String guestJs;
 
 	public AlertDialog dialog;
 
