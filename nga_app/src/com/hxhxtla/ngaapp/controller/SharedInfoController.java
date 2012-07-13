@@ -35,6 +35,8 @@ public class SharedInfoController {
 
 	public static DefaultHttpClient httpClient;
 
+	public static boolean CTRL_PREFIX_DISPLAY;
+
 	public static boolean showAvatar() {
 		if (CTRL_AVATAR_SHOW && (HAS_WIFI || CTRL_AVATAR_SHOW_WIFI)) {
 			return true;

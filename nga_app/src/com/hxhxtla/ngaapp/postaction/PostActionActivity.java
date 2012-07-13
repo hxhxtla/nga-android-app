@@ -46,7 +46,13 @@ public class PostActionActivity extends Activity implements ITaskActivity {
 								.get(0).getId());
 				String tid = SharedInfoController.RECENT_POST.getTID();
 				String text_subject = subject.getText().toString();
-				String text_content = content.getText().toString();
+				String text_content;
+				if (SharedInfoController.CTRL_PREFIX_DISPLAY) {
+					text_content = getString(R.string.PREFIX_DEFAULT) + "\n"
+							+ content.getText().toString();
+				} else {
+					text_content = content.getText().toString();
+				}
 				pat = new PostActionTask(PostActionActivity.this);
 				pat.execute(fid, tid, text_subject, text_content);
 

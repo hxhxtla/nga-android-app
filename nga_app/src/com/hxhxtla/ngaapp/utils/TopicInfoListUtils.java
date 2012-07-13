@@ -169,7 +169,7 @@ public class TopicInfoListUtils {
 		AllTopicInfoList.add(new TopicInfo(R.string.topic48_id,
 				R.string.topic48, R.drawable.pdefault));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic49_id,
-				R.string.topic49, R.drawable.pdefault));
+				R.string.topic49, R.drawable.pn447601));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic50_id,
 				R.string.topic50, R.drawable.pdefault));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic51_id,
