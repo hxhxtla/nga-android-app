@@ -48,6 +48,7 @@
     <string name="control_avatar_show">显示</string>
     <string name="control_avatar_without_wifi">非Wifi状态</string>
     <string name="control_avatar_without_wifi_hint">(禁用后，仍可点击默认头像单独加载)</string>
+    <string name="control_prefix">前缀</string>
     <string name="options_control">控制设置</string>
     <string name="posttime_grave">(坟)</string>
     <string name="posttime_justnow">(刚才)</string>

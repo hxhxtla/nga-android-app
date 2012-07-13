@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="CONFIG">config</string>
+    <string name="CONFIG_VERSION">config_version</string>
     <string name="TOPIC_LIST">topic_list</string>
     <string name="CTRL_AVATAR_SHOW">ctrl_avatar_show</string>
     <string name="CTRL_AVATAR_SHOW_WIFI">ctrl_avatar_show_wifi</string>
+    <string name="CTRL_PREFIX_DISPLAY">ctrl_prefix_display</string>
     
+    <string name="CUR_CONFIG_VERSION">V1.0.0</string>
+    
+    <string name="PREFIX_DEFAULT">[img]http://pic2.178.com/1683/16833150/month_1207/6dbd5c46a9741e9b01e831cf7689dab8.png[/img]</string>
     
     <string name="add_topic">添加主题</string>
     <string name="add_topic_id">add</string>

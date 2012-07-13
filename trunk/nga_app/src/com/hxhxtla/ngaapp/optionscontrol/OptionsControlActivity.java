@@ -12,6 +12,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class OptionsControlActivity extends Activity {
 	private CheckBox ctrl_avatar_cb_show;
+	private CheckBox ctrl_prefix_cb_show;
 	private CheckBox ctrl_avatar_cb_show_wifi;
 
 	private ConfigController cc;
@@ -20,10 +21,13 @@ public class OptionsControlActivity extends Activity {
 		setContentView(R.layout.controls);
 		ctrl_avatar_cb_show = (CheckBox) findViewById(R.id.ctrl_avatar_cb_show);
 		ctrl_avatar_cb_show_wifi = (CheckBox) findViewById(R.id.ctrl_avatar_cb_show_wifi);
+		ctrl_prefix_cb_show = (CheckBox) findViewById(R.id.ctrl_prefix_cb_show);
 
 		ctrl_avatar_cb_show.setChecked(SharedInfoController.CTRL_AVATAR_SHOW);
 		ctrl_avatar_cb_show_wifi
 				.setChecked(SharedInfoController.CTRL_AVATAR_SHOW_WIFI);
+		ctrl_prefix_cb_show
+				.setChecked(SharedInfoController.CTRL_PREFIX_DISPLAY);
 
 		ctrl_avatar_cb_show
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -36,6 +40,7 @@ public class OptionsControlActivity extends Activity {
 						} else {
 							ctrl_avatar_cb_show
 									.setChecked(SharedInfoController.CTRL_AVATAR_SHOW);
+							// TODO: show alert
 						}
 						ctrl_avatar_cb_show_wifi
 								.setEnabled(SharedInfoController.CTRL_AVATAR_SHOW);
@@ -53,6 +58,23 @@ public class OptionsControlActivity extends Activity {
 						} else {
 							ctrl_avatar_cb_show_wifi
 									.setChecked(SharedInfoController.CTRL_AVATAR_SHOW_WIFI);
+							// TODO: show alert
+						}
+					}
+				});
+
+		ctrl_prefix_cb_show
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (cc.saveCtrlPrefixShow(isChecked)) {
+							SharedInfoController.CTRL_PREFIX_DISPLAY = isChecked;
+						} else {
+							ctrl_prefix_cb_show
+									.setChecked(SharedInfoController.CTRL_PREFIX_DISPLAY);
+							// TODO: show alert
 						}
 					}
 				});

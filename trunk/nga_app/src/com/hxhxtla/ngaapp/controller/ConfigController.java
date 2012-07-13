@@ -24,6 +24,19 @@ public class ConfigController {
 		if (sharedPreferences == null) {
 			sharedPreferences = context.getSharedPreferences(
 					context.getString(R.string.CONFIG), Context.MODE_PRIVATE);
+			String history_config_version = sharedPreferences.getString(
+					context.getString(R.string.CONFIG_VERSION), null);
+			if (history_config_version == null
+					|| !history_config_version.equalsIgnoreCase(context
+							.getString(R.string.CUR_CONFIG_VERSION))) {
+				Editor editor = sharedPreferences.edit();
+				editor.putString(context.getString(R.string.TOPIC_LIST), null);
+				editor.putString(context.getString(R.string.CONFIG_VERSION),
+						context.getString(R.string.CUR_CONFIG_VERSION));
+				if (!editor.commit()) {
+					//TODO:failed to update config handler
+				}
+			}
 		}
 		return sharedPreferences;
 	}
@@ -71,6 +84,19 @@ public class ConfigController {
 				value);
 		return editor.commit();
 
+	}
+
+	public boolean saveCtrlPrefixShow(boolean value) {
+		Editor editor = getConfig().edit();
+		editor.putBoolean(context.getString(R.string.CTRL_PREFIX_DISPLAY),
+				value);
+		return editor.commit();
+
+	}
+
+	public boolean getCtrlPrefixShow() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_PREFIX_DISPLAY), true);
 	}
 
 	public boolean getCtrlAvatarShowWifi() {
