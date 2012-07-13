@@ -148,7 +148,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						cil.add(ci);
 					}
 				}
-				
+
 				pi.setContentSource(content, cil, sbutitle);
 
 				Elements imgs = item.select(post_user_info1).select(
@@ -173,6 +173,14 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 								if (url != null && !url.isEmpty()) {
 									pi.setUrlAvatar(url.replaceAll("\"", ""));
 								}
+								String pid = values[9];
+								pid = pid.replaceAll("\"", "");
+								if (pid.equals("0")) {
+									pid = values[8];
+								}
+								pi.setPid(pid);
+							} else {
+								// TODO
 							}
 						}
 						break;
@@ -266,6 +274,10 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	public void setHighlightAuthor(int value) {
 		curHighLightAuthor = getItem(value).getAuthor();
+	}
+
+	public String getQuoteInfo(int value) {
+		return getItem(value).getQuoteContent();
 	}
 
 	public void refreshHighlightAuthor() {

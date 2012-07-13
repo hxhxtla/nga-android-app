@@ -9,7 +9,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ToggleButton;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
@@ -19,6 +23,7 @@ import com.hxhxtla.ngaapp.task.PostActionTask;
 public class PostActionActivity extends Activity implements ITaskActivity {
 	private EditText subject;
 	private EditText content;
+	private EditText quote;
 	private Button submit;
 	private ProgressDialog progressDialog;
 	private PostActionTask pat;
@@ -32,9 +37,30 @@ public class PostActionActivity extends Activity implements ITaskActivity {
 
 		submit = (Button) findViewById(R.id.post_action_submit);
 
-		if (SharedInfoController.POST_ACTION_CONTENT_PRE_ADD != null
+		if (SharedInfoController.POST_ACTION_TYPE == R.string.post_action_type_reply
+				&& SharedInfoController.POST_ACTION_CONTENT_PRE_ADD != null
 				&& !SharedInfoController.POST_ACTION_CONTENT_PRE_ADD.isEmpty()) {
-			content.setText(SharedInfoController.POST_ACTION_CONTENT_PRE_ADD);
+
+			LinearLayout module_quote = (LinearLayout) findViewById(R.id.post_action_module_quote);
+			module_quote.setVisibility(View.VISIBLE);
+			quote = (EditText) findViewById(R.id.post_action_quote);
+			quote.setText(SharedInfoController.POST_ACTION_CONTENT_PRE_ADD);
+			SharedInfoController.POST_ACTION_CONTENT_PRE_ADD = null;
+
+			ToggleButton tb = (ToggleButton) findViewById(R.id.post_page_editText_display);
+			tb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						quote.setVisibility(View.VISIBLE);
+					} else {
+						quote.setVisibility(View.GONE);
+					}
+
+				}
+			});
 		}
 
 		submit.setOnClickListener(new OnClickListener() {
@@ -47,11 +73,21 @@ public class PostActionActivity extends Activity implements ITaskActivity {
 				String tid = SharedInfoController.RECENT_POST.getTID();
 				String text_subject = subject.getText().toString();
 				String text_content;
+				if (quote != null
+						&& quote.getText().toString().trim().length() > 0) {
+					text_content = quote.getText().toString() + "\n"
+							+ content.getText().toString();
+				} else if (content.getText().toString().trim().length() > 0) {
+					text_content = content.getText().toString();
+				} else {
+					SharedInfoController.showCommonAlertDialog(
+							PostActionActivity.this, R.string.post_cant_msg,
+							null);
+					return;
+				}
 				if (SharedInfoController.CTRL_PREFIX_DISPLAY) {
 					text_content = getString(R.string.PREFIX_DEFAULT) + "\n"
-							+ content.getText().toString();
-				} else {
-					text_content = content.getText().toString();
+							+ text_content;
 				}
 				pat = new PostActionTask(PostActionActivity.this);
 				pat.execute(fid, tid, text_subject, text_content);
