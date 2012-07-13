@@ -1,6 +1,5 @@
 package com.hxhxtla.ngaapp.homepage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
+import com.hxhxtla.ngaapp.utils.TopicInfoListUtils;
 
 public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
@@ -112,35 +112,6 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 		return convertView;
 	}
 
-	private static void initializeTopicInfoList() {
-		TopicInfoList = new ArrayList<TopicInfo>();
-
-		TopicInfoList.add(new TopicInfo(R.string.topic1_id, R.string.topic1,
-				R.drawable.p7));
-		TopicInfoList.add(new TopicInfo(R.string.topic2_id, R.string.topic2,
-				R.drawable.p323));
-		TopicInfoList.add(new TopicInfo(R.string.topic3_id, R.string.topic3,
-				R.drawable.p354));
-		TopicInfoList.add(new TopicInfo(R.string.topic4_id, R.string.topic4,
-				R.drawable.p318));
-		TopicInfoList.add(new TopicInfo(R.string.topic5_id, R.string.topic5,
-				R.drawable.p10));
-		TopicInfoList.add(new TopicInfo(R.string.topic6_id, R.string.topic6,
-				R.drawable.p230));
-		TopicInfoList.add(new TopicInfo(R.string.topic7_id, R.string.topic7,
-				R.drawable.p387));
-		TopicInfoList.add(new TopicInfo(R.string.topic8_id, R.string.topic8,
-				R.drawable.p320));
-		TopicInfoList.add(new TopicInfo(R.string.topic9_id, R.string.topic9,
-				R.drawable.p181));
-		TopicInfoList.add(new TopicInfo(R.string.topic10_id, R.string.topic10,
-				R.drawable.p182));
-		TopicInfoList.add(new TopicInfo(R.string.topic11_id, R.string.topic11,
-				R.drawable.p183));
-		TopicInfoList.add(new TopicInfo(R.string.add_topic_id,
-				R.string.add_topic, R.drawable.add_icon));
-	}
-
 	public int getIndex_view() {
 		return index_view;
 	}
@@ -159,7 +130,8 @@ public class HomeListAdapter extends BaseAdapter implements ListAdapter {
 
 	public static int getCurrentPageCount() {
 		if (TopicInfoList == null) {
-			initializeTopicInfoList();
+			TopicInfoList = TopicInfoListUtils
+					.initializeTopicInfoList(TopicInfoList);
 		}
 		int numPage = (int) Math.ceil((double) TopicInfoList.size()
 				/ (double) NUM_PER_PAGE);

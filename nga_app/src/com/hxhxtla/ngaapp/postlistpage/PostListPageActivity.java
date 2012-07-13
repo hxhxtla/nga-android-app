@@ -233,6 +233,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 
 	public void showContectionProgressDialog() {
 		if (progressDialog != null) {
+			progressDialog.show();
 			progressDialog.setTitle(R.string.articles_pd_title);
 			progressDialog
 					.setMessage(this.getString(R.string.articles_pd_msg1));
