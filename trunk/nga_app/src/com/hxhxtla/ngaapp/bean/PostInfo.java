@@ -34,6 +34,10 @@ public class PostInfo {
 	private String postcount;
 	private String urlAvatar;
 
+	private String originalContent;
+
+	private String pid;
+
 	// view////////////////////////////////
 	private ViewGroup view;
 
@@ -113,6 +117,14 @@ public class PostInfo {
 		tvPostcount.setText(postcount);
 	}
 
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
 	public void setContent(String content) {
 		wvContent
 				.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
@@ -123,6 +135,7 @@ public class PostInfo {
 
 	public void setContentSource(String value, ArrayList<CommentInfo> cil,
 			String title) {
+		originalContent = value;
 		new PostContentBuilder(this).execute(value, cil, title);
 	}
 
@@ -198,6 +211,13 @@ public class PostInfo {
 			wvContent.clearCache(true);
 			wvContent.clearHistory();
 		}
+	}
+
+	public String getQuoteContent() {
+		String quote = "[quote][pid=" + pid + "]Reply[/pid] [b]Post by "
+				+ author + " (" + datetime + "):[/b]\n\n"
+				+ originalContent.replaceAll("\\<br /\\>", "\n") + "[/quote]";
+		return quote;
 	}
 
 }

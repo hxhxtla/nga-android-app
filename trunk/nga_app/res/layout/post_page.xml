@@ -7,7 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,13 +19,52 @@
 
         <EditText
             android:id="@+id/post_action_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:ems="10"
             android:maxLength="100" >
         </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/post_action_module_quote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:text="@string/post_page_quote"
+                android:textColor="@color/text_color" />
+
+            <ToggleButton
+                android:id="@+id/post_page_editText_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:checked="false"
+                android:textOff="@string/display"
+                android:textOn="@string/hide" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/post_action_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView
@@ -47,7 +87,7 @@
 
     <Button
         android:id="@+id/post_action_submit"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/post_page_submit" />

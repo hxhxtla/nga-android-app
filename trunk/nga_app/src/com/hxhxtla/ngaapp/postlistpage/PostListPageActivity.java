@@ -46,6 +46,8 @@ import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
 public class PostListPageActivity extends Activity implements ITaskActivity {
 
+	private static final int MENU_QUOTE = 0;
+
 	private static final int MENU_ADDHIGHLIGHT = 1;
 
 	private ProgressDialog progressDialog;
@@ -273,6 +275,11 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			progressDialog.dismiss();
 	}
 
+	private void doPostAction() {
+		SharedInfoController.POST_ACTION_TYPE = R.string.post_action_type_reply;
+		startActivity(new Intent(this, PostActionActivity.class));
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -285,7 +292,10 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.add(0, MENU_ADDHIGHLIGHT, 0, R.string.menu_add_highlight);
+		if (LoginController.logged) {
+			menu.add(0, MENU_QUOTE, 0, R.string.post_page_quote);
+		}
+		menu.add(0, MENU_ADDHIGHLIGHT, 1, R.string.menu_add_highlight);
 
 	}
 
@@ -293,11 +303,17 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-
+		int index;
 		switch (item.getItemId()) {
+		case MENU_QUOTE:
+			index = info.position;
+			SharedInfoController.POST_ACTION_CONTENT_PRE_ADD = pla
+					.getQuoteInfo(index - 1);
+			doPostAction();
+			break;
 		case MENU_ADDHIGHLIGHT:
-			int index = info.position;
-			menuHandler_addHighlight(index);
+			index = info.position;
+			menuHandler_addHighlight(index - 1);
 			break;
 
 		}
@@ -389,8 +405,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			dialog.show();
 		} else if (itemId == R.id.postlist_menu_reply) {
 			if (LoginController.logged) {
-				SharedInfoController.POST_ACTION_TYPE = R.string.post_action_type_reply;
-				startActivity(new Intent(this, PostActionActivity.class));
+				doPostAction();
 			} else {
 				SharedInfoController.showCommonAlertDialog(this,
 						R.string.msg_not_login, null);

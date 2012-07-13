@@ -35,6 +35,7 @@
     <string name="articles_pd_msg2">获取数据。。。</string>
     <string name="articles_pd_msg3">载入中。。。</string>
     <string name="post_compeleted_msg">发贴完毕</string>
+    <string name="post_cant_msg">内容不能为空</string>
     <string name="post_failed_msg">发贴失败\n可能原因:\n\t1.内容过短或过长\n\t2.账号权限不足\n\t3.帖子被关闭\n请确认后重试</string>
     <string name="post_load_text">点击载入缺页</string>
     <string name="post_list_page">页</string>
@@ -58,7 +59,10 @@
     <string name="posttime_yesterday">(昨天)</string>
     <string name="post_page">发帖-回复-编辑</string>
     <string name="post_page_title">标题</string>
+    <string name="post_page_quote">引用</string>
     <string name="post_page_content">内容</string>
     <string name="post_page_submit">提交</string>
+    <string name="display">显示</string>
+    <string name="hide">隐藏</string>
 
 </resources>
