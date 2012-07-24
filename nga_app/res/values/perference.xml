@@ -7,7 +7,7 @@
     <string name="CTRL_AVATAR_SHOW_WIFI">ctrl_avatar_show_wifi</string>
     <string name="CTRL_PREFIX_DISPLAY">ctrl_prefix_display</string>
     
-    <string name="CUR_CONFIG_VERSION">V1.0.0</string>
+    <string name="CUR_CONFIG_VERSION">V1.0.1</string>
     
     <string name="PREFIX_DEFAULT">[img]http://pic2.178.com/1683/16833150/month_1207/62720a255803feee543f5e37e43fe4be.png[/img]</string>
     
@@ -149,4 +149,6 @@
     <string name="topic67_id">399</string>
     <string name="topic68">五晨寺</string>
     <string name="topic68_id">390</string>
+    <string name="topic69">宠物讨论</string>
+    <string name="topic69_id">411</string>
 </resources>

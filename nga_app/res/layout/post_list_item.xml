@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:textAppearance="?android:attr/textAppearanceMediumInverse"
-            android:textColor="@color/post_text_color" />
+            android:textColor="@color/post_text_color"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/post_floor"

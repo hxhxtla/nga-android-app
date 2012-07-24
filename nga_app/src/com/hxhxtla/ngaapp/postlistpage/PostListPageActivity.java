@@ -166,7 +166,8 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	private void refreshView(boolean status) {
 		initialization = status;
 		gsdt = new GetServerDataTask(PostListPageActivity.this);
-		String url = SharedInfoController.RECENT_POST.getLink() + "&"
+		String url = SharedInfoController.SERVER_URL + "/"
+				+ SharedInfoController.RECENT_POST.getLink() + "&"
 				+ urlKeyword2 + String.valueOf(curPageNum);
 
 		gsdt.execute(url);
