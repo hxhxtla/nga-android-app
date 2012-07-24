@@ -113,6 +113,8 @@ public class TopicInfoListUtils {
 				R.string.topic30, R.drawable.p327));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic31_id,
 				R.string.topic31, R.drawable.p388));
+		AllTopicInfoList.add(new TopicInfo(R.string.topic69_id,
+				R.string.topic69, R.drawable.p411));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic32_id,
 				R.string.topic32, R.drawable.p10));
 		AllTopicInfoList.add(new TopicInfo(R.string.topic33_id,

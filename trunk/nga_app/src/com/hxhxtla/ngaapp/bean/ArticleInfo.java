@@ -1,5 +1,6 @@
 package com.hxhxtla.ngaapp.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -11,7 +12,18 @@ import android.widget.TextView;
 import com.hxhxtla.ngaapp.R;
 
 public class ArticleInfo {
-	public static final Calendar lastBuildDate = Calendar.getInstance();
+
+	public static final SimpleDateFormat sdf1 = new SimpleDateFormat(
+			"yyyy-MM-dd");
+	public static final SimpleDateFormat sdf2 = new SimpleDateFormat(
+			"MM-dd HH:mm");
+	public static final SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
+
+	public static long now;
+
+	public static long nowDayStart;
+
+	public static long nowYearStart;
 
 	public static Pattern P_TID;
 
@@ -93,39 +105,56 @@ public class ArticleInfo {
 		tvPostcount.setText(postcount);
 	}
 
-	public void setPostTime(Date value) {
-		Calendar postTime = Calendar.getInstance();
-		postTime.setTime(value);
-		int dif_year = lastBuildDate.get(Calendar.YEAR)
-				- postTime.get(Calendar.YEAR);
-		if (dif_year == 0) {
-			int dif_day = lastBuildDate.get(Calendar.DAY_OF_YEAR)
-					- postTime.get(Calendar.DAY_OF_YEAR);
-			if (dif_day == 0) {
-				int dif_hour = lastBuildDate.get(Calendar.HOUR_OF_DAY)
-						- postTime.get(Calendar.HOUR_OF_DAY);
-				if (dif_hour == 0) {
-					tvPostTime.setText(R.string.posttime_hour);
-				} else {
-					if (postTime.get(Calendar.HOUR_OF_DAY) < 12) {
-						tvPostTime.setText(R.string.posttime_morning);
-					} else {
-						tvPostTime.setText(R.string.posttime_afternoon);
-					}
-				}
-			} else if (dif_day == 1) {
-				tvPostTime.setText(R.string.posttime_yesterday);
-			} else {
-				tvPostTime.setText("("
-						+ String.valueOf(postTime.get(Calendar.MONTH) + 1)
-						+ "-"
-						+ String.valueOf(postTime.get(Calendar.DAY_OF_MONTH))
-						+ ")");
-			}
-		} else {
-			tvPostTime.setText(R.string.posttime_grave);
+	public void setPostTime(String value) {
+		if (value == null || value.isEmpty()) {
+			return;
 		}
+		Calendar postTime = Calendar.getInstance();
+		long millisecondsValue = Long.parseLong(value);
+		postTime.setTimeInMillis(millisecondsValue * 1000);
+		Date dPostTime = postTime.getTime();
 
+		long x = now - millisecondsValue;
+		String dx;
+
+		if (x < 4500) {
+			String z = "分钟前";
+			if (x < 60)
+				dx = "刚才";
+			else if (x < 450)
+				dx = "5" + z;
+			else if (x < 750)
+				dx = "10" + z;
+			else if (x < 1050)
+				dx = "15" + z;
+			else if (x < 1350)
+				dx = "20" + z;
+			else if (x < 1650)
+				dx = "25" + z;
+			else if (x < 2100)
+				dx = "30" + z;
+			else if (x < 2700)
+				dx = "40" + z;
+			else if (x < 3300)
+				dx = "50" + z;
+			else
+				dx = "1小时前";
+		} else {
+			if (millisecondsValue > (nowDayStart - 172800)) {
+				if (millisecondsValue > nowDayStart)
+					dx = "今天";
+				else if (millisecondsValue > (nowDayStart - 86400))
+					dx = "昨天";
+				else
+					dx = "前天 ";
+				dx += sdf3.format(dPostTime);
+			} else if (millisecondsValue > nowYearStart)
+				dx = sdf2.format(dPostTime);
+			else
+				dx = sdf1.format(dPostTime);
+		}
+		dx = "(" + dx + ")";
+		tvPostTime.setText(dx);
 	}
 
 	public View getView() {

@@ -52,7 +52,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 			"\\[(custom)?achieve\\](.+?)\\[/(custom)?achieve\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_COLLAPSE = Pattern.compile(
-			"\\[collapse=?.*?\\](.+?)\\[/collapse\\]", Pattern.DOTALL
+			"\\[collapse=?(.*?)\\](.+?)\\[/collapse\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_LR = Pattern.compile(
 			"\\[[lr]\\](.+?)\\[/[lr]\\]", Pattern.DOTALL
@@ -216,7 +216,8 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 			sb = new StringBuffer();
 			while (matcher.find()) {
 				temp = matcher.group(1);
-				matcher.appendReplacement(sb, getR_FONT(temp));
+				temp2 = matcher.group(2);
+				matcher.appendReplacement(sb, getR_COLLAPSE(temp, temp2));
 			}
 			matcher.appendTail(sb);
 			value = sb.toString();
@@ -398,6 +399,16 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 		return "<i style='font-style:italic'>" + temp + "</i>";
 	}
 
+	private static String getR_COLLAPSE(String temp, String temp2) {
+		// "<div style='border-top:1px solid #fff;border-bottom:1px solid #fff;display:none'>"
+		// + "<button style='font-size:12px;line-height:normal;padding:0px 2px'"
+		// + " onclick='collapseClickHandler()'"
+		// + " type='button'><b>+</b></button> <b class='gray'>"
+		// + temp + "</b></div>"
+		return "<div style='border-top:1px solid #fff;border-bottom:1px solid #fff'>"
+				+ temp2 + "</div>";
+	}
+
 	@Override
 	protected String doInBackground(Object... params) {
 		String content = (String) params[0];
@@ -412,6 +423,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 				+ "<style type='text/css'>"
 				+ ".quote {background:#E8E8E8;border:1px solid #888;margin:10px 10px 10px 10px;padding:10px}"
 				+ ".silver {color:#888}"
+				+ ".gray {color:#555}"
 				+ ".chocolate {color:chocolate}"
 				+ ".img {max-width:100%}"
 				+ ".color {color:#D00}"

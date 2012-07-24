@@ -1,5 +1,8 @@
 package com.hxhxtla.ngaapp.articleslistpage;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -45,7 +48,6 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 	private String urlKeyword;
 	private String urlKeyword1;
 	private String urlKeyword2;
-	private String urlKeyword3;
 
 	private GetServerDataTask gsdt;
 
@@ -141,7 +143,6 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 		urlKeyword = this.getString(R.string.article_keyword);
 		urlKeyword1 = this.getString(R.string.article_keyword1);
 		urlKeyword2 = this.getString(R.string.article_keyword2);
-		urlKeyword3 = this.getString(R.string.server_rss);
 	}
 
 	private void showPageByIndex(int index) {
@@ -159,7 +160,7 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 				+ urlKeyword1
 				+ getString(SharedInfoController.DISPLAYED_HISTORY_TOPICLIST
 						.get(0).getId()) + "&" + urlKeyword2
-				+ String.valueOf(curPageNum) + "&" + urlKeyword3;
+				+ String.valueOf(curPageNum);
 
 		gsdt.execute(url);
 	}
@@ -217,11 +218,12 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 
 	public void callbackHander(String doc) {
 		if (doc != null) {
-			if (ala.setData(doc)) {
-				ala.notifyDataSetChanged();
-				htla.notifyDataSetChanged();
-				lv.setSelectionAfterHeaderView();
-			} else {
+			Document document = Jsoup.parse(doc);
+			if (document.title().equals(getString(R.string.keyword_ads_check))) {
+				SharedInfoController.showCommonAlertDialog(this,
+						R.string.msg_adsAlert, null);
+			} else if (document.title().equals(
+					getString(R.string.keyword_tip_check))) {
 				int startIndex = doc.lastIndexOf("guestJs=");
 				if (startIndex != -1) {
 					refreshView();
@@ -230,13 +232,16 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 					SharedInfoController.showCommonAlertDialog(this,
 							R.string.msg_errerMsg, null);
 				}
+			} else if (ala.setData(document)) {
+				ala.notifyDataSetChanged();
+				htla.notifyDataSetChanged();
+				lv.setSelectionAfterHeaderView();
 			}
 		}
 		if (gsdt != null) {
 			gsdt = null;
 		}
 		closeContectionProgressDialog();
-
 	}
 
 	@Override
