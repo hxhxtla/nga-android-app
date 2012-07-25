@@ -144,7 +144,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				PostInfo pi = pla.getItem(arg2);
+				PostInfo pi = pla.getItem(arg2-1);
 				if (pi.getPageIndex() != 0) {
 					curPageNum = pi.getPageIndex();
 					refreshView(false);
