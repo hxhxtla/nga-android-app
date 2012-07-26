@@ -30,6 +30,11 @@ public class OptionsControlActivity extends Activity {
 		ctrl_avatar_cb_show.setChecked(SharedInfoController.CTRL_AVATAR_SHOW);
 		ctrl_avatar_cb_show_wifi
 				.setChecked(SharedInfoController.CTRL_AVATAR_SHOW_WIFI);
+
+		ctrl_image_cb_show.setChecked(SharedInfoController.CTRL_IMAGE_SHOW);
+		ctrl_image_cb_show_wifi
+				.setChecked(SharedInfoController.CTRL_IMAGE_SHOW_WIFI);
+
 		ctrl_prefix_cb_show
 				.setChecked(SharedInfoController.CTRL_PREFIX_DISPLAY);
 
