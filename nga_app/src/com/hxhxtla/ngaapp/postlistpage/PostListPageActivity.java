@@ -290,6 +290,12 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedInfoController.CURRENT_ACTIVITY = this;
+	}
+
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);

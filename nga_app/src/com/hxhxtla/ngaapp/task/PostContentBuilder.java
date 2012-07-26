@@ -399,7 +399,9 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 			imageTask.execute(url);
 			url = imageTask.imageUUID;
 		}
-		return "<img class='img' src='" + url + "' alt='' />";
+		return "<img class='img' src='"
+				+ url
+				+ "' alt='' onclick='window.postInfo.showImageInExtendTool(this.src)' />";
 	}
 
 	private static String getR_COLOR(String temp) {
@@ -474,6 +476,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 			if (git.imageLocalURL != null && !git.imageLocalURL.isEmpty()) {
 				_postContent = _postContent.replace(git.imageUUID,
 						git.imageLocalURL);
+				target.setJSEnabled(true);
 			} else {
 				_postContent = _postContent.replace(git.imageUUID,
 						ICON_IMAGE_LOADING);
