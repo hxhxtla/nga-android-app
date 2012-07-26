@@ -162,7 +162,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						userInfo = clearUserInfo(userInfo);
 						if (userInfo != null) {
 							String[] values = userInfo.split(",");
-							if (values.length == 27) {
+							if (values.length > 19) {
 								pi.setPrestige(mContext
 										.getString(R.string.user_info_prestige)
 										+ values[7]);

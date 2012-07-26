@@ -34,11 +34,11 @@ import com.hxhxtla.ngaapp.articleslistpage.ArticlesListPageActivity;
 import com.hxhxtla.ngaapp.bean.ITaskActivity;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
 import com.hxhxtla.ngaapp.controller.ConfigController;
+import com.hxhxtla.ngaapp.controller.LocalFileManager;
 import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.optionscontrol.OptionsControlActivity;
-import com.hxhxtla.ngaapp.utils.SaveFileToLocalUtils;
 
 public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
@@ -126,7 +126,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 		LoginController.initializeHttpClient(cctrl.getNgaPassportUid(),
 				cctrl.getNgaPassportCid());
 		HomeListAdapter.setTopicInfoList(cctrl.getTopiclist());
-		SaveFileToLocalUtils.initialize();
+		LocalFileManager.initialize();
 	}
 
 	public boolean saveTopicInfoListToConfig() {

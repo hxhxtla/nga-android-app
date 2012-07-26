@@ -104,7 +104,7 @@ public class ArticlesListAdapter extends BaseAdapter implements ListAdapter {
 					topicInfo = topicInfo.substring(1, topicInfo.length() - 1);
 					if (topicInfo != null) {
 						String[] values = topicInfo.split(",");
-						if (values.length == 21) {
+						if (values.length > 15) {
 							ai.setPostcount(values[15]);
 							ai.setPostTime(values[13]);
 						} else {
