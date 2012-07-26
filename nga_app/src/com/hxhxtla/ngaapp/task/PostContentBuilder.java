@@ -1,15 +1,19 @@
 package com.hxhxtla.ngaapp.task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.os.AsyncTask;
 
 import com.hxhxtla.ngaapp.bean.CommentInfo;
+import com.hxhxtla.ngaapp.bean.IImageTask;
 import com.hxhxtla.ngaapp.bean.PostInfo;
 
-public class PostContentBuilder extends AsyncTask<Object, String, String> {
+public class PostContentBuilder extends AsyncTask<Object, String, String>
+		implements IImageTask {
 	private static String _IMG_SERVER_PATH;
 	private static String _IMG_SERVER_BASE;
 	// 正则表达式 检索器
@@ -72,13 +76,19 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 	public static final Pattern P_BRACES = Pattern.compile("\\{.+?\\}",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
+	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/image_loading.png";
+
+	public static final HashMap<String, GetImageTask> imageTaskList = new HashMap<String, GetImageTask>();
+
 	private PostInfo target;
+
+	private String _postContent;
 
 	public PostContentBuilder(PostInfo value) {
 		target = value;
 	}
 
-	private static String getContentHtml(String value) {
+	private String getContentHtml(String value) {
 		if (value != null && !value.isEmpty()) {
 			Matcher matcher;
 			String temp;
@@ -360,7 +370,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 		return "<img src='" + temp + "' alt=''/>";
 	}
 
-	private static String getR_IMG(String temp) {
+	private String getR_IMG(String temp) {
 		if (_IMG_SERVER_BASE == null || _IMG_SERVER_BASE.isEmpty()) {
 			_IMG_SERVER_BASE = "http://img.ngacn.cc/attachments";
 		}
@@ -371,7 +381,25 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 		} else {
 			url = _IMG_SERVER_BASE + temp.substring(1);
 		}
-		return "<img class='img' src='" + url + "' alt=''/>";
+		GetImageTask imageTask;
+		if (imageTaskList.containsKey(url)) {
+			imageTask = imageTaskList.get(url);
+			if (imageTask.imageLocalURL != null
+					&& !imageTask.imageLocalURL.isEmpty()) {
+				url = imageTask.imageLocalURL;
+			} else {
+				url = imageTask.imageUUID;
+				imageTask.addTaskDestination(this);
+			}
+		} else {
+			imageTask = new GetImageTask(this);
+			imageTask.imageUUID = UUID.randomUUID().toString();
+			imageTask.needToSave = true;
+			imageTaskList.put(url, imageTask);
+			imageTask.execute(url);
+			url = imageTask.imageUUID;
+		}
+		return "<img class='img' src='" + url + "' alt='' />";
 	}
 
 	private static String getR_COLOR(String temp) {
@@ -416,7 +444,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 		ArrayList<CommentInfo> comment = (ArrayList<CommentInfo>) params[1];
 		String title = (String) params[2];
 
-		String value = "<!DOCTYPE HTML><html><head>"
+		_postContent = "<!DOCTYPE HTML><html><head>"
 				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
 				+ "<META http-equiv='Cache-Control' content='no-cache'>"
 				+ "<META http-equiv='Cache-Control' content='no-store'>"
@@ -433,11 +461,24 @@ public class PostContentBuilder extends AsyncTask<Object, String, String> {
 				+ "</style></head>" + "<body><section>" + getTitleHtml(title)
 				+ getContentHtml(content) + getCommentHtml(comment)
 				+ "</section></body></html>";
-		return value;
+		return _postContent;
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
 		target.setContent(result);
+	}
+
+	public void callImageBackHander(GetImageTask git) {
+		if (_postContent != null && !_postContent.isEmpty()) {
+			if (git.imageLocalURL != null && !git.imageLocalURL.isEmpty()) {
+				_postContent = _postContent.replace(git.imageUUID,
+						git.imageLocalURL);
+			} else {
+				_postContent = _postContent.replace(git.imageUUID,
+						ICON_IMAGE_LOADING);
+			}
+			target.setContent(_postContent);
+		}
 	}
 }

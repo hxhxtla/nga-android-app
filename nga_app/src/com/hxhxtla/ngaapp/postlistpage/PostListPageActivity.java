@@ -424,6 +424,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 	protected void onStop() {
 		if (pla != null) {
 			pla.clearWebViewCache();
+			PostContentBuilder.imageTaskList.clear();
 		}
 		super.onStop();
 	}

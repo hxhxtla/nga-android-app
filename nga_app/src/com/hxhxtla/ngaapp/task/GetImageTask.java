@@ -16,41 +16,46 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
-import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.bean.IImageTask;
+import com.hxhxtla.ngaapp.utils.SaveFileToLocalUtils;
 
-public class GetAvatarTask extends AsyncTask<String, String, String> {
+public class GetImageTask extends AsyncTask<String, String, String> {
 
 	private DefaultHttpClient httpClient;
 
-	private List<PostInfo> pi;
+	private List<IImageTask> pcb;
 
-	private String avatarURL;
+	public String imageUUID;
 
-	private Bitmap avatar;
+	public String imageLocalURL;
 
-	public GetAvatarTask(PostInfo value) {
+	public boolean needToSave = false;
+
+	private Bitmap image;
+
+	public GetImageTask(IImageTask value) {
 		super();
 		httpClient = new DefaultHttpClient();
-		pi = new ArrayList<PostInfo>();
-		pi.add(value);
+		pcb = new ArrayList<IImageTask>();
+		pcb.add(value);
 	}
 
-	public void addTaskDestination(PostInfo value) {
-		if (avatar == null) {
-			pi.add(value);
+	public void addTaskDestination(IImageTask value) {
+		if (image == null) {
+			pcb.add(value);
 		} else {
-			value.callAvatarHandler(avatar);
+			value.callImageBackHander(this);
 		}
 	}
 
 	@Override
 	protected String doInBackground(String... arg0) {
-		avatarURL = arg0[0];
-		if (avatarURL == null) {
+		String imageURL = arg0[0];
+		if (imageURL == null) {
 			// TODO
 			return null;
 		}
-		HttpGet httpRequest = new HttpGet(avatarURL);
+		HttpGet httpRequest = new HttpGet(imageURL);
 		HttpResponse httpResponse = null;
 		try {
 			httpResponse = httpClient.execute(httpRequest);
@@ -67,7 +72,11 @@ public class GetAvatarTask extends AsyncTask<String, String, String> {
 			HttpEntity httpEntity = httpResponse.getEntity();
 			try {
 				InputStream is = httpEntity.getContent();
-				avatar = BitmapFactory.decodeStream(is);
+				image = BitmapFactory.decodeStream(is);
+				if (needToSave) {
+					imageLocalURL = SaveFileToLocalUtils.saveImage(image,
+							imageUUID);
+				}
 				is.close();
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
@@ -82,10 +91,14 @@ public class GetAvatarTask extends AsyncTask<String, String, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		if (avatar != null) {
-			for (PostInfo item : pi) {
-				item.callAvatarHandler(avatar);
+		if (image != null) {
+			for (IImageTask item : pcb) {
+				item.callImageBackHander(this);
 			}
 		}
+	}
+
+	public Bitmap getImage() {
+		return image;
 	}
 }
