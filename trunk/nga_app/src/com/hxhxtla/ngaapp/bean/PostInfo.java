@@ -13,12 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
-import com.hxhxtla.ngaapp.task.GetAvatarTask;
+import com.hxhxtla.ngaapp.task.GetImageTask;
 import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
-public class PostInfo {
+public class PostInfo implements IImageTask {
 
-	public static final HashMap<String, GetAvatarTask> avatarTask = new HashMap<String, GetAvatarTask>();
+	private static final HashMap<String, GetImageTask> avatarTask = PostContentBuilder.imageTaskList;
 
 	private boolean highlight;
 
@@ -148,7 +148,8 @@ public class PostInfo {
 
 	}
 
-	public void callAvatarHandler(Bitmap bitmap) {
+	public void callImageBackHander(GetImageTask git) {
+		Bitmap bitmap = git.getImage();
 		if (!avatarLoaded) {
 			ivAvatar.setImageBitmap(bitmap);
 			avatarLoaded = true;
@@ -159,11 +160,11 @@ public class PostInfo {
 	public void tryLoadAvatar() {
 		if (!avatarLoaded && urlAvatar != null && !urlAvatar.isEmpty()) {
 			pbLoading.setVisibility(View.VISIBLE);
-			GetAvatarTask value = avatarTask.get(urlAvatar);
+			GetImageTask value = avatarTask.get(urlAvatar);
 			if (value != null) {
 				avatarTask.get(urlAvatar).addTaskDestination(this);
 			} else if (!avatarTask.containsKey(urlAvatar)) {
-				value = new GetAvatarTask(this);
+				value = new GetImageTask(this);
 				avatarTask.put(urlAvatar, value);
 				value.execute(urlAvatar);
 			}

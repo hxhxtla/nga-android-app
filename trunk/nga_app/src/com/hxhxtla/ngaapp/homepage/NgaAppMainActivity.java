@@ -38,6 +38,7 @@ import com.hxhxtla.ngaapp.controller.LoginController;
 import com.hxhxtla.ngaapp.controller.PointTabController;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.optionscontrol.OptionsControlActivity;
+import com.hxhxtla.ngaapp.utils.SaveFileToLocalUtils;
 
 public class NgaAppMainActivity extends Activity implements ITaskActivity {
 
@@ -125,6 +126,7 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 		LoginController.initializeHttpClient(cctrl.getNgaPassportUid(),
 				cctrl.getNgaPassportCid());
 		HomeListAdapter.setTopicInfoList(cctrl.getTopiclist());
+		SaveFileToLocalUtils.initialize();
 	}
 
 	public boolean saveTopicInfoListToConfig() {
