@@ -79,9 +79,9 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	public static final Pattern P_BRACES = Pattern.compile("\\{.+?\\}",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
-	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/image_loading.png?";
+	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/logo.png?";
 
-	private static final String ICON_IMAGE_LOADING_REGULAREXPRESSION = "file:///android_res/drawable/image_loading\\.png\\?";
+	private static final String ICON_IMAGE_LOADING_REGULAREXPRESSION = "file:///android_res/drawable/logo\\.png\\?";
 
 	private static final HashMap<String, GetImageTask> imageTaskList = SharedInfoController.imageTaskList;
 
@@ -422,6 +422,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 					} else {
 						SharedInfoController.Wait4LoadImageList.put(tempUrl,
 								url);
+						target.setJSEnabled(true);
 					}
 					url = tempUrl;
 				}
