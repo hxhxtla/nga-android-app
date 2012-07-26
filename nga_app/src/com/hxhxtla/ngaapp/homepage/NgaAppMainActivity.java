@@ -122,6 +122,9 @@ public class NgaAppMainActivity extends Activity implements ITaskActivity {
 		SharedInfoController.CTRL_AVATAR_SHOW = cctrl.getCtrlAvatarShow();
 		SharedInfoController.CTRL_AVATAR_SHOW_WIFI = cctrl
 				.getCtrlAvatarShowWifi();
+		SharedInfoController.CTRL_IMAGE_SHOW = cctrl.getCtrlImageShow();
+		SharedInfoController.CTRL_IMAGE_SHOW_WIFI = cctrl
+				.getCtrlImageShowWifi();
 		SharedInfoController.CTRL_PREFIX_DISPLAY = cctrl.getCtrlPrefixShow();
 		LoginController.initializeHttpClient(cctrl.getNgaPassportUid(),
 				cctrl.getNgaPassportCid());

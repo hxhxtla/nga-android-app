@@ -153,8 +153,15 @@ public class PostInfo implements IImageTask {
 	}
 
 	public void showImageInExtendTool(String imagePath) {
-		Intent it = OpenFileInExtendToolUtils.getImageFileIntent(imagePath);
-		SharedInfoController.CURRENT_ACTIVITY.startActivity(it);
+		if (SharedInfoController.Wait4LoadImageList.containsKey(imagePath)) {
+			String realUrl = SharedInfoController.Wait4LoadImageList
+					.get(imagePath);
+			SharedInfoController.imageTaskList.get(realUrl).execute(realUrl);
+			SharedInfoController.Wait4LoadImageList.remove(imagePath);
+		} else {
+			Intent it = OpenFileInExtendToolUtils.getImageFileIntent(imagePath);
+			SharedInfoController.CURRENT_ACTIVITY.startActivity(it);
+		}
 	}
 
 	public void setContentSource(String value, ArrayList<CommentInfo> cil,
