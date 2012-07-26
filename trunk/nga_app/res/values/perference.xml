@@ -5,9 +5,11 @@
     <string name="TOPIC_LIST">topic_list</string>
     <string name="CTRL_AVATAR_SHOW">ctrl_avatar_show</string>
     <string name="CTRL_AVATAR_SHOW_WIFI">ctrl_avatar_show_wifi</string>
+    <string name="CTRL_IMAGE_SHOW">ctrl_image_show</string>
+    <string name="CTRL_IMAGE_SHOW_WIFI">ctrl_image_show_wifi</string>
     <string name="CTRL_PREFIX_DISPLAY">ctrl_prefix_display</string>
     
-    <string name="CUR_CONFIG_VERSION">V1.0.1</string>
+    <string name="CUR_CONFIG_VERSION">V1.0.2</string>
     
     <string name="PREFIX_DEFAULT">[img]http://pic2.178.com/1683/16833150/month_1207/62720a255803feee543f5e37e43fe4be.png[/img]</string>
     

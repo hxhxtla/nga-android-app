@@ -34,7 +34,7 @@ public class ConfigController {
 				editor.putString(context.getString(R.string.CONFIG_VERSION),
 						context.getString(R.string.CUR_CONFIG_VERSION));
 				if (!editor.commit()) {
-					//TODO:failed to update config handler
+					// TODO:failed to update config handler
 				}
 			}
 		}
@@ -86,6 +86,36 @@ public class ConfigController {
 
 	}
 
+	public boolean getCtrlAvatarShowWifi() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_AVATAR_SHOW_WIFI), false);
+	}
+
+	public boolean saveCtrlImageShow(boolean value) {
+		Editor editor = getConfig().edit();
+		editor.putBoolean(context.getString(R.string.CTRL_IMAGE_SHOW), value);
+		return editor.commit();
+
+	}
+
+	public boolean getCtrlImageShow() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_IMAGE_SHOW), true);
+	}
+
+	public boolean saveCtrlImageShowWifi(boolean value) {
+		Editor editor = getConfig().edit();
+		editor.putBoolean(context.getString(R.string.CTRL_IMAGE_SHOW_WIFI),
+				value);
+		return editor.commit();
+
+	}
+
+	public boolean getCtrlImageShowWifi() {
+		return getConfig().getBoolean(
+				context.getString(R.string.CTRL_IMAGE_SHOW_WIFI), false);
+	}
+
 	public boolean saveCtrlPrefixShow(boolean value) {
 		Editor editor = getConfig().edit();
 		editor.putBoolean(context.getString(R.string.CTRL_PREFIX_DISPLAY),
@@ -97,11 +127,6 @@ public class ConfigController {
 	public boolean getCtrlPrefixShow() {
 		return getConfig().getBoolean(
 				context.getString(R.string.CTRL_PREFIX_DISPLAY), true);
-	}
-
-	public boolean getCtrlAvatarShowWifi() {
-		return getConfig().getBoolean(
-				context.getString(R.string.CTRL_AVATAR_SHOW_WIFI), false);
 	}
 
 	public boolean clearLoginInfo() {

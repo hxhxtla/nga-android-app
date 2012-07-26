@@ -46,9 +46,11 @@
     <string name="user_info_prestige">威望: </string>
     <string name="user_info_postcount">发帖: </string>
     <string name="control_avatar">头像</string>
+    <string name="control_image">图片</string>
     <string name="control_avatar_show">显示</string>
-    <string name="control_avatar_without_wifi">非Wifi状态</string>
+    <string name="control_avatar_without_wifi">无Wifi也显示</string>
     <string name="control_avatar_without_wifi_hint">(禁用后，仍可点击默认头像单独加载)</string>
+    <string name="control_image_without_wifi_hint">(禁用后，仍可默认图片单独加载)</string>
     <string name="control_prefix">前缀</string>
     <string name="options_control">控制设置</string>
     <string name="posttime_grave">(坟)</string>

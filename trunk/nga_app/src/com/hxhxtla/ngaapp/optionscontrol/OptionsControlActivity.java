@@ -12,8 +12,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class OptionsControlActivity extends Activity {
 	private CheckBox ctrl_avatar_cb_show;
-	private CheckBox ctrl_prefix_cb_show;
 	private CheckBox ctrl_avatar_cb_show_wifi;
+	private CheckBox ctrl_image_cb_show;
+	private CheckBox ctrl_image_cb_show_wifi;
+	private CheckBox ctrl_prefix_cb_show;
 
 	private ConfigController cc;
 
@@ -21,6 +23,8 @@ public class OptionsControlActivity extends Activity {
 		setContentView(R.layout.controls);
 		ctrl_avatar_cb_show = (CheckBox) findViewById(R.id.ctrl_avatar_cb_show);
 		ctrl_avatar_cb_show_wifi = (CheckBox) findViewById(R.id.ctrl_avatar_cb_show_wifi);
+		ctrl_image_cb_show = (CheckBox) findViewById(R.id.ctrl_image_cb_show);
+		ctrl_image_cb_show_wifi = (CheckBox) findViewById(R.id.ctrl_image_cb_show_wifi);
 		ctrl_prefix_cb_show = (CheckBox) findViewById(R.id.ctrl_prefix_cb_show);
 
 		ctrl_avatar_cb_show.setChecked(SharedInfoController.CTRL_AVATAR_SHOW);
@@ -58,6 +62,40 @@ public class OptionsControlActivity extends Activity {
 						} else {
 							ctrl_avatar_cb_show_wifi
 									.setChecked(SharedInfoController.CTRL_AVATAR_SHOW_WIFI);
+							// TODO: show alert
+						}
+					}
+				});
+
+		ctrl_image_cb_show
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (cc.saveCtrlImageShow(isChecked)) {
+							SharedInfoController.CTRL_IMAGE_SHOW = isChecked;
+						} else {
+							ctrl_image_cb_show
+									.setChecked(SharedInfoController.CTRL_IMAGE_SHOW);
+							// TODO: show alert
+						}
+						ctrl_image_cb_show_wifi
+								.setEnabled(SharedInfoController.CTRL_IMAGE_SHOW);
+					}
+				});
+
+		ctrl_image_cb_show_wifi
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (cc.saveCtrlImageShowWifi(isChecked)) {
+							SharedInfoController.CTRL_IMAGE_SHOW_WIFI = isChecked;
+						} else {
+							ctrl_avatar_cb_show_wifi
+									.setChecked(SharedInfoController.CTRL_IMAGE_SHOW_WIFI);
 							// TODO: show alert
 						}
 					}

@@ -54,7 +54,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 							new String[] { uuid });
 				}
 			} else {
-				db.delete(TABLE_IMAGE, IMG_UUID + "=?", new String[] { uuid });
+				db.delete(TABLE_IMAGE, IMG_URL + "=?", new String[] { value });
 			}
 		}
 		cursor.close();

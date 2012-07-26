@@ -79,7 +79,9 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	public static final Pattern P_BRACES = Pattern.compile("\\{.+?\\}",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
-	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/image_loading.png";
+	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/image_loading.png?";
+
+	private static final String ICON_IMAGE_LOADING_REGULAREXPRESSION = "file:///android_res/drawable/image_loading\\.png\\?";
 
 	private static final HashMap<String, GetImageTask> imageTaskList = SharedInfoController.imageTaskList;
 
@@ -407,15 +409,21 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 							&& !imageTask.imageLocalURL.isEmpty()) {
 						url = imageTask.imageLocalURL;
 					} else {
-						url = imageTask.imageUUID;
+						url = ICON_IMAGE_LOADING + imageTask.imageUUID;
 						imageTask.addTaskDestination(this);
 					}
 				} else {
 					imageTask = new GetImageTask(this);
 					imageTask.imageUUID = UUID.randomUUID().toString();
 					imageTaskList.put(url, imageTask);
-					imageTask.execute(url);
-					url = imageTask.imageUUID;
+					String tempUrl = ICON_IMAGE_LOADING + imageTask.imageUUID;
+					if (SharedInfoController.showImage()) {
+						imageTask.execute(url);
+					} else {
+						SharedInfoController.Wait4LoadImageList.put(tempUrl,
+								url);
+					}
+					url = tempUrl;
 				}
 			}
 		}
@@ -489,14 +497,12 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	public void callImageBackHander(GetImageTask git) {
 		if (postContent != null && !postContent.isEmpty()) {
 			if (git.imageLocalURL != null && !git.imageLocalURL.isEmpty()) {
-				postContent = postContent.replace(git.imageUUID,
+				postContent = postContent.replaceAll(
+						ICON_IMAGE_LOADING_REGULAREXPRESSION + git.imageUUID,
 						git.imageLocalURL);
 				target.setJSEnabled(true);
 				SharedInfoController.LoadedImageList.put(git.imageURL,
 						git.imageLocalURL);
-			} else {
-				postContent = postContent.replace(git.imageUUID,
-						ICON_IMAGE_LOADING);
 			}
 			imageTaskList.remove(git.imageURL);
 			target.setContent(postContent);

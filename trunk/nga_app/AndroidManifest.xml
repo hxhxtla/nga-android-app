@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hxhxtla.ngaapp"
     android:versionCode="5"
-    android:versionName="1.0.8.20120724" >
+    android:versionName="1.1.0.120726" >
 
     <uses-sdk android:minSdkVersion="9" />
 

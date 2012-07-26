@@ -26,6 +26,8 @@ public class SharedInfoController {
 
 	public static final HashMap<String, String> LoadedImageList = new HashMap<String, String>();
 
+	public static final HashMap<String, String> Wait4LoadImageList = new HashMap<String, String>();
+
 	public static final int DISPLAYED_HISTORY_TOPICLIST_LIMIT = 5;
 
 	public static String SERVER_URL;
@@ -34,6 +36,9 @@ public class SharedInfoController {
 
 	public static boolean CTRL_AVATAR_SHOW;
 	public static boolean CTRL_AVATAR_SHOW_WIFI;
+
+	public static boolean CTRL_IMAGE_SHOW;
+	public static boolean CTRL_IMAGE_SHOW_WIFI;
 
 	public static boolean HAS_WIFI;
 
@@ -47,6 +52,15 @@ public class SharedInfoController {
 
 	public static boolean showAvatar() {
 		if (CTRL_AVATAR_SHOW && (HAS_WIFI || CTRL_AVATAR_SHOW_WIFI)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public static boolean showImage() {
+		if (CTRL_IMAGE_SHOW && (HAS_WIFI || CTRL_IMAGE_SHOW_WIFI)) {
 			return true;
 		} else {
 			return false;
