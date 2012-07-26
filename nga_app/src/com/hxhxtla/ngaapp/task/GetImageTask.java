@@ -17,7 +17,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.hxhxtla.ngaapp.bean.IImageTask;
-import com.hxhxtla.ngaapp.utils.SaveFileToLocalUtils;
+import com.hxhxtla.ngaapp.controller.DatabaseManager;
+import com.hxhxtla.ngaapp.controller.LocalFileManager;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
 public class GetImageTask extends AsyncTask<String, String, String> {
 
@@ -25,11 +27,11 @@ public class GetImageTask extends AsyncTask<String, String, String> {
 
 	private List<IImageTask> pcb;
 
+	public String imageURL;
+
 	public String imageUUID;
 
 	public String imageLocalURL;
-
-	public boolean needToSave = false;
 
 	private Bitmap image;
 
@@ -49,8 +51,10 @@ public class GetImageTask extends AsyncTask<String, String, String> {
 	}
 
 	@Override
-	protected String doInBackground(String... arg0) {
-		String imageURL = arg0[0];
+	protected String doInBackground(String... values) {
+		if (values.length > 0 && values[0] != null && values[0].length() > 0) {
+			imageURL = values[0];
+		}
 		if (imageURL == null) {
 			// TODO
 			return null;
@@ -70,20 +74,23 @@ public class GetImageTask extends AsyncTask<String, String, String> {
 		if (httpResponse != null
 				&& httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			HttpEntity httpEntity = httpResponse.getEntity();
-			try {
-				InputStream is = httpEntity.getContent();
-				image = BitmapFactory.decodeStream(is);
-				if (needToSave) {
-					imageLocalURL = SaveFileToLocalUtils.saveImage(image,
-							imageUUID);
+			if (httpEntity.getContentLength() > 0) {
+				try {
+					InputStream is = httpEntity.getContent();
+					image = BitmapFactory.decodeStream(is);
+					imageLocalURL = LocalFileManager
+							.saveImage(image, imageUUID);
+					DatabaseManager dbm = new DatabaseManager(
+							SharedInfoController.CURRENT_ACTIVITY);
+					dbm.addImageCache(imageURL, imageUUID);
+					is.close();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				is.close();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		return null;

@@ -11,6 +11,9 @@ import android.os.AsyncTask;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.IImageTask;
 import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.controller.DatabaseManager;
+import com.hxhxtla.ngaapp.controller.LocalFileManager;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 
 public class PostContentBuilder extends AsyncTask<Object, String, String>
 		implements IImageTask {
@@ -78,11 +81,13 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 
 	private static final String ICON_IMAGE_LOADING = "file:///android_res/drawable/image_loading.png";
 
-	public static final HashMap<String, GetImageTask> imageTaskList = new HashMap<String, GetImageTask>();
+	private static final HashMap<String, GetImageTask> imageTaskList = SharedInfoController.imageTaskList;
 
 	private PostInfo target;
 
-	private String _postContent;
+	private String postContent;
+
+	private DatabaseManager dbm;
 
 	public PostContentBuilder(PostInfo value) {
 		target = value;
@@ -381,23 +386,38 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 		} else {
 			url = _IMG_SERVER_BASE + temp.substring(1);
 		}
-		GetImageTask imageTask;
-		if (imageTaskList.containsKey(url)) {
-			imageTask = imageTaskList.get(url);
-			if (imageTask.imageLocalURL != null
-					&& !imageTask.imageLocalURL.isEmpty()) {
-				url = imageTask.imageLocalURL;
-			} else {
-				url = imageTask.imageUUID;
-				imageTask.addTaskDestination(this);
-			}
+		if (SharedInfoController.LoadedImageList.containsKey(url)) {// 一级缓存
+			url = SharedInfoController.LoadedImageList.get(url);
 		} else {
-			imageTask = new GetImageTask(this);
-			imageTask.imageUUID = UUID.randomUUID().toString();
-			imageTask.needToSave = true;
-			imageTaskList.put(url, imageTask);
-			imageTask.execute(url);
-			url = imageTask.imageUUID;
+
+			if (dbm == null) {
+				dbm = new DatabaseManager(SharedInfoController.CURRENT_ACTIVITY);
+			}
+			String uuid = dbm.getImageUUIDByURL(url);
+			if (uuid != null && !uuid.isEmpty()) {// 二级缓存
+				String localFilePath = "file://"
+						+ LocalFileManager.getImageLocalPath(uuid);
+				SharedInfoController.LoadedImageList.put(url, localFilePath);
+				url = localFilePath;
+			} else {// 加载
+				GetImageTask imageTask;
+				if (imageTaskList.containsKey(url)) {
+					imageTask = imageTaskList.get(url);
+					if (imageTask.imageLocalURL != null
+							&& !imageTask.imageLocalURL.isEmpty()) {
+						url = imageTask.imageLocalURL;
+					} else {
+						url = imageTask.imageUUID;
+						imageTask.addTaskDestination(this);
+					}
+				} else {
+					imageTask = new GetImageTask(this);
+					imageTask.imageUUID = UUID.randomUUID().toString();
+					imageTaskList.put(url, imageTask);
+					imageTask.execute(url);
+					url = imageTask.imageUUID;
+				}
+			}
 		}
 		return "<img class='img' src='"
 				+ url
@@ -430,11 +450,6 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	}
 
 	private static String getR_COLLAPSE(String temp, String temp2) {
-		// "<div style='border-top:1px solid #fff;border-bottom:1px solid #fff;display:none'>"
-		// + "<button style='font-size:12px;line-height:normal;padding:0px 2px'"
-		// + " onclick='collapseClickHandler()'"
-		// + " type='button'><b>+</b></button> <b class='gray'>"
-		// + temp + "</b></div>"
 		return "<div style='border-top:1px solid #fff;border-bottom:1px solid #fff'>"
 				+ temp2 + "</div>";
 	}
@@ -446,7 +461,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 		ArrayList<CommentInfo> comment = (ArrayList<CommentInfo>) params[1];
 		String title = (String) params[2];
 
-		_postContent = "<!DOCTYPE HTML><html><head>"
+		postContent = "<!DOCTYPE HTML><html><head>"
 				+ "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
 				+ "<META http-equiv='Cache-Control' content='no-cache'>"
 				+ "<META http-equiv='Cache-Control' content='no-store'>"
@@ -463,7 +478,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 				+ "</style></head>" + "<body><section>" + getTitleHtml(title)
 				+ getContentHtml(content) + getCommentHtml(comment)
 				+ "</section></body></html>";
-		return _postContent;
+		return postContent;
 	}
 
 	@Override
@@ -472,16 +487,19 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	}
 
 	public void callImageBackHander(GetImageTask git) {
-		if (_postContent != null && !_postContent.isEmpty()) {
+		if (postContent != null && !postContent.isEmpty()) {
 			if (git.imageLocalURL != null && !git.imageLocalURL.isEmpty()) {
-				_postContent = _postContent.replace(git.imageUUID,
+				postContent = postContent.replace(git.imageUUID,
 						git.imageLocalURL);
 				target.setJSEnabled(true);
+				SharedInfoController.LoadedImageList.put(git.imageURL,
+						git.imageLocalURL);
 			} else {
-				_postContent = _postContent.replace(git.imageUUID,
+				postContent = postContent.replace(git.imageUUID,
 						ICON_IMAGE_LOADING);
 			}
-			target.setContent(_postContent);
+			imageTaskList.remove(git.imageURL);
+			target.setContent(postContent);
 		}
 	}
 }

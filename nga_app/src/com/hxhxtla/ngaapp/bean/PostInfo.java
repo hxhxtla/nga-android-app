@@ -2,10 +2,11 @@ package com.hxhxtla.ngaapp.bean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.controller.DatabaseManager;
+import com.hxhxtla.ngaapp.controller.LocalFileManager;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetImageTask;
 import com.hxhxtla.ngaapp.task.PostContentBuilder;
@@ -22,13 +25,15 @@ import com.hxhxtla.ngaapp.utils.OpenFileInExtendToolUtils;
 
 public class PostInfo implements IImageTask {
 
-	private static final HashMap<String, GetImageTask> avatarTask = PostContentBuilder.imageTaskList;
+	private static final HashMap<String, GetImageTask> avatarTask = SharedInfoController.imageTaskList;
 
 	private boolean highlight;
 
 	private int pageIndex;
 
 	private boolean avatarLoaded = false;
+
+	private DatabaseManager dbm;
 
 	// var////////////////////////////////
 	private String author;
@@ -168,24 +173,48 @@ public class PostInfo implements IImageTask {
 	}
 
 	public void callImageBackHander(GetImageTask git) {
-		Bitmap bitmap = git.getImage();
-		if (!avatarLoaded) {
-			ivAvatar.setImageBitmap(bitmap);
+		if (!avatarLoaded && git.imageLocalURL != null
+				&& !git.imageLocalURL.isEmpty()) {
+			ivAvatar.setImageBitmap(git.getImage());
 			avatarLoaded = true;
 			pbLoading.setVisibility(View.GONE);
+			SharedInfoController.LoadedImageList.put(git.imageURL,
+					git.imageLocalURL);
 		}
+		avatarTask.remove(git.imageURL);
 	}
 
 	public void tryLoadAvatar() {
 		if (!avatarLoaded && urlAvatar != null && !urlAvatar.isEmpty()) {
-			pbLoading.setVisibility(View.VISIBLE);
-			GetImageTask value = avatarTask.get(urlAvatar);
-			if (value != null) {
-				avatarTask.get(urlAvatar).addTaskDestination(this);
-			} else if (!avatarTask.containsKey(urlAvatar)) {
-				value = new GetImageTask(this);
-				avatarTask.put(urlAvatar, value);
-				value.execute(urlAvatar);
+			if (SharedInfoController.LoadedImageList.containsKey(urlAvatar)) {// 一级缓存
+				ivAvatar.setImageURI(Uri
+						.parse(SharedInfoController.LoadedImageList
+								.get(urlAvatar)));
+				avatarLoaded = true;
+			} else {
+
+				if (dbm == null) {
+					dbm = new DatabaseManager(
+							SharedInfoController.CURRENT_ACTIVITY);
+				}
+				String uuid = dbm.getImageUUIDByURL(urlAvatar);
+				if (uuid != null && !uuid.isEmpty()) {// 二级缓存
+					String localFilePath = "file://"
+							+ LocalFileManager.getImageLocalPath(uuid);
+					SharedInfoController.LoadedImageList.put(urlAvatar,
+							localFilePath);
+					ivAvatar.setImageURI(Uri.parse(localFilePath));
+				} else {// 加载
+					pbLoading.setVisibility(View.VISIBLE);
+					if (avatarTask.containsKey(urlAvatar)) {
+						avatarTask.get(urlAvatar).addTaskDestination(this);
+					} else {
+						GetImageTask value = new GetImageTask(this);
+						value.imageUUID = UUID.randomUUID().toString();
+						avatarTask.put(urlAvatar, value);
+						value.execute(urlAvatar);
+					}
+				}
 			}
 		}
 	}

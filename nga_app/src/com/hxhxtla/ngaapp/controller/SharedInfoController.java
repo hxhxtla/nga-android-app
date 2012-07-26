@@ -1,6 +1,7 @@
 package com.hxhxtla.ngaapp.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -13,12 +14,17 @@ import android.content.DialogInterface.OnClickListener;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.ArticleInfo;
 import com.hxhxtla.ngaapp.bean.TopicInfo;
+import com.hxhxtla.ngaapp.task.GetImageTask;
 
 public class SharedInfoController {
 
 	public static Activity CURRENT_ACTIVITY;
 
 	public static final List<TopicInfo> DISPLAYED_HISTORY_TOPICLIST = new ArrayList<TopicInfo>();
+
+	public static final HashMap<String, GetImageTask> imageTaskList = new HashMap<String, GetImageTask>();
+
+	public static final HashMap<String, String> LoadedImageList = new HashMap<String, String>();
 
 	public static final int DISPLAYED_HISTORY_TOPICLIST_LIMIT = 5;
 
