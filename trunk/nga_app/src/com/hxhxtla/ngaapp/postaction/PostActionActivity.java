@@ -109,6 +109,12 @@ public class PostActionActivity extends Activity implements ITaskActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedInfoController.CURRENT_ACTIVITY = this;
+	}
+
+	@Override
 	public void callbackHander(String doc) {
 		if (doc != null) {
 			if (doc.indexOf(getString(R.string.post_compeleted_msg)) != -1) {

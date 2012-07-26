@@ -3,6 +3,8 @@ package com.hxhxtla.ngaapp.bean;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,8 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hxhxtla.ngaapp.R;
+import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.GetImageTask;
 import com.hxhxtla.ngaapp.task.PostContentBuilder;
+import com.hxhxtla.ngaapp.utils.OpenFileInExtendToolUtils;
 
 public class PostInfo implements IImageTask {
 
@@ -131,6 +135,21 @@ public class PostInfo implements IImageTask {
 		if (highlight) {
 			wvContent.setBackgroundResource(R.drawable.msgbox1);
 		}
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	public void setJSEnabled(boolean value) {
+		if (value) {
+			wvContent.getSettings().setJavaScriptEnabled(true);
+			wvContent.addJavascriptInterface(this, "postInfo");
+		} else {
+			wvContent.getSettings().setJavaScriptEnabled(false);
+		}
+	}
+
+	public void showImageInExtendTool(String imagePath) {
+		Intent it = OpenFileInExtendToolUtils.getImageFileIntent(imagePath);
+		SharedInfoController.CURRENT_ACTIVITY.startActivity(it);
 	}
 
 	public void setContentSource(String value, ArrayList<CommentInfo> cil,

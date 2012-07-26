@@ -216,6 +216,12 @@ public class ArticlesListPageActivity extends Activity implements ITaskActivity 
 		this.initView();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedInfoController.CURRENT_ACTIVITY = this;
+	}
+
 	public void callbackHander(String doc) {
 		if (doc != null) {
 			Document document = Jsoup.parse(doc);

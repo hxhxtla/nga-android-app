@@ -92,4 +92,10 @@ public class OptionsControlActivity extends Activity {
 		this.initData();
 		this.initView();
 	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedInfoController.CURRENT_ACTIVITY = this;
+	}
 }
