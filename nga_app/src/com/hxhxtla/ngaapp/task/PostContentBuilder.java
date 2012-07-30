@@ -70,6 +70,14 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 
 	private static final Pattern P_HTTP = Pattern.compile("^http",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+
+	private static final String P_LIST_L = "\\[list\\]";
+
+	private static final String P_LIST_R = "\\[/list\\]";
+
+	private static final Pattern P_LI = Pattern.compile(
+			"\\[\\*\\](.+?)(\\[\\*\\]|</ul>)", Pattern.DOTALL
+					| Pattern.CASE_INSENSITIVE);
 	// 公用
 	public static final Pattern P_PAGENUM = Pattern.compile("\\d+");
 
@@ -259,6 +267,23 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 			matcher.appendTail(sb);
 			value = sb.toString();
 			value = "<p>" + value + "</p>";
+
+			value = value.replaceAll(P_LIST_L, "<ul>");
+			value = value.replaceAll(P_LIST_R, "</ul>");
+
+			do {
+				matcher = P_LI.matcher(value);
+				sb = new StringBuffer();
+				if (matcher.find()) {
+					temp = matcher.group(1);
+					temp2 = matcher.group(2);
+					matcher.appendReplacement(sb, getR_LI(temp, temp2));
+					matcher.appendTail(sb);
+					value = sb.toString();
+				} else {
+					break;
+				}
+			} while (true);
 		}
 		return value;
 	}
@@ -461,6 +486,10 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 	private static String getR_COLLAPSE(String temp, String temp2) {
 		return "<div style='border-top:1px solid #fff;border-bottom:1px solid #fff'>"
 				+ temp2 + "</div>";
+	}
+
+	private static String getR_LI(String temp, String temp2) {
+		return "<li>" + temp + "</li>" + temp2;
 	}
 
 	@Override
