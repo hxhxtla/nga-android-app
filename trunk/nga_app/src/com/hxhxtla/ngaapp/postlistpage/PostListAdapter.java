@@ -40,7 +40,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 	private String post_item;
 	private String post_author;
-	private String post_floor;
+//	private String post_floor;
 	private String post_datetime;
 	private String post_content;
 	private String post_comment;
@@ -64,7 +64,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 		post_item = mContext.getString(R.string.post_item);
 		post_author = mContext.getString(R.string.post_author);
-		post_floor = mContext.getString(R.string.post_floor);
+//		post_floor = mContext.getString(R.string.post_floor);
 		post_content = mContext.getString(R.string.post_content);
 		post_datetime = mContext.getString(R.string.post_datetime);
 		post_comment = mContext.getString(R.string.post_comment);
@@ -128,8 +128,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 
 				pi.setHighlight(curHighLightAuthor);
 
-				String floor = item.select(post_floor).text();
-				pi.setFloor(floor);
+//				String floor = item.select(post_floor).text();
+//				pi.setFloor(floor);
 
 				String datetime = item.select(post_datetime).text();
 				pi.setDatetime(datetime);
@@ -163,6 +163,7 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						if (userInfo != null) {
 							String[] values = userInfo.split(",");
 							if (values.length > 19) {
+								pi.setFloor("["+values[3] + "楼]");
 								pi.setPrestige(mContext
 										.getString(R.string.user_info_prestige)
 										+ values[7]);
