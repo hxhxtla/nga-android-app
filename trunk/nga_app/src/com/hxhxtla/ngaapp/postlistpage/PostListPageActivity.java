@@ -144,7 +144,7 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				PostInfo pi = pla.getItem(arg2-1);
+				PostInfo pi = pla.getItem(arg2 - 1);
 				if (pi.getPageIndex() != 0) {
 					curPageNum = pi.getPageIndex();
 					refreshView(false);
@@ -201,7 +201,10 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 					pla.setHighlightAuthor(SharedInfoController.RECENT_POST
 							.getAuthor());
 				}
-				pla.setData(document, curPageNum);
+				int indexS = doc.indexOf("commonui.userInfo.setAll(");
+				int indexE = getEndIndex(indexS + 25, indexS + 25, doc);
+				String userInfo = doc.substring(indexS + 25, indexE);
+				pla.setData(document, curPageNum, userInfo);
 				pla.notifyDataSetChanged();
 				locatePageByIndex(curPageNum);
 			}
@@ -210,6 +213,16 @@ public class PostListPageActivity extends Activity implements ITaskActivity {
 			gsdt = null;
 		}
 		closeContectionProgressDialog();
+	}
+
+	public int getEndIndex(int startIndexS, int startIndexE, String value) {
+		int indexL = value.indexOf("(", startIndexS);
+		int indexR = value.indexOf(")", startIndexE);
+		if (indexL == -1 || indexL > indexR) {
+			return indexR;
+		} else {
+			return getEndIndex(indexL + 1, indexR + 1, value);
+		}
 	}
 
 	private void setPageNum(Document document) {

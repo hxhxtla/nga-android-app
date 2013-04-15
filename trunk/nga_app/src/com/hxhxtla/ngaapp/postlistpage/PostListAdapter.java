@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 
@@ -19,10 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.hxhxtla.ngaapp.R;
 import com.hxhxtla.ngaapp.bean.CommentInfo;
 import com.hxhxtla.ngaapp.bean.PageInfo;
 import com.hxhxtla.ngaapp.bean.PostInfo;
+import com.hxhxtla.ngaapp.bean.UserInfo;
 import com.hxhxtla.ngaapp.controller.SharedInfoController;
 import com.hxhxtla.ngaapp.task.PostContentBuilder;
 
@@ -39,8 +44,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 	private Random randKey;
 
 	private String post_item;
-	private String post_author;
-//	private String post_floor;
+	// private String post_author;
+	// private String post_floor;
 	private String post_datetime;
 	private String post_content;
 	private String post_comment;
@@ -63,8 +68,8 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 		mContext = value;
 
 		post_item = mContext.getString(R.string.post_item);
-		post_author = mContext.getString(R.string.post_author);
-//		post_floor = mContext.getString(R.string.post_floor);
+//		post_author = mContext.getString(R.string.post_author);
+		// post_floor = mContext.getString(R.string.post_floor);
 		post_content = mContext.getString(R.string.post_content);
 		post_datetime = mContext.getString(R.string.post_datetime);
 		post_comment = mContext.getString(R.string.post_comment);
@@ -89,8 +94,13 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				R.layout.post_list_title, null);
 	}
 
-	public void setData(Document document, int pagenum) {
+	public void setData(Document document, int pagenum, String AllUserInfo) {
 		if (document != null) {
+			Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+					.create();
+			Map<String, UserInfo> userInfoList = gson.fromJson(
+					AllUserInfo.trim(), new TypeToken<Map<String, UserInfo>>() {
+					}.getType());
 			PageInfo ipage = null;
 			for (PageInfo pi : pageinfoList) {
 				if (pi.getIndex() == pagenum) {
@@ -123,13 +133,6 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 				} else {
 					pi = ipage.getPostList().get(index);
 				}
-				String author = item.select(post_author).text();
-				pi.setAuthor(author);
-
-				pi.setHighlight(curHighLightAuthor);
-
-//				String floor = item.select(post_floor).text();
-//				pi.setFloor(floor);
 
 				String datetime = item.select(post_datetime).text();
 				pi.setDatetime(datetime);
@@ -162,23 +165,23 @@ public class PostListAdapter extends BaseAdapter implements ListAdapter {
 						userInfo = clearUserInfo(userInfo);
 						if (userInfo != null) {
 							String[] values = userInfo.split(",");
-							if (values.length > 19) {
-								pi.setFloor("["+values[3] + "楼]");
+							if (values.length > 6) {
+								UserInfo iUser = userInfoList.get(values[6]);
+								pi.setAuthor(iUser.username);
+								pi.setHighlight(curHighLightAuthor);
+
+								pi.setFloor("[" + values[2] + "楼]");
 								pi.setPrestige(mContext
 										.getString(R.string.user_info_prestige)
-										+ values[7]);
+										+ Math.floor(iUser.rvrc / 10));
 								pi.setPostcount(mContext
 										.getString(R.string.user_info_postcount)
-										+ values[19].replaceAll("\"", ""));
-								String url = checkURL(values[11]);
+										+ iUser.postnum);
+								String url = checkURL(iUser.avatar);
 								if (url != null && !url.isEmpty()) {
 									pi.setUrlAvatar(url.replaceAll("\"", ""));
 								}
-								String pid = values[9];
-								pid = pid.replaceAll("\"", "");
-								if (pid.equals("0")) {
-									pid = values[8];
-								}
+								String pid = values[5];
 								pi.setPid(pid);
 							} else {
 								// TODO
