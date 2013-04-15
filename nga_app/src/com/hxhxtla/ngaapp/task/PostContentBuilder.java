@@ -24,7 +24,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 			"\\[quote\\](.+?)\\[/quote\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_REPLY = Pattern.compile(
-			"\\[[pt]id=?\\d{0,20}\\](.+?)\\[/pid\\]", Pattern.DOTALL
+			"\\[[pt]id=?(.*?)\\](.+?)\\[/pid\\]", Pattern.DOTALL
 					| Pattern.CASE_INSENSITIVE);
 	private static final Pattern P_B = Pattern.compile("\\[b\\](.+?)\\[/b\\]",
 			Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
@@ -122,7 +122,7 @@ public class PostContentBuilder extends AsyncTask<Object, String, String>
 			matcher = P_REPLY.matcher(value);
 			sb = new StringBuffer();
 			while (matcher.find()) {
-				temp = matcher.group(1);
+				temp = matcher.group(2);
 				matcher.appendReplacement(sb, getR_REPLY(temp));
 			}
 			matcher.appendTail(sb);
